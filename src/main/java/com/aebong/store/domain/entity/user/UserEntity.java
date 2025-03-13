@@ -1,11 +1,13 @@
 package com.aebong.store.domain.entity.user;
 
+import com.aebong.store.common.enums.user.UserAccountType;
+import com.aebong.store.common.enums.user.UserStatus;
+import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.domain.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.usertype.UserType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -61,7 +63,7 @@ public class UserEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_connecting_information_id", columnDefinition = "bigint COMMENT 'CI 인증정보 순번'")
-    private UserConnectingInformation userConnectingInformation;
+    private UserConnectingInformationEntity userConnectingInformation;
 
     @Column(name = "rejoin_yn", columnDefinition = "char(1) DEFAULT = 'N' COMMENT '재가입여부'")
     private Boolean isRejoin = Boolean.FALSE;
