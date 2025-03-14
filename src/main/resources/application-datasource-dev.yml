@@ -14,7 +14,7 @@ spring:
       show-sql: true
 
   datasource:
-    url: jdbc:mysql://localhost:13306/aebong_store
+    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/aebong_store
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
