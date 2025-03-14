@@ -3,10 +3,7 @@ package com.aebong.store.domain.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -24,6 +21,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 public abstract class BaseEntity {
 
+    @Builder.Default
     @Column(name = "delete_yn", columnDefinition = "char(1) DEFAULT = 'N' COMMENT '삭제여부'", nullable = false)
     private Boolean isDeleted = Boolean.FALSE;
 
