@@ -8,7 +8,7 @@ CREATE TABLE `user`
     `user_type`                         VARCHAR(20)                        NOT NULL COMMENT '회원유형',
     `user_account`                      VARCHAR(30)                        NOT NULL COMMENT '회원계정',
     `user_account_type`                 VARCHAR(20)                        NOT NULL COMMENT '회원계정 유형',
-    `user_password`                     VARCHAR(100)                       NOT NULL COMMENT '회원 비밀번호',
+    `user_password`                     VARCHAR(100)                       NOT NULL COMMENT '비밀번호',
     `user_status`                       VARCHAR(20)                        NOT NULL COMMENT '회원상태 (활성, 탈퇴, 휴면, 잠금)',
     `password_init_yn`                  CHAR     DEFAULT 'N'               NOT NULL COMMENT '비밀번호 초기화 필요 여부',
     `fail_password_count`               INT      DEFAULT 0                 NOT NULL COMMENT '비밀번호 틀린 횟수',
@@ -32,15 +32,13 @@ CREATE TABLE `user_detail`
 (
     `user_detail_id`         BIGINT AUTO_INCREMENT COMMENT '회원 상세정보 순번 PK',
     `user_id`                BIGINT       NOT NULL COMMENT '회원순번',
-    `user_type`              VARCHAR(30)  NOT NULL COMMENT '회원유형',
-    `user_number`            VARCHAR(30)           DEFAULT NULL COMMENT '회원번호',
-    `nick_name`              VARCHAR(100)          DEFAULT NULL COMMENT '회원 닉네임',
-    `first_name`             VARCHAR(100)          DEFAULT NULL COMMENT '이름',
+    `first_name`             VARCHAR(100) NOT NULL COMMENT '이름',
     `last_name`              VARCHAR(100) NOT NULL COMMENT '성',
     `birth_date`             DATE                  DEFAULT NULL COMMENT '생년월일',
     `gender`                 VARCHAR(20)  NOT NULL COMMENT '성별(MALE|FEMALE|NON_BINARY|OTHER)',
-    `mobile_number`          VARCHAR(30)           DEFAULT NULL COMMENT '휴대폰번호',
+    `mobile_number`          VARCHAR(11)           DEFAULT NULL COMMENT '휴대폰번호',
     `personal_id`            VARCHAR(100)          DEFAULT NULL COMMENT '개인식별번호',
+    `nick_name`              VARCHAR(100)          DEFAULT NULL COMMENT '회원 닉네임',
     `tel_number`             VARCHAR(30)           DEFAULT NULL COMMENT '전화번호',
     `email`                  VARCHAR(150)          DEFAULT NULL COMMENT '이메일주소',
     `address1`               VARCHAR(255)          DEFAULT NULL COMMENT '주소',
@@ -53,10 +51,11 @@ CREATE TABLE `user_detail`
     `inactivated_datetime`   DATETIME              DEFAULT NULL COMMENT '계정 비활성 일시',
     `withdrawal_datetime`    DATETIME              DEFAULT NULL COMMENT '탈퇴 일시',
     `dormant_datetime`       DATETIME              DEFAULT NULL COMMENT '휴면처리 일시',
-    `send_email_state`       CHAR(1)               DEFAULT NULL COMMENT '가입완료 이메일 전송 여부 (NULL:제외, Y:발송완료, N:미발송, F:발송실패)',
-    `send_email_retry_count` TINYINT      NOT NULL DEFAULT '0' COMMENT '가입완료 이메일 전송 재시도 횟수',
-    `send_alarm_state`       CHAR(1)               DEFAULT NULL COMMENT '가입완료 알림톡 전송 여부 (NULL:제외, Y:발송완료, N:미발송, F:발송실패)',
-    `send_alarm_retry_count` TINYINT      NOT NULL DEFAULT '0' COMMENT '가입완료 알림톡 전송 재시도 횟수',
+#     todo: 알림기능 개발 시 추가 예정
+#     `send_email_state`       CHAR(1)               DEFAULT NULL COMMENT '가입완료 이메일 전송 여부 (NULL:제외, Y:발송완료, N:미발송, F:발송실패)',
+#     `send_email_retry_count` TINYINT      NOT NULL DEFAULT '0' COMMENT '가입완료 이메일 전송 재시도 횟수',
+#     `send_alarm_state`       CHAR(1)               DEFAULT NULL COMMENT '가입완료 알림톡 전송 여부 (NULL:제외, Y:발송완료, N:미발송, F:발송실패)',
+#     `send_alarm_retry_count` TINYINT      NOT NULL DEFAULT '0' COMMENT '가입완료 알림톡 전송 재시도 횟수',
     `delete_yn`              VARCHAR(1)   NOT NULL,
     `created_user_id`        BIGINT       NOT NULL,
     `created_datetime`       DATETIME              DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -99,9 +98,9 @@ CREATE TABLE `user_social_account`
     CONSTRAINT `fk_user_social_account_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB COMMENT ='회원 소셜 계정 관리 테이블';
 
-CREATE TABLE `user_addresses`
+CREATE TABLE `user_delivery_addresses`
 (
-    `user_addresses_id` BIGINT AUTO_INCREMENT COMMENT '회원배송지 순번 PK',
+    `user_delivery_addresses_id` BIGINT AUTO_INCREMENT COMMENT '회원배송지 순번 PK',
     `user_id`           BIGINT                                 NOT NULL COMMENT '회원순번',
     `address_name`      VARCHAR(100)   DEFAULT                 NULL COMMENT '배송지 별칭',
     `first_name`        VARCHAR(100)   DEFAULT                 NULL COMMENT '수취인 이름',
@@ -121,8 +120,8 @@ CREATE TABLE `user_addresses`
     `created_datetime`  DATETIME       DEFAULT CURRENT_TIMESTAMP NOT NULL,
     `modified_user_id`  BIGINT                                 NULL,
     `modified_datetime` DATETIME                               NULL ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`user_addresses_id`),
-    CONSTRAINT `fk_user_addresses_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+    PRIMARY KEY (`user_delivery_addresses_id`),
+    CONSTRAINT `fk_user_delivery_addresses_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
 ) ENGINE = InnoDB COMMENT ='회원 배송지 정보 관리 테이블';
 
 CREATE TABLE `user_refund_bank_account`
@@ -177,11 +176,11 @@ CREATE TABLE `user_information_change_history`
 (
     `user_information_change_history_id` BIGINT AUTO_INCREMENT COMMENT '회원정보 변경이력 순번 PK',
     `user_id`                            BIGINT     NOT NULL COMMENT '회원순번',
-    `log_type`                           VARCHAR(50)         DEFAULT NULL COMMENT '변경항목 유형 (대)',
-    `log_sub_type`                       VARCHAR(50)         DEFAULT NULL COMMENT '변경항목 유형 (소)',
-    `description`                        TEXT COMMENT '설명',
-    `note`                               TEXT COMMENT '비고',
-    `occurrence_datetime`                DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '변경일시',
+    `log_type`                           VARCHAR(50)         DEFAULT NULL COMMENT '변경항목 유형 (대분류)',
+    `log_sub_type`                       VARCHAR(50)         DEFAULT NULL COMMENT '변경항목 유형 (소분류)',
+    `description`                        TEXT COMMENT '이력 설명',
+    `note`                               TEXT COMMENT '이력 비고',
+    `occurrence_datetime`                DATETIME   NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '정보변경일시',
     `before_change`                      VARCHAR(255)        DEFAULT NULL COMMENT '변경전',
     `after_change`                       VARCHAR(255)        DEFAULT NULL COMMENT '변경후',
     `delete_yn`                          VARCHAR(1) NOT NULL,
@@ -197,7 +196,7 @@ CREATE TABLE `withdrawal_user`
     `withdrawal_user_id`  BIGINT AUTO_INCREMENT COMMENT '탈퇴회원 순번 PK',
     `user_id`             BIGINT                                 NOT NULL COMMENT '회원순번',
     `withdrawal_type`     VARCHAR(30)                            NOT NULL COMMENT '탈퇴사유 유형',
-    `note`                VARCHAR(255) DEFAULT                       NULL COMMENT '비고',
+    `note`                TEXT                                            COMMENT '탈퇴 비고',
     `withdrawal_datetime` DATETIME                               NOT NULL COMMENT '탈퇴일시',
     `delete_yn`           VARCHAR(1)                             NOT NULL,
     `created_user_id`     BIGINT                                 NOT NULL,
