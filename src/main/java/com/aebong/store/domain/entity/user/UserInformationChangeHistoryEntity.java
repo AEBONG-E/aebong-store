@@ -5,11 +5,13 @@ import com.aebong.store.common.enums.user.LogType;
 import com.aebong.store.domain.entity.AuditingEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,5 +56,31 @@ public class UserInformationChangeHistoryEntity extends AuditingEntity {
     @Comment("변경후")
     @Column(name = "after_change")
     private String after;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserInformationChangeHistoryEntity that = (UserInformationChangeHistoryEntity) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(this.id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id);
+    }
+
+    @Builder
+    private UserInformationChangeHistoryEntity(UserEntity user, LogType logType, LogSubType logSubType, String description, String note, LocalDateTime occurrenceDatetime, String before, String after) {
+        this.user = user;
+        this.logType = logType;
+        this.logSubType = logSubType;
+        this.description = description;
+        this.note = note;
+        this.occurrenceDatetime = occurrenceDatetime;
+        this.before = before;
+        this.after = after;
+    }
 
 }

@@ -5,12 +5,14 @@ import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.AuditingEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -87,5 +89,39 @@ public class UserDetailEntity extends AuditingEntity {
     @Comment("휴면처리 일시")
     @Column(name = "dormant_datetime")
     private LocalDateTime dormantDatetime;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDetailEntity that = (UserDetailEntity) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(this.id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id);
+    }
+
+    @Builder
+    private UserDetailEntity(UserEntity user, String firstName, String lastName, LocalDate birthDate, Gender gender, String mobileNumber, String personalId, String nickName, String telNumber, String email, Address address, LocalDateTime joinDatetime, LocalDateTime activatedDatetime, LocalDateTime inactivatedDatetime, LocalDateTime withdrawalDatetime, LocalDateTime dormantDatetime) {
+        this.user = user;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.gender = gender;
+        this.mobileNumber = mobileNumber;
+        this.personalId = personalId;
+        this.nickName = nickName;
+        this.telNumber = telNumber;
+        this.email = email;
+        this.address = address;
+        this.joinDatetime = joinDatetime;
+        this.activatedDatetime = activatedDatetime;
+        this.inactivatedDatetime = inactivatedDatetime;
+        this.withdrawalDatetime = withdrawalDatetime;
+        this.dormantDatetime = dormantDatetime;
+    }
 
 }

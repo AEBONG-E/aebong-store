@@ -4,9 +4,12 @@ import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.AuditingEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -58,5 +61,33 @@ public class UserDeliveryAddressEntity extends AuditingEntity {
     @Comment("기본배송지 여부")
     @Column(name = "address_valid_yn")
     private Boolean isAddressValid;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDeliveryAddressEntity that = (UserDeliveryAddressEntity) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(this.id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id);
+    }
+
+    @Builder
+    private UserDeliveryAddressEntity(UserEntity user, String addressName, String firstName, String lastName, String mobileNumber, String telNumber, Address address, String deliveryMessage, Boolean isDefault, Boolean isAddressValid) {
+        this.user = user;
+        this.addressName = addressName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobileNumber = mobileNumber;
+        this.telNumber = telNumber;
+        this.address = address;
+        this.deliveryMessage = deliveryMessage;
+        this.isDefault = isDefault;
+        this.isAddressValid = isAddressValid;
+    }
 
 }

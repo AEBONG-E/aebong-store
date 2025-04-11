@@ -6,6 +6,7 @@ import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.domain.entity.AuditingEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -92,6 +94,38 @@ public class UserEntity extends AuditingEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserInformationChangeHistoryEntity> userInformationChangeHistories = new ArrayList<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(this.id, that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id);
+    }
+
+    @Builder
+    private UserEntity(UserType userType, String userAccount, UserAccountType userAccountType, String userPassword, UserStatus userStatus, Boolean passwordInitYn, int failPasswordCount, LocalDateTime accountLockedDatetime, LocalDateTime lastLoginDatetime, LocalDateTime lastPasswordChangeDatetime, LocalDateTime requiredPasswordChangeDatetime, LocalDate loginAvailableDate, LocalDate rejoinPossibleDate, Boolean isRejoin, List<UserInformationChangeHistoryEntity> userInformationChangeHistories)
+    {
+        this.userType = userType;
+        this.userAccount = userAccount;
+        this.userAccountType = userAccountType;
+        this.userPassword = userPassword;
+        this.userStatus = userStatus;
+        this.passwordInitYn = passwordInitYn;
+        this.failPasswordCount = failPasswordCount;
+        this.accountLockedDatetime = accountLockedDatetime;
+        this.lastLoginDatetime = lastLoginDatetime;
+        this.lastPasswordChangeDatetime = lastPasswordChangeDatetime;
+        this.requiredPasswordChangeDatetime = requiredPasswordChangeDatetime;
+        this.loginAvailableDate = loginAvailableDate;
+        this.rejoinPossibleDate = rejoinPossibleDate;
+        this.isRejoin = isRejoin;
+        this.userInformationChangeHistories = userInformationChangeHistories;
+    }
 
 }
