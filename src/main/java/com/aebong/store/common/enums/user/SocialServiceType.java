@@ -4,5 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum SocialServiceType {
-    NAVER, KAKAO, GOOGLE, FACEBOOK, APPLE
+    NAVER,
+    KAKAO,
+    GOOGLE,
+    FACEBOOK,
+    APPLE
 }
