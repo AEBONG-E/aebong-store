@@ -3,69 +3,129 @@ package com.aebong.store.domain.entity.user;
 import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
-import com.aebong.store.domain.entity.BaseEntity;
+import com.aebong.store.domain.entity.AuditingEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 @Entity
-public class UserEntity extends BaseEntity {
+public class UserEntity extends AuditingEntity {
 
-    @Column(name = "user_id", columnDefinition = "bigint COMMENT '회원순번 PK'", nullable = false)
-    @Id
-    private Long userId;
+    @Comment("회원순번 PK")
+    @Column(name = "user_id", nullable = false)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "user_type", columnDefinition = "varchar(20) COMMENT '회원유형'", nullable = false)
+    @Comment("회원유형")
+    @Column(name = "user_type", nullable = false, length = 20)
     private UserType userType;
 
-    @Column(name = "user_account", columnDefinition = "varchar(30) COMMENT '회원계정'", nullable = false)
+    @Comment("회원계정")
+    @Column(name = "user_account", nullable = false, length = 30)
     private String userAccount;
 
-    @Column(name = "user_account_type", columnDefinition = "varchar(20) COMMENT '회원계정 유형'", nullable = false)
+    @Comment("회원계정 유형")
+    @Column(name = "user_account_type", nullable = false, length = 20)
     private UserAccountType userAccountType;
 
-    @Column(name = "user_password", columnDefinition = "varchar(100) COMMENT '회원 비밀번호'", nullable = false)
+    @Comment("비밀번호")
+    @Column(name = "user_password", nullable = false, length = 100)
     private String userPassword;
 
-    @Column(name = "user_status", columnDefinition = "varchar(20) COMMENT '회원상태 (활성, 탈퇴, 휴면, 잠금'", nullable = false)
+    @Comment("회원상태 (활성|탈퇴|휴면|잠금)")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_status", nullable = false, length = 20)
     private UserStatus userStatus;
 
-    @Column(name = "password_init_yn", columnDefinition = "char(1) DEFAULT = 'N' COMMENT '비밀번호 초기화 필요 여부'", nullable = false)
+    @Comment("비밀번호 초기화 필요 여부")
+    @Column(name = "password_init_yn", nullable = false)
     private Boolean passwordInitYn = Boolean.FALSE;
 
-    @Column(name = "fail_password_count", columnDefinition = "int DEFAULT = 0 COMMENT '비밀번호 틀린 횟수'", nullable = false)
-    private int failPasswordCount;
+    @Comment("비밀번호 틀린 횟수")
+    @Column(name = "fail_password_count", nullable = false)
+    private int failPasswordCount = 0;
 
-    @Column(name = "account_locked_datetime", columnDefinition = "datetime COMMENT '로그인 잠금 일시'")
+    @Comment("로그인 잠금 일시")
+    @Column(name = "account_locked_datetime")
     private LocalDateTime accountLockedDatetime;
 
-    @Column(name = "last_login_datetime", columnDefinition = "datetime COMMENT '마지막 로그인 일시'")
+    @Comment("마지막 로그인 일시")
+    @Column(name = "last_login_datetime")
     private LocalDateTime lastLoginDatetime;
 
-    @Column(name = "last_password_change_datetime", columnDefinition = "datetime COMMENT '마지막 비밀번호 변경 일시'", nullable = false)
+    @Comment("마지막 비밀번호 변경 일시")
+    @Column(name = "last_password_change_datetime", nullable = false)
     private LocalDateTime lastPasswordChangeDatetime;
 
-    @Column(name = "required_password_change_datetime", columnDefinition = "datetime COMMENT '비밀번호 변경 요구 일시'", nullable = false)
+    @Comment("비밀번호 변경 요구 일시")
+    @Column(name = "required_password_change_datetime", nullable = false)
     private LocalDateTime requiredPasswordChangeDatetime;
 
-    @Column(name = "login_available_date", columnDefinition = "date COMMENT '로그인 가능일자'")
+    @Comment("로그인 가능일자")
+    @Column(name = "login_available_date")
     private LocalDate loginAvailableDate;
 
-    @Column(name = "rejoin_possible_date", columnDefinition = "date COMMENT '재가입 가능일자'")
+    @Comment("재가입 가능일자")
+    @Column(name = "rejoin_possible_date")
     private LocalDate rejoinPossibleDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_connecting_information_id", columnDefinition = "bigint COMMENT 'CI 인증정보 순번'")
-    private UserConnectingInformationEntity userConnectingInformation;
+//    todo: NICE 인증 모듈 구현 시 추가 예정
+//    @Comment("CI 인증정보 순번")
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_connecting_information_id")
+//    private UserConnectingInformationEntity userConnectingInformation;
 
-    @Column(name = "rejoin_yn", columnDefinition = "char(1) DEFAULT = 'N' COMMENT '재가입여부'")
+    @Comment("재가입여부")
+    @Column(name = "rejoin_yn", nullable = false)
     private Boolean isRejoin = Boolean.FALSE;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserInformationChangeHistoryEntity> userInformationChangeHistories = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserEntity that = (UserEntity) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(this.id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.id);
+    }
+
+    @Builder
+    private UserEntity(UserType userType, String userAccount, UserAccountType userAccountType, String userPassword, UserStatus userStatus, Boolean passwordInitYn, int failPasswordCount, LocalDateTime accountLockedDatetime, LocalDateTime lastLoginDatetime, LocalDateTime lastPasswordChangeDatetime, LocalDateTime requiredPasswordChangeDatetime, LocalDate loginAvailableDate, LocalDate rejoinPossibleDate, Boolean isRejoin, List<UserInformationChangeHistoryEntity> userInformationChangeHistories)
+    {
+        this.userType = userType;
+        this.userAccount = userAccount;
+        this.userAccountType = userAccountType;
+        this.userPassword = userPassword;
+        this.userStatus = userStatus;
+        this.passwordInitYn = passwordInitYn;
+        this.failPasswordCount = failPasswordCount;
+        this.accountLockedDatetime = accountLockedDatetime;
+        this.lastLoginDatetime = lastLoginDatetime;
+        this.lastPasswordChangeDatetime = lastPasswordChangeDatetime;
+        this.requiredPasswordChangeDatetime = requiredPasswordChangeDatetime;
+        this.loginAvailableDate = loginAvailableDate;
+        this.rejoinPossibleDate = rejoinPossibleDate;
+        this.isRejoin = isRejoin;
+        this.userInformationChangeHistories = userInformationChangeHistories;
+    }
 
 }
