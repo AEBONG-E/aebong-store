@@ -214,11 +214,10 @@ CREATE TABLE `withdrawal_user`
 CREATE TABLE `product`
 (
     `product_id`        BIGINT AUTO_INCREMENT COMMENT '상품순번 PK',
-    `category_id`       BIGINT                             NOT NULL COMMENT '상품 카테고리 순번',
     `product_code`      VARCHAR(20)                        NOT NULL COMMENT '상품코드',
     `product_name`      VARCHAR(150)                       NOT NULL COMMENT '상품명',
-    `brand`             VARCHAR(20)                        NOT NULL COMMENT '상품브랜드',
-    `product_type`      VARCHAR(20)                        NOT NULL COMMENT '상품유형',
+    `brand`             VARCHAR(100)                       NOT NULL COMMENT '상품브랜드',
+    `product_type`      VARCHAR(100)                       NOT NULL COMMENT '상품유형',
     `delete_yn`         VARCHAR(1)                         NOT NULL,
     `created_user_id`   BIGINT                             NOT NULL,
     `created_datetime`  DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -245,7 +244,7 @@ CREATE TABLE `category`
 CREATE TABLE `tag`
 (
     `tag_id`            BIGINT      NOT NULL AUTO_INCREMENT COMMENT '태그순번 PK',
-    `tag_name`          VARCHAR(50) NOT NULL COMMENT '태그 명',
+    `tag_name`          VARCHAR(50) NOT NULL COMMENT '태그명',
     `version`           INT         NOT NULL DEFAULT '1' COMMENT '버전',
     `delete_yn`         VARCHAR(1)  NOT NULL,
     `created_user_id`   BIGINT      NOT NULL,
@@ -260,9 +259,9 @@ CREATE TABLE `product_category`
     `product_category_id`        BIGINT     NOT NULL AUTO_INCREMENT COMMENT '상품 카테고리 순번 PK',
     `product_id`                 BIGINT     NOT NULL COMMENT '상품순번',
     `category_id`                BIGINT     NOT NULL COMMENT '카테고리 순번',
-    `representative_category_yn` CHAR(1)    NOT NULL DEFAULT 'N' COMMENT '대표 카테고리 여부',
-    `display_order`              INT        NOT NULL DEFAULT '0' COMMENT '노출 순서',
-    `category_display_order`     INT        NOT NULL DEFAULT '0' COMMENT '카테고리 노출 순서',
+    `main_category_yn`           CHAR(1)    NOT NULL DEFAULT 'N' COMMENT '대표 카테고리 여부',
+#     `display_order`              INT        NOT NULL DEFAULT '0' COMMENT '노출 순서',
+#     `category_display_order`     INT        NOT NULL DEFAULT '0' COMMENT '카테고리 노출 순서',
     `version`                    INT        NOT NULL DEFAULT '1' COMMENT '버전',
     `delete_yn`                  VARCHAR(1) NOT NULL,
     `created_user_id`            BIGINT     NOT NULL,
@@ -289,13 +288,13 @@ CREATE TABLE `product_tag`
 CREATE TABLE `image`
 (
     `image_id`                 BIGINT AUTO_INCREMENT COMMENT '이미지순번 PK',
-    `product_id`               BIGINT                             NOT NULL COMMENT '상품채번',
+    `product_id`               BIGINT                             NOT NULL COMMENT '상품순번',
     `admin_image_file_name`    VARCHAR(1000)                      NOT NULL COMMENT '이미지파일 관리 이름',
     `original_image_file_name` VARCHAR(1000)                      NOT NULL COMMENT '이미지파일 원본 이름',
     `image_file_name`          VARCHAR(1000)                      NOT NULL COMMENT '이미지파일 이름',
     `image_file_url`           TEXT                               NOT NULL COMMENT '이미지파일 url',
     `image_type`               VARCHAR(20)                        NOT NULL COMMENT '이미지유형',
-    `display_order`            INT                                NOT NULL COMMENT '노출순서',
+#     `display_order`            INT                                NOT NULL COMMENT '노출순서',
     `content_type`             VARCHAR(20)                        NOT NULL COMMENT '컨텐츠유형',
     `width`                    INT                                NOT NULL COMMENT '너비',
     `height`                   INT                                NOT NULL COMMENT '높이',
