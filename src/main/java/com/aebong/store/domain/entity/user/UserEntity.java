@@ -19,7 +19,7 @@ import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user")
+@Table(name = "`users`")
 @Entity
 public class UserEntity extends AuditingEntity {
 
