@@ -7,7 +7,7 @@ on:
 
 env:
   S3_BUCKET_NAME: aebong-s3
-  RESOURCE_PATH: ./src/main/resources/application-datasource-prod.yml
+  RESOURCE_PATH: ./src/main/resources/application-prod.yml
   CODE_DEPLOY_APPLICATION_NAME: AEBONG-CODEDEPLOY
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: AEBONG-CODEDEPLOY-GROUP
 
