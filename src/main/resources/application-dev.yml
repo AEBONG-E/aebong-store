@@ -8,15 +8,18 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate.dialect.storage_engine: innodb
       show-sql: true
+      hibernate:
+        format_sql: true
 
   datasource:
-    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/aebong_store
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+#    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/aebong_store
+    url: jdbc:mysql://localhost:13306/aebong_store
+    username: root
+    password: dlatjdgns1923!
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 3000            # (밀리초) 커넥션 풀에서 커넥션을 가져오기 위한 최대 대기 시간 (기본값: 30000ms)

@@ -4,4 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum LogSubType {
+
+    NEW_JOIN,
+    RE_JOIN
+
 }

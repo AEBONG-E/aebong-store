@@ -2,7 +2,7 @@
 -- 회원
 -- ===========================================================================================================
 
-CREATE TABLE `user`
+CREATE TABLE `users`
 (
     `user_id`                           BIGINT AUTO_INCREMENT COMMENT '회원순번 PK',
     `user_type`                         VARCHAR(20)                        NOT NULL COMMENT '회원유형',
