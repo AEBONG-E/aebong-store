@@ -62,7 +62,7 @@ CREATE TABLE `user_detail`
     `modified_user_id`       BIGINT       NULL,
     `modified_datetime`      DATETIME     NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_detail_id`),
-    CONSTRAINT `fk_user_detail_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `fk_user_detail_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB COMMENT ='회원 상세 정보 관리 테이블';
 
 CREATE TABLE `user_connecting_information`
@@ -95,7 +95,7 @@ CREATE TABLE `user_social_account`
     `modified_user_id`       BIGINT                             NULL,
     `modified_datetime`      DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_social_account_id`),
-    CONSTRAINT `fk_user_social_account_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `fk_user_social_account_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB COMMENT ='회원 소셜 계정 관리 테이블';
 
 CREATE TABLE `user_delivery_addresses`
@@ -121,7 +121,7 @@ CREATE TABLE `user_delivery_addresses`
     `modified_user_id`  BIGINT                                 NULL,
     `modified_datetime` DATETIME                               NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_delivery_addresses_id`),
-    CONSTRAINT `fk_user_delivery_addresses_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+    CONSTRAINT `fk_user_delivery_addresses_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE = InnoDB COMMENT ='회원 배송지 정보 관리 테이블';
 
 CREATE TABLE `user_refund_bank_account`
@@ -141,7 +141,7 @@ CREATE TABLE `user_refund_bank_account`
     `modified_user_id`            BIGINT                                NULL,
     `modified_datetime`           DATETIME                              NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_refund_bank_account_id`),
-    CONSTRAINT `fk_user_refund_bank_account_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+    CONSTRAINT `fk_user_refund_bank_account_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE = InnoDB COMMENT ='회원 환불계좌 관리 테이블';
 
 CREATE TABLE `user_refund_bank_account_history`
@@ -169,7 +169,7 @@ CREATE TABLE `user_refund_bank_account_history`
     CONSTRAINT `fk_user_refund_bank_account_history_parent` FOREIGN KEY (`user_refund_bank_account_id`)
         REFERENCES `user_refund_bank_account` (`user_refund_bank_account_id`),
     CONSTRAINT `fk_user_refund_bank_account_history_user_id` FOREIGN KEY (`user_id`)
-        REFERENCES `user` (`user_id`)
+        REFERENCES `users` (`user_id`)
 ) ENGINE = InnoDB COMMENT ='회원 환불계좌 이력 관리 테이블';
 
 CREATE TABLE `user_information_change_history`
@@ -204,7 +204,7 @@ CREATE TABLE `withdrawal_user`
     `modified_user_id`    BIGINT                                 NULL,
     `modified_datetime`   DATETIME                               NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`withdrawal_user_id`),
-    CONSTRAINT `fk_withdrawal_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+    CONSTRAINT `fk_withdrawal_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE = InnoDB COMMENT ='탈퇴 회원 정보 관리 테이블';
 
 -- ===========================================================================================================
