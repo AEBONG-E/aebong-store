@@ -48,15 +48,15 @@ public class UserDetailEntity extends AuditingEntity {
     private Gender gender;
 
     @Comment("휴대폰번호")
-    @Column(name = "mobile_number", length = 11)
+    @Column(name = "mobile_number", length = 11, unique = true)
     private String mobileNumber;
 
     @Comment("개인식별번호")
-    @Column(name = "personal_id", length = 13)
-    private String personalId;
+    @Column(name = "rrn", length = 13, unique = true)
+    private String rrn;
 
     @Comment("닉네임")
-    @Column(name = "nick_name", length = 100)
+    @Column(name = "nick_name", length = 100, unique = true)
     private String nickName;
 
     @Comment("전화번호")
@@ -64,7 +64,7 @@ public class UserDetailEntity extends AuditingEntity {
     private String telNumber;
 
     @Comment("이메일")
-    @Column(name = "email", length = 150)
+    @Column(name = "email", length = 150, unique = true)
     private String email;
 
     @Embedded
@@ -105,14 +105,14 @@ public class UserDetailEntity extends AuditingEntity {
     }
 
     @Builder
-    private UserDetailEntity(UserEntity user, String firstName, String lastName, LocalDate birthDate, Gender gender, String mobileNumber, String personalId, String nickName, String telNumber, String email, Address address, LocalDateTime joinDatetime, LocalDateTime activatedDatetime, LocalDateTime inactivatedDatetime, LocalDateTime withdrawalDatetime, LocalDateTime dormantDatetime) {
+    private UserDetailEntity(UserEntity user, String firstName, String lastName, LocalDate birthDate, Gender gender, String mobileNumber, String rrn, String nickName, String telNumber, String email, Address address, LocalDateTime joinDatetime, LocalDateTime activatedDatetime, LocalDateTime inactivatedDatetime, LocalDateTime withdrawalDatetime, LocalDateTime dormantDatetime) {
         this.user = user;
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthDate = birthDate;
         this.gender = gender;
         this.mobileNumber = mobileNumber;
-        this.personalId = personalId;
+        this.rrn = rrn;
         this.nickName = nickName;
         this.telNumber = telNumber;
         this.email = email;

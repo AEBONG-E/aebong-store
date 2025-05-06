@@ -33,7 +33,7 @@ public class UserEntity extends AuditingEntity {
     private UserType userType;
 
     @Comment("회원계정")
-    @Column(name = "user_account", nullable = false, length = 30)
+    @Column(name = "user_account", nullable = false, length = 30, unique = true)
     private String userAccount;
 
     @Comment("회원계정 유형")
@@ -109,7 +109,7 @@ public class UserEntity extends AuditingEntity {
     }
 
     @Builder
-    private UserEntity(UserType userType, String userAccount, UserAccountType userAccountType, String userPassword, UserStatus userStatus, Boolean passwordInitYn, int failPasswordCount, LocalDateTime accountLockedDatetime, LocalDateTime lastLoginDatetime, LocalDateTime lastPasswordChangeDatetime, LocalDateTime requiredPasswordChangeDatetime, LocalDate loginAvailableDate, LocalDate rejoinPossibleDate, Boolean isRejoin, List<UserInformationChangeHistoryEntity> userInformationChangeHistories)
+    private UserEntity(UserType userType, String userAccount, UserAccountType userAccountType, String userPassword, UserStatus userStatus, Boolean passwordInitYn, int failPasswordCount, LocalDateTime accountLockedDatetime, LocalDateTime lastLoginDatetime, LocalDateTime lastPasswordChangeDatetime, LocalDateTime requiredPasswordChangeDatetime, LocalDate loginAvailableDate, LocalDate rejoinPossibleDate, Boolean isRejoin)
     {
         this.userType = userType;
         this.userAccount = userAccount;
@@ -125,7 +125,6 @@ public class UserEntity extends AuditingEntity {
         this.loginAvailableDate = loginAvailableDate;
         this.rejoinPossibleDate = rejoinPossibleDate;
         this.isRejoin = isRejoin;
-        this.userInformationChangeHistories = userInformationChangeHistories;
     }
 
 }

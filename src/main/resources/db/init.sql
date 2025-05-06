@@ -25,6 +25,7 @@ CREATE TABLE `users`
     `created_datetime`                  DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
     `modified_user_id`                  BIGINT                             NULL,
     `modified_datetime`                 DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT users_uk_user_account UNIQUE (user_account),
     PRIMARY KEY (`user_id`)
 ) ENGINE = InnoDB COMMENT '회원 관리 테이블';
 
@@ -37,7 +38,7 @@ CREATE TABLE `user_detail`
     `birth_date`             DATE                  DEFAULT NULL COMMENT '생년월일',
     `gender`                 VARCHAR(20)  NOT NULL COMMENT '성별(MALE|FEMALE|NON_BINARY|OTHER)',
     `mobile_number`          VARCHAR(11)           DEFAULT NULL COMMENT '휴대폰번호',
-    `personal_id`            VARCHAR(100)          DEFAULT NULL COMMENT '개인식별번호',
+    `rrn`                    VARCHAR(100)          DEFAULT NULL COMMENT '개인식별번호(Resident Registration Number)',
     `nick_name`              VARCHAR(100)          DEFAULT NULL COMMENT '회원 닉네임',
     `tel_number`             VARCHAR(30)           DEFAULT NULL COMMENT '전화번호',
     `email`                  VARCHAR(150)          DEFAULT NULL COMMENT '이메일주소',
@@ -61,6 +62,10 @@ CREATE TABLE `user_detail`
     `created_datetime`       DATETIME              DEFAULT CURRENT_TIMESTAMP NOT NULL,
     `modified_user_id`       BIGINT       NULL,
     `modified_datetime`      DATETIME     NULL ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT user_detail_uk_email UNIQUE (email),
+    CONSTRAINT user_detail_uk_mobile_number UNIQUE (mobile_number),
+    CONSTRAINT user_detail_uk_nick_name UNIQUE (nick_name),
+    CONSTRAINT user_detail_uk_rrn UNIQUE (rrn),
     PRIMARY KEY (`user_detail_id`),
     CONSTRAINT `fk_user_detail_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB COMMENT ='회원 상세 정보 관리 테이블';
