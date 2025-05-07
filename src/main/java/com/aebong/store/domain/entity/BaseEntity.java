@@ -3,6 +3,7 @@ package com.aebong.store.domain.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
@@ -36,5 +37,10 @@ public abstract class BaseEntity {
     @Column(name = "modified_datetime")
     @LastModifiedDate
     private LocalDateTime modifiedDatetime;
+
+    @PrePersist
+    public void PrePersist(){
+        createdDatetime = LocalDateTime.now();
+    }
 
 }
