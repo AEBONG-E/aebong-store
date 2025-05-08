@@ -28,4 +28,4 @@ spring:
 
 logging:
   level:
-    sql: debug
+    sql: info

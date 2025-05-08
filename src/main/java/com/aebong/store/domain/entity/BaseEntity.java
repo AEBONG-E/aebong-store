@@ -31,16 +31,11 @@ public abstract class BaseEntity {
     @Comment("데이터 생성 일시")
     @Column(name = "created_datetime", nullable = false, updatable = false)
     @CreatedDate
-    private LocalDateTime createdDatetime;
+    private LocalDateTime createdDatetime = LocalDateTime.now();
 
     @Comment("데이터 수정 일시")
     @Column(name = "modified_datetime")
     @LastModifiedDate
     private LocalDateTime modifiedDatetime;
-
-    @PrePersist
-    public void PrePersist(){
-        createdDatetime = LocalDateTime.now();
-    }
 
 }

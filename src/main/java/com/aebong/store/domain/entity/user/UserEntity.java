@@ -51,11 +51,11 @@ public class UserEntity extends AuditingEntity {
 
     @Comment("비밀번호 초기화 필요 여부")
     @Column(name = "password_init_yn", nullable = false)
-    private Boolean passwordInitYn = Boolean.FALSE;
+    private Boolean passwordInitYn;
 
     @Comment("비밀번호 틀린 횟수")
     @Column(name = "fail_password_count", nullable = false)
-    private int failPasswordCount = 0;
+    private Integer failPasswordCount;
 
     @Comment("로그인 잠금 일시")
     @Column(name = "account_locked_datetime")
@@ -89,7 +89,7 @@ public class UserEntity extends AuditingEntity {
 
     @Comment("재가입여부")
     @Column(name = "rejoin_yn", nullable = false)
-    private Boolean isRejoin = Boolean.FALSE;
+    private Boolean isRejoin;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserInformationChangeHistoryEntity> userInformationChangeHistories = new ArrayList<>();
@@ -116,15 +116,15 @@ public class UserEntity extends AuditingEntity {
         this.userAccountType = userAccountType;
         this.userPassword = userPassword;
         this.userStatus = userStatus;
-        this.passwordInitYn = passwordInitYn;
-        this.failPasswordCount = failPasswordCount;
+        this.passwordInitYn = Objects.isNull(passwordInitYn) ? Boolean.FALSE : passwordInitYn;
+        this.failPasswordCount = Objects.isNull(failPasswordCount) ? 0 : failPasswordCount;
         this.accountLockedDatetime = accountLockedDatetime;
         this.lastLoginDatetime = lastLoginDatetime;
-        this.lastPasswordChangeDatetime = lastPasswordChangeDatetime;
+        this.lastPasswordChangeDatetime = Objects.isNull(lastPasswordChangeDatetime) ? LocalDateTime.now() : lastPasswordChangeDatetime;
         this.requiredPasswordChangeDatetime = requiredPasswordChangeDatetime;
         this.loginAvailableDate = loginAvailableDate;
         this.rejoinPossibleDate = rejoinPossibleDate;
-        this.isRejoin = isRejoin;
+        this.isRejoin = Objects.isNull(isRejoin) ? Boolean.FALSE : isRejoin;
     }
 
 }

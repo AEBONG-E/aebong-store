@@ -94,13 +94,7 @@ public class UserRegisterInfo {
                 .userAccountType(this.userAccountType)
                 .userPassword(this.userPassword)
                 .userStatus(this.userStatus)
-                .passwordInitYn(this.passwordInitYn)
-                .failPasswordCount(this.failPasswordCount)
-                .accountLockedDatetime(this.accountLockedDatetime)
-                .lastLoginDatetime(this.lastLoginDatetime)
-                .lastPasswordChangeDatetime(this.lastPasswordChangeDatetime)
-                .rejoinPossibleDate(this.rejoinPossibleDate)
-                .isRejoin(this.isRejoin)
+                .requiredPasswordChangeDatetime(this.requiredPasswordChangeDatetime)
                 .build();
     }
 
