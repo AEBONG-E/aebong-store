@@ -15,6 +15,7 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -23,37 +24,35 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional
-@UnitTest
+@SpringBootTest
 class UserServiceTest {
-    
+
+    @Autowired private UserService service;
     @Autowired private UserRepository userRepository;
     @Autowired private UserDetailRepository userDetailRepository;
     @Autowired private EntityManager em;
 
-    @DisplayName("유효한 사용자 정보가 주어지면 정상적으로 사용자 정보가 저장되어야 한다.")
+    @DisplayName("UserService:registerUser 메소드 테스트")
     @Test
-    void givenValidUserRegisterInfo_whenSaving_thenUserIsPersisted() {
+    void registerUser_test() {
         // given
         UserRegisterInfo registerInfo = createUserRegisterInfo();
-        UserEntity newUser = registerInfo.toUserEntity();
-        UserDetailEntity newUserDetail = registerInfo.toUserDetailEntity(newUser);
+
+        String validateUserAccount = "aebong@gmail.com";
+        String validateEmail = "aebong@gmail.com";
 
         // when
-        this.userRepository.save(newUser);
-        this.userDetailRepository.save(newUserDetail);
+        this.service.registerUser(registerInfo);
 
         em.flush();
         em.clear();
 
-        boolean isEqualsUserAccount = this.userRepository.existsByUserAccount(newUser.getUserAccount());
-        boolean isEqualsEmail = this.userDetailRepository.existsByEmail(newUserDetail.getEmail());
-
-        Optional<UserEntity> findUserInfo = this.userRepository.findById(newUser.getId());
+        boolean isEqualsUserAccount = this.userRepository.existsByUserAccount(validateUserAccount);
+        boolean isEqualsEmail = this.userDetailRepository.existsByEmail(validateEmail);
 
         // then
         assertThat(isEqualsUserAccount).isTrue();
         assertThat(isEqualsEmail).isTrue();
-        assertThat(findUserInfo.get().getUserAccount()).isEqualTo("aebong@gmail.com");
 
     }
 
@@ -69,10 +68,8 @@ class UserServiceTest {
                 .lastName("이")
                 .gender(Gender.MALE)
                 .email("aebong@gmail.com")
-                .address(Address.builder()
-                        .address1("대구광역시 수성구 동대구로 86")
-                        .zipCode("42176")
-                        .build())
+                .address1("대구광역시 수성구 동대구로 86")
+                .zipcode("42176")
                 .build();
     }
 
