@@ -6,7 +6,6 @@ import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.common.exceptions.UserInvalidException;
-import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
@@ -78,10 +77,8 @@ class UserRegisterServiceUnitTest {
                 .lastName("E")
                 .gender(Gender.MALE)
                 .email("aebonge@gmail.com")
-                .address(Address.builder()
-                                 .address1("대구광역시 수성구 동대구로 86")
-                                 .zipCode("42176")
-                                 .build())
+                .address1("대구광역시 수성구 동대구로 86")
+                .zipcode("42176")
                 .build();
         UserEntity user2 = registerInfo2.toUserEntity();
         UserDetailEntity userDetail2 = registerInfo.toUserDetailEntity(user2);
@@ -116,10 +113,8 @@ class UserRegisterServiceUnitTest {
                 .lastName("이")
                 .gender(Gender.MALE)
                 .email("aebong@gmail.com")
-                .address(Address.builder()
-                        .address1("대구광역시 수성구 동대구로 86")
-                        .zipCode("42176")
-                        .build())
+                .address1("대구광역시 수성구 동대구로 86")
+                .zipcode("42176")
                 .build();
     }
 

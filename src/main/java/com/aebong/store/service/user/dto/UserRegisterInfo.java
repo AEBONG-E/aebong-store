@@ -61,7 +61,8 @@ public class UserRegisterInfo {
                             LocalDate birthDate, Gender gender,
                             String mobileNumber, String rrn,
                             String nickName, String telNumber,
-                            String email, Address address,
+                            String email, String address1,
+                            String address2, String zipcode,
                             LocalDateTime joinDatetime, LocalDateTime activatedDatetime,
                             LocalDateTime inactivatedDatetime, LocalDateTime withdrawalDatetime,
                             LocalDateTime dormantDatetime) {
@@ -82,7 +83,11 @@ public class UserRegisterInfo {
         this.nickName = nickName;
         this.telNumber = telNumber;
         this.email = email;
-        this.address = address;
+        this.address = Address.builder()
+                .address1(address1)
+                .address2(address2)
+                .zipCode(zipcode)
+                .build();
         this.joinDatetime = LocalDateTime.now();
         this.activatedDatetime = LocalDateTime.now();
     }
