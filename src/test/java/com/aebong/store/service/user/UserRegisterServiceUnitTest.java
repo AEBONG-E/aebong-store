@@ -5,7 +5,7 @@ import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
-import com.aebong.store.common.exceptions.UserInvalidException;
+import com.aebong.store.common.exceptions.UserApplicationException;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
@@ -97,7 +97,7 @@ class UserRegisterServiceUnitTest {
         assertThat(isEqualsUserAccount).isTrue();
         assertThat(isEqualsEmail).isTrue();
         assertThatThrownBy(() -> userIsExists(user2.getUserAccount()))
-                .isInstanceOf(UserInvalidException.class).hasMessage("Invalid user data.");
+                .isInstanceOf(UserApplicationException.class).hasMessage("Invalid user data.");
 
     }
 
@@ -122,7 +122,7 @@ class UserRegisterServiceUnitTest {
         if (Objects.nonNull(userAccount)) {
             boolean isExists = this.userRepository.existsByUserAccount(userAccount);
             if (isExists) {
-                throw new UserInvalidException("Invalid user data.");
+                throw new UserApplicationException("Invalid user data.");
             }
         }
     }
