@@ -4,6 +4,6 @@ import com.aebong.store.service.user.dto.UserRegisterInfo;
 
 public interface UserService {
 
-    public void registerUser(UserRegisterInfo registerInfo);
+    void registerUser(UserRegisterInfo registerInfo);
 
 }
