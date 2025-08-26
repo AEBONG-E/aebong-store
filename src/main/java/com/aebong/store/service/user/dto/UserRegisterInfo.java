@@ -7,6 +7,7 @@ import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,9 +27,13 @@ public class UserRegisterInfo {
     private UserStatus userStatus;
     private Boolean passwordInitYn;
     private int failPasswordCount;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime accountLockedDatetime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginDatetime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastPasswordChangeDatetime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime requiredPasswordChangeDatetime;
     private LocalDate loginAvailableDate;
     private LocalDate rejoinPossibleDate;
@@ -43,10 +48,15 @@ public class UserRegisterInfo {
     private String telNumber;
     private String email;
     private Address address;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime joinDatetime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime activatedDatetime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime inactivatedDatetime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime withdrawalDatetime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dormantDatetime;
 
     @Builder

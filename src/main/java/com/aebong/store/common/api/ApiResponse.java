@@ -21,7 +21,6 @@ public class ApiResponse<T> {
                 .build();
     }
 
-    // 응답 실패 경우 (데이터 O)
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
                 .code("SUCCESS")
@@ -29,6 +28,7 @@ public class ApiResponse<T> {
                 .build();
     }
 
+    // 응답 실패 경우 (데이터 O)
     public static <T> ApiResponse<T> error(String errorCode, String errorMessage) {
         return ApiResponse.<T>builder()
                 .code(errorCode)
