@@ -4,19 +4,19 @@ import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
+import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Getter
 public class UserRegisterInfo {
 
@@ -27,13 +27,9 @@ public class UserRegisterInfo {
     private UserStatus userStatus;
     private Boolean passwordInitYn;
     private int failPasswordCount;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime accountLockedDatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginDatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastPasswordChangeDatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime requiredPasswordChangeDatetime;
     private LocalDate loginAvailableDate;
     private LocalDate rejoinPossibleDate;
@@ -48,15 +44,10 @@ public class UserRegisterInfo {
     private String telNumber;
     private String email;
     private Address address;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime joinDatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime activatedDatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime inactivatedDatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime withdrawalDatetime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dormantDatetime;
 
     @Builder
@@ -96,7 +87,7 @@ public class UserRegisterInfo {
         this.address = Address.builder()
                 .address1(address1)
                 .address2(address2)
-                .zipCode(zipcode)
+                .zipcode(zipcode)
                 .build();
         this.joinDatetime = LocalDateTime.now();
         this.activatedDatetime = LocalDateTime.now();
@@ -132,6 +123,27 @@ public class UserRegisterInfo {
                 .inactivatedDatetime(this.inactivatedDatetime)
                 .withdrawalDatetime(this.withdrawalDatetime)
                 .dormantDatetime(this.dormantDatetime)
+                .build();
+    }
+
+    public UserRegisterRequest toRequest(UserRegisterInfo userRegisterInfo) {
+        if (userRegisterInfo == null) return null;
+        return UserRegisterRequest.builder()
+                .userType(userRegisterInfo.getUserType())
+                .userAccount(userRegisterInfo.getUserAccount())
+                .userAccountType(userRegisterInfo.getUserAccountType())
+                .userPassword(userRegisterInfo.getUserPassword())
+                .firstName(userRegisterInfo.getFirstName())
+                .lastName(userRegisterInfo.getLastName())
+                .birthDate(userRegisterInfo.getBirthDate())
+                .gender(userRegisterInfo.getGender())
+                .mobileNumber(userRegisterInfo.getMobileNumber())
+                .nickName(userRegisterInfo.getNickName())
+                .telNumber(userRegisterInfo.getTelNumber())
+                .email(userRegisterInfo.getEmail())
+                .address1(userRegisterInfo.getAddress().getAddress1())
+                .address2(Objects.nonNull(userRegisterInfo.getAddress().getAddress2()) ? userRegisterInfo.getAddress().getAddress2() : null)
+                .zipcode(userRegisterInfo.getAddress().getZipcode())
                 .build();
     }
 
