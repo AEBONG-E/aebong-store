@@ -1,4 +1,4 @@
-package com.aebong.store.service.user;
+package com.aebong.store.unit;
 
 import com.aebong.store.annotation.UnitTest;
 import com.aebong.store.common.enums.user.Gender;

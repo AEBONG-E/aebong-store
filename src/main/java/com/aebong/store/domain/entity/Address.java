@@ -31,15 +31,15 @@ public class Address {
 
     @Comment("우편번호")
     @Column(length = 6)
-    private String zipCode;
+    private String zipcode;
 
     @Builder
-    public Address(String address1, String address2, String city, String state, String zipCode) {
+    public Address(String address1, String address2, String city, String state, String zipcode) {
         this.address1 = address1;
         this.address2 = address2;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
+//        this.city = city;
+//        this.state = state;
+        this.zipcode = zipcode;
     }
 
 }

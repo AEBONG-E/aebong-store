@@ -38,6 +38,11 @@ public class UserServiceImpl implements UserService {
                     String.format("%s already exists userAccount", registerInfo.getUserAccount()));
         }
 
+        if (validateEmailIsExists(registerInfo.getEmail())) {
+            throw new UserApplicationException(CustomErrorType.IS_EXIST_USER,
+                    String.format("%s already exists email", registerInfo.getEmail()));
+        }
+
         // 회원 DB 저장 데이터 생성 (todo: 회원 기본 정보 DB 저장 전 비밀번호 암호화 처리 필요)
         userRepository.save(registerInfo.toUserEntity());
         userDetailRepository.save(registerInfo.toUserDetailEntity(registerInfo.toUserEntity()));
@@ -49,6 +54,13 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("userAccount is null");
         }
         return userRepository.existsByUserAccount(userAccount);
+    }
+
+    private boolean validateEmailIsExists(String email) {
+        if (Objects.isNull(email)) {
+            throw new IllegalArgumentException("userAccount is null");
+        }
+        return userDetailRepository.existsByEmail(email);
     }
 
 }
