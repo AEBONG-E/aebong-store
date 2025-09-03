@@ -4,6 +4,7 @@ import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
+import com.aebong.store.controller.api.UserController;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.service.user.UserService;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
@@ -16,8 +17,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.*;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
