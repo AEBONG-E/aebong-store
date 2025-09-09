@@ -35,22 +35,21 @@ public class UserRegisterRequest {
     private Address address;
 
     @Builder
-    public UserRegisterRequest(UserType userType, String userAccount,
-                               UserAccountType userAccountType, String userPassword,
-                               UserStatus userStatus, Boolean passwordInitYn,
-                               int failPasswordCount, LocalDateTime accountLockedDatetime,
-                               LocalDateTime lastLoginDatetime, LocalDateTime lastPasswordChangeDatetime,
-                               LocalDateTime requiredPasswordChangeDatetime, LocalDate loginAvailableDate,
-                               LocalDate rejoinPossibleDate, Boolean isRejoin,
-                               String firstName, String lastName,
-                               LocalDate birthDate, Gender gender,
-                               String mobileNumber, String rrn,
-                               String nickName, String telNumber,
-                               String email, String address1,
-                               String address2, String zipcode,
-                               LocalDateTime joinDatetime, LocalDateTime activatedDatetime,
-                               LocalDateTime inactivatedDatetime, LocalDateTime withdrawalDatetime,
-                               LocalDateTime dormantDatetime) {
+    public UserRegisterRequest(UserType userType,
+                               String userAccount,
+                               UserAccountType userAccountType,
+                               String userPassword,
+                               String firstName,
+                               String lastName,
+                               LocalDate birthDate,
+                               Gender gender,
+                               String mobileNumber,
+                               String nickName,
+                               String telNumber,
+                               String email,
+                               String address1,
+                               String address2,
+                               String zipcode) {
         this.userType = userType;
         this.userAccount = userAccount;
         this.userAccountType = userAccountType;

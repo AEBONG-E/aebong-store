@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/public")
+    @PostMapping("/sign-up")
     ApiResponse<Void> registerUser(@RequestBody UserRegisterInfo registerInfo) {
         userService.registerUser(registerInfo);
         return ApiResponse.success();

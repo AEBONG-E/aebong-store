@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
-@RequestMapping("/v1/users")
+@RequestMapping("/users")
 @Controller
 public class UserViewController {
 
     @GetMapping("/sign-up")
     public String getRegisterForm(Model model) {
-        model.addAttribute("userRegisterRequest", new UserRegisterRequest());
-        return "/sign-up";
+        model.addAttribute("registerForm", new UserRegisterRequest());
+        return "user-register";
     }
 
 }
