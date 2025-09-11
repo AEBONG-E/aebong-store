@@ -37,8 +37,8 @@
                             <input type="hidden" class="form-control" name="phone">
                             <div class="row g-3">
                                 <div class="row-sm-6">
-                                    <label th:for="email" class="form-label">아이디(이메일)</label>
-                                    <input type="email" class="form-control" name="email" placeholder="이메일을 입력해주세요">
+                                    <label th:for="userAccount" class="form-label">아이디(이메일)</label>
+                                    <input type="email" class="form-control" name="userAccount" placeholder="이메일을 입력해주세요">
                                     <!-- Ajax 로 이메일 중복 검사 -->
 <!--                                    <span class="emailCheck"></span>-->
 <!--                                    <p class="fieldError" th:if="${emailError}" th:text="${emailError}"></p>-->
@@ -54,8 +54,8 @@
 <!--                                    </div>-->
                                 </div>
                                 <div class="row-sm-6">
-                                    <label th:for="password" class="form-label">비밀번호</label>
-                                    <input type="password" id="password" class="form-control" name="password"
+                                    <label th:for="userPassword" class="form-label">비밀번호</label>
+                                    <input type="password" id="userPassword" class="form-control" name="userPassword"
                                            placeholder="비밀번호는 8~14 자리로 입력해주세요." required>
                                     <p class="fieldError" th:if="${passwordError}" th:text="${passwordError}"></p>
                                 </div>
@@ -84,29 +84,34 @@
                                 <div class="row-sm-6">
                                     <label for="passwordcheck" class="form-label">비밀번호 확인</label>
                                     <input type="password" class="form-control" id="passwordcheck"
-                                           placeholder="똑같은 비밀번호를 입력해주세요." required onkeyup="checkPasswordMatch();">
+                                           placeholder="똑같은 비밀번호를 입력해주세요.">
+<!--                                           required onkeyup="checkPasswordMatch();"-->
                                     <p id="passwordMatchMessage"></p>
                                 </div>
-                                <div class="row-sm-6">
-                                    <label th:for="nickName" class="form-label">닉네임</label>
-                                    <input type="text" class="form-control" name="nickName"
-                                           placeholder="닉네임을 입력해주세요." required>
-                                    <p class="fieldError" th:if="${nickNameError}" th:text="${nickNameError}"></p>
-                                    <!-- Ajax 로 닉네임 중복 검사 -->
-                                    <span class="nickNameCheck"></span>
+
+                                <div class="row mb-3">
+                                    <!-- 성(lastName) -->
+                                    <div class="col-sm-6">
+                                        <label th:for="lastName" class="form-label">성</label>
+                                        <input type="text" class="form-control" name="lastName" placeholder="성을 입력해주세요." required>
+                                        <p class="fieldError" th:if="${lastNameError}" th:text="${lastNameError}"></p>
+                                    </div>
+
+                                    <!-- 이름(firstName) -->
+                                    <div class="col-sm-6">
+                                        <label th:for="firstName" class="form-label">이름</label>
+                                        <input type="text" class="form-control" name="firstName" placeholder="이름을 입력해주세요." required>
+                                        <p class="fieldError" th:if="${firstNameError}" th:text="${firstNameError}"></p>
+                                    </div>
                                 </div>
+
                                 <div class="row-sm-6">
-                                    <label th:for="name" class="form-label">이름</label>
-                                    <input type="text" class="form-control" name="name" placeholder="이름 입력해주세요."
-                                           required>
-                                    <p class="fieldError" th:if="${nameError}" th:text="${nameError}"></p>
-                                </div>
-                                <div class="row-sm-6">
-                                    <label th:for="birth" class="form-label">생년월일</label>
-                                    <input type="text" class="form-control" name="birth"
+                                    <label th:for="birthDate" class="form-label">생년월일</label>
+                                    <input type="text" class="form-control" name="birthDate"
                                            placeholder="생년월일은 6자리로 입력해주세요" required>
                                     <p class="fieldError" th:if="${birthError}" th:text="${birthError}"></p>
                                 </div>
+
                                 <div class="form-radio">
                                     <p class="mb-3">성별</p>
                                     <input type="radio" class="form-radio-input" name="gender" value="M">
@@ -114,22 +119,9 @@
                                     <input type="radio" class="form-radio-input" name="gender" value="W">
                                     <label th:for="gender" class="form-check-label"> &nbsp;여자</label>
                                 </div>
+
                                 <div class="row-sm-6">
-                                    <label th:for="zipcode" class="form-label">우편번호</label>
-                                    <input type="text" class="form-control" name="zipcode" placeholder="우편번호 검색"
-                                           readonly>
-<!--                                    <input type="button" class="btn btn-secondary btn-sm" value="우편번호 검색"-->
-<!--                                           onclick="execDaumPostcode();">-->
-                                    <label th:for="addr1" class="form-label"></label>
-                                    <input type="text" class="form-control" name="addr1" placeholder="주소를 입력해주세요."
-                                           required>
-                                    <p id="addr1Error" class="fieldError"></p>
-                                    <input type="text" class="form-control" name="addr2"
-                                           placeholder="상세 주소를 입력해주세요." required>
-                                    <p id="addr2Error" class="fieldError"></p>
-                                </div>
-                                <div class="row-sm-6">
-                                    <label th:for="phone" class="form-label">전화번호</label>
+                                    <label th:for="phone" class="form-label">휴대폰번호</label>
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <input type="tel" class="form-control" name="phone1" placeholder="0000"
@@ -147,6 +139,30 @@
                                             <p id="phone3Error" class="fieldError"></p>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="row-sm-6">
+                                    <label th:for="nickName" class="form-label">닉네임</label>
+                                    <input type="text" class="form-control" name="nickName"
+                                           placeholder="닉네임을 입력해주세요." required>
+                                    <p class="fieldError" th:if="${nickNameError}" th:text="${nickNameError}"></p>
+                                    <!-- Ajax 로 닉네임 중복 검사 -->
+                                    <span class="nickNameCheck"></span>
+                                </div>
+
+                                <div class="row-sm-6">
+                                    <label th:for="zipcode" class="form-label">우편번호</label>
+                                    <input type="text" class="form-control" name="zipcode" placeholder="우편번호 검색"
+                                           >
+<!--                                    <input type="button" class="btn btn-secondary btn-sm" value="우편번호 검색"-->
+<!--                                           onclick="execDaumPostcode();">-->
+                                    <label th:for="address1" class="form-label"></label>
+                                    <input type="text" class="form-control" name="address1" placeholder="주소를 입력해주세요."
+                                           required>
+                                    <p id="address1Error" class="fieldError"></p>
+                                    <input type="text" class="form-control" name="address2"
+                                           placeholder="상세 주소를 입력해주세요." required>
+                                    <p id="address2Error" class="fieldError"></p>
                                 </div>
                                 <button id="btnForm" class="w-100 btn btn-dark btn-lg mx-auto" type="button"
                                         style="display: block;">회원가입

@@ -22,7 +22,7 @@ public class UserRegisterRequest {
 
     private UserType userType;
     private String userAccount;
-    private UserAccountType userAccountType;
+//    private UserAccountType userAccountType; // todo: 추후 SNS 소셜 계정 가입 기능 추가 시 필요
     private String userPassword;
     private String firstName;
     private String lastName;
@@ -35,8 +35,7 @@ public class UserRegisterRequest {
     private Address address;
 
     @Builder
-    public UserRegisterRequest(UserType userType,
-                               String userAccount,
+    public UserRegisterRequest(String userAccount,
                                UserAccountType userAccountType,
                                String userPassword,
                                String firstName,
@@ -50,9 +49,9 @@ public class UserRegisterRequest {
                                String address1,
                                String address2,
                                String zipcode) {
-        this.userType = userType;
+        this.userType = UserType.REGULAR_MEMBER;
         this.userAccount = userAccount;
-        this.userAccountType = userAccountType;
+//        this.userAccountType = userAccountType;
         this.userPassword = userPassword;
         this.firstName = firstName;
         this.lastName = lastName;

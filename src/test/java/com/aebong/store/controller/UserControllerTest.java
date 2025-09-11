@@ -39,7 +39,7 @@ class UserControllerTest {
         UserRegisterRequest request = registerInfo.toRequest(registerInfo);
 
         // when & then
-        mockMvc.perform(post("/api/v1/users/public")
+        mockMvc.perform(post("/api/v1/users/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())

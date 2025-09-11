@@ -131,7 +131,6 @@ public class UserRegisterInfo {
     public UserRegisterRequest toRequest(UserRegisterInfo userRegisterInfo) {
         if (userRegisterInfo == null) return null;
         return UserRegisterRequest.builder()
-                .userType(userRegisterInfo.getUserType())
                 .userAccount(userRegisterInfo.getUserAccount())
                 .userAccountType(userRegisterInfo.getUserAccountType())
                 .userPassword(userRegisterInfo.getUserPassword())
