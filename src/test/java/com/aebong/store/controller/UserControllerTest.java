@@ -35,19 +35,19 @@ class UserControllerTest {
     void 회원등록() throws Exception {
 
         // given
-        UserRegisterInfo registerInfo = createUserRegisterInfo();
-        UserRegisterRequest request = registerInfo.toRequest(registerInfo);
+        UserRegisterRequest registerRequest = createUserRegisterInfo();
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(registerRequest);
 
         // when & then
         mockMvc.perform(post("/api/v1/users/sign-up")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                .content(objectMapper.writeValueAsString(registerRequest)))
                 .andExpect(status().isOk())
                 .andDo(document("user-register",
                         requestFields(
-                                fieldWithPath("userType").description("회원유형 (예: ADMIN, REGULAR_MEMBER, ASSOCIATE_MEMBER, NON_MEMBER)"),
+//                                fieldWithPath("userType").description("회원유형 (예: ADMIN, REGULAR_MEMBER, ASSOCIATE_MEMBER, NON_MEMBER)"),
                                 fieldWithPath("userAccount").description("회원계정(이메일)"),
-                                fieldWithPath("userAccountType").description("회원계정유형 (예: EMAIL, SOCIAL"),
+//                                fieldWithPath("userAccountType").description("회원계정유형 (예: EMAIL, SOCIAL"),
                                 fieldWithPath("userPassword").description("비밀번호"),
                                 fieldWithPath("firstName").description("이름"),
                                 fieldWithPath("lastName").description("성"),
@@ -56,12 +56,12 @@ class UserControllerTest {
                                 fieldWithPath("mobileNumber").description("휴대폰번호"),
                                 fieldWithPath("nickName").description("별칭(닉네임)"),
                                 fieldWithPath("telNumber").description("전화번호"),
-                                fieldWithPath("email").description("이메일"),
-                                fieldWithPath("address.address1").description("주소(도로명주소|지번주소)"),
-                                fieldWithPath("address.address2").description("상세주소").optional(),
-                                fieldWithPath("address.city").description("구|군|동").optional(),
-                                fieldWithPath("address.state").description("도|시").optional(),
-                                fieldWithPath("address.zipcode").description("우편번호")
+//                                fieldWithPath("email").description("이메일"),
+                                fieldWithPath("address1").description("주소(도로명주소|지번주소)"),
+                                fieldWithPath("address2").description("상세주소").optional(),
+                                fieldWithPath("zipcode").description("우편번호")
+//                                fieldWithPath("address.city").description("구|군|동").optional(),
+//                                fieldWithPath("address.state").description("도|시").optional(),
                         ),
                         responseFields(
                                 fieldWithPath("code").description("응답코드"),
@@ -71,18 +71,18 @@ class UserControllerTest {
                 ));
     }
 
-    private UserRegisterInfo createUserRegisterInfo() {
-        return UserRegisterInfo.builder()
-                .userType(UserType.REGULAR_MEMBER)
+    private UserRegisterRequest createUserRegisterInfo() {
+        return UserRegisterRequest.builder()
+//                .userType(UserType.REGULAR_MEMBER)
                 .userAccount("aebong@gmail.com")
-                .userAccountType(UserAccountType.EMAIL)
+//                .userAccountType(UserAccountType.EMAIL)
                 .userPassword("nonencodepassword")
-                .userStatus(UserStatus.ACTIVATED)
-                .requiredPasswordChangeDatetime(LocalDateTime.now().plusDays(90))
+//                .userStatus(UserStatus.ACTIVATED)
+//                .requiredPasswordChangeDatetime(LocalDateTime.now().plusDays(90))
                 .firstName("애봉")
                 .lastName("이")
                 .gender(Gender.MALE)
-                .email("aebong@gmail.com")
+//                .email("aebong@gmail.com")
                 .address1("대구광역시 동구 동대구로 503")
                 .zipcode("42176")
                 .build();

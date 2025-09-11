@@ -9,18 +9,16 @@ import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Data
 @NoArgsConstructor
-@Getter
 public class UserRegisterRequest {
 
-    private UserType userType;
+//    private UserType userType;
     private String userAccount;
 //    private UserAccountType userAccountType; // todo: 추후 SNS 소셜 계정 가입 기능 추가 시 필요
     private String userPassword;
@@ -31,12 +29,13 @@ public class UserRegisterRequest {
     private String mobileNumber;
     private String nickName;
     private String telNumber;
-    private String email;
-    private Address address;
+//    private String email;
+    private String address1;
+    private String address2;
+    private String zipcode;
 
     @Builder
     public UserRegisterRequest(String userAccount,
-                               UserAccountType userAccountType,
                                String userPassword,
                                String firstName,
                                String lastName,
@@ -45,13 +44,12 @@ public class UserRegisterRequest {
                                String mobileNumber,
                                String nickName,
                                String telNumber,
-                               String email,
+//                               String email,
                                String address1,
                                String address2,
                                String zipcode) {
-        this.userType = UserType.REGULAR_MEMBER;
+//        this.userType = UserType.REGULAR_MEMBER;
         this.userAccount = userAccount;
-//        this.userAccountType = userAccountType;
         this.userPassword = userPassword;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -60,12 +58,10 @@ public class UserRegisterRequest {
         this.mobileNumber = mobileNumber;
         this.nickName = nickName;
         this.telNumber = telNumber;
-        this.email = email;
-        this.address = Address.builder()
-                .address1(address1)
-                .address2(address2)
-                .zipcode(zipcode)
-                .build();
+//        this.email = email;
+        this.address1 = address1;
+        this.address2 = address2;
+        this.zipcode = zipcode;
     }
 
 }

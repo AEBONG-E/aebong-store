@@ -1,6 +1,7 @@
 package com.aebong.store.controller.api;
 
 import com.aebong.store.common.api.ApiResponse;
+import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.service.user.UserService;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    ApiResponse<Void> registerUser(@RequestBody UserRegisterInfo registerInfo) {
-        userService.registerUser(registerInfo);
+    ApiResponse<Void> registerUser(@RequestBody UserRegisterRequest registerRequest) {
+        userService.registerUser(registerRequest);
         return ApiResponse.success();
     }
 

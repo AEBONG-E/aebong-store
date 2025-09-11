@@ -2,6 +2,7 @@ package com.aebong.store.service.user;
 
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.exceptions.UserApplicationException;
+import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
@@ -22,26 +23,28 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 회원 등록
-     * @param registerInfo 회원 등록 정보(api 통해 request 로 부터 받아올 매개변수)
+     * @param registerRequest 회원 등록 정보(api 통해 request 로 부터 받아올 매개변수)
      */
     @Transactional
     @Override
-    public void registerUser(UserRegisterInfo registerInfo) {
+    public void registerUser(UserRegisterRequest registerRequest) {
 
-        if (Objects.isNull(registerInfo)) {
+        if (Objects.isNull(registerRequest)) {
             throw new IllegalArgumentException("registerInfo must not be null");
         }
 
         // 회원 계정 중복 검증
-        if (validateUserAccountIsExists(registerInfo.getUserAccount())) {
+        if (validateUserAccountIsExists(registerRequest.getUserAccount())) {
             throw new UserApplicationException(CustomErrorType.IS_EXIST_USER,
-                    String.format("%s already exists userAccount", registerInfo.getUserAccount()));
+                    String.format("%s already exists userAccount", registerRequest.getUserAccount()));
         }
 
-        if (validateEmailIsExists(registerInfo.getEmail())) {
-            throw new UserApplicationException(CustomErrorType.IS_EXIST_USER,
-                    String.format("%s already exists email", registerInfo.getEmail()));
-        }
+//        if (validateEmailIsExists(registerRequest.getEmail())) {
+//            throw new UserApplicationException(CustomErrorType.IS_EXIST_USER,
+//                    String.format("%s already exists email", registerRequest.getEmail()));
+//        }
+
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(registerRequest);
 
         // 회원 DB 저장 데이터 생성 (todo: 회원 기본 정보 DB 저장 전 비밀번호 암호화 처리 필요)
         userRepository.save(registerInfo.toUserEntity());

@@ -6,6 +6,7 @@ import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.common.exceptions.UserApplicationException;
+import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
@@ -36,7 +37,7 @@ class UserServiceTest {
     @Test
     void 회원등록_정상_케이스() {
         // given
-        UserRegisterInfo registerInfo = createUserRegisterInfo();
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(createUserRegisterInfo());
         UserEntity userEntity = registerInfo.toUserEntity();
         UserDetailEntity userDetailEntity = registerInfo.toUserDetailEntity(userEntity);
 
@@ -49,14 +50,14 @@ class UserServiceTest {
         when(userRepository.saveAndFlush(any())).thenReturn(mock(UserEntity.class));
         when(userDetailRepository.saveAndFlush(any())).thenReturn(mock(UserDetailEntity.class));
 
-        assertThatCode(() -> service.registerUser(registerInfo)).doesNotThrowAnyException();
+        assertThatCode(() -> service.registerUser(createUserRegisterInfo())).doesNotThrowAnyException();
 
     }
 
     @Test
     void 회원등록_실패_중복된_userAccount가_들어온_케이스() {
         // given
-        UserRegisterInfo registerInfo = createUserRegisterInfo();
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(createUserRegisterInfo());
         UserEntity userEntity = registerInfo.toUserEntity();
         UserDetailEntity userDetailEntity = registerInfo.toUserDetailEntity(userEntity);
 
@@ -74,19 +75,19 @@ class UserServiceTest {
                 .hasMessage("is exist user.");
     }
 
-    private UserRegisterInfo createUserRegisterInfo() {
-        return UserRegisterInfo.builder()
-                .userType(UserType.REGULAR_MEMBER)
+    private UserRegisterRequest createUserRegisterInfo() {
+        return UserRegisterRequest.builder()
+//                .userType(UserType.REGULAR_MEMBER)
                 .userAccount("aebong@gmail.com")
-                .userAccountType(UserAccountType.EMAIL)
+//                .userAccountType(UserAccountType.EMAIL)
                 .userPassword("nonencodepassword")
-                .userStatus(UserStatus.ACTIVATED)
-                .requiredPasswordChangeDatetime(LocalDateTime.now().plusDays(90))
+//                .userStatus(UserStatus.ACTIVATED)
+//                .requiredPasswordChangeDatetime(LocalDateTime.now().plusDays(90))
                 .firstName("애봉")
                 .lastName("이")
                 .gender(Gender.MALE)
-                .email("aebong@gmail.com")
-                .address1("대구광역시 수성구 동대구로 86")
+//                .email("aebong@gmail.com")
+                .address1("대구광역시 동구 동대구로 503")
                 .zipcode("42176")
                 .build();
     }

@@ -128,23 +128,23 @@ public class UserRegisterInfo {
                 .build();
     }
 
-    public UserRegisterRequest toRequest(UserRegisterInfo userRegisterInfo) {
-        if (userRegisterInfo == null) return null;
-        return UserRegisterRequest.builder()
-                .userAccount(userRegisterInfo.getUserAccount())
-                .userAccountType(userRegisterInfo.getUserAccountType())
-                .userPassword(userRegisterInfo.getUserPassword())
-                .firstName(userRegisterInfo.getFirstName())
-                .lastName(userRegisterInfo.getLastName())
-                .birthDate(userRegisterInfo.getBirthDate())
-                .gender(userRegisterInfo.getGender())
-                .mobileNumber(userRegisterInfo.getMobileNumber())
-                .nickName(userRegisterInfo.getNickName())
-                .telNumber(userRegisterInfo.getTelNumber())
-                .email(userRegisterInfo.getEmail())
-                .address1(userRegisterInfo.getAddress().getAddress1())
-                .address2(Objects.nonNull(userRegisterInfo.getAddress().getAddress2()) ? userRegisterInfo.getAddress().getAddress2() : null)
-                .zipcode(userRegisterInfo.getAddress().getZipcode())
+    public static UserRegisterInfo to(UserRegisterRequest registerRequest) {
+        if (registerRequest == null) return null;
+        return UserRegisterInfo.builder()
+                .userType(UserType.REGULAR_MEMBER)
+                .userAccount(registerRequest.getUserAccount())
+                .userPassword(registerRequest.getUserPassword())
+                .firstName(registerRequest.getFirstName())
+                .lastName(registerRequest.getLastName())
+                .birthDate(registerRequest.getBirthDate())
+                .gender(registerRequest.getGender())
+                .mobileNumber(registerRequest.getMobileNumber())
+                .nickName(registerRequest.getNickName())
+                .telNumber(registerRequest.getTelNumber())
+//                .email(registerRequest.getEmail())
+                .address1(registerRequest.getAddress1())
+                .address2(Objects.nonNull(registerRequest.getAddress2()) ? registerRequest.getAddress2() : null)
+                .zipcode(registerRequest.getZipcode())
                 .build();
     }
 
