@@ -16,6 +16,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -81,6 +83,7 @@ class UserControllerTest {
 //                .requiredPasswordChangeDatetime(LocalDateTime.now().plusDays(90))
                 .firstName("애봉")
                 .lastName("이")
+                .birthDate(LocalDate.of(1990, 1,1))
                 .gender(Gender.MALE)
 //                .email("aebong@gmail.com")
                 .address1("대구광역시 동구 동대구로 503")

@@ -3,6 +3,8 @@ package com.aebong.store.service.user;
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.exceptions.UserApplicationException;
 import com.aebong.store.controller.req.UserRegisterRequest;
+import com.aebong.store.domain.entity.user.UserDetailEntity;
+import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
@@ -47,8 +49,11 @@ public class UserServiceImpl implements UserService {
         UserRegisterInfo registerInfo = UserRegisterInfo.to(registerRequest);
 
         // 회원 DB 저장 데이터 생성 (todo: 회원 기본 정보 DB 저장 전 비밀번호 암호화 처리 필요)
-        userRepository.save(registerInfo.toUserEntity());
-        userDetailRepository.save(registerInfo.toUserDetailEntity(registerInfo.toUserEntity()));
+        UserEntity user = registerInfo.toUserEntity();
+        userRepository.save(user);
+
+        UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
+        userDetailRepository.save(userDetail);
 
     }
 

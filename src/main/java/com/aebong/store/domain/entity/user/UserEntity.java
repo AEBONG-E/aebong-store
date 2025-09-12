@@ -94,6 +94,9 @@ public class UserEntity extends AuditingEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserInformationChangeHistoryEntity> userInformationChangeHistories = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserDetailEntity userDetail;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -109,7 +112,20 @@ public class UserEntity extends AuditingEntity {
     }
 
     @Builder
-    private UserEntity(UserType userType, String userAccount, UserAccountType userAccountType, String userPassword, UserStatus userStatus, Boolean passwordInitYn, int failPasswordCount, LocalDateTime accountLockedDatetime, LocalDateTime lastLoginDatetime, LocalDateTime lastPasswordChangeDatetime, LocalDateTime requiredPasswordChangeDatetime, LocalDate loginAvailableDate, LocalDate rejoinPossibleDate, Boolean isRejoin)
+    private UserEntity(UserType userType,
+                       String userAccount,
+                       UserAccountType userAccountType,
+                       String userPassword,
+                       UserStatus userStatus,
+                       Boolean passwordInitYn,
+                       int failPasswordCount,
+                       LocalDateTime accountLockedDatetime,
+                       LocalDateTime lastLoginDatetime,
+                       LocalDateTime lastPasswordChangeDatetime,
+                       LocalDateTime requiredPasswordChangeDatetime,
+                       LocalDate loginAvailableDate,
+                       LocalDate rejoinPossibleDate,
+                       Boolean isRejoin)
     {
         this.userType = userType;
         this.userAccount = userAccount;
@@ -121,7 +137,7 @@ public class UserEntity extends AuditingEntity {
         this.accountLockedDatetime = accountLockedDatetime;
         this.lastLoginDatetime = lastLoginDatetime;
         this.lastPasswordChangeDatetime = Objects.isNull(lastPasswordChangeDatetime) ? LocalDateTime.now() : lastPasswordChangeDatetime;
-        this.requiredPasswordChangeDatetime = requiredPasswordChangeDatetime;
+        this.requiredPasswordChangeDatetime = Objects.isNull(requiredPasswordChangeDatetime) ? LocalDateTime.now().plusMonths(6) : requiredPasswordChangeDatetime;
         this.loginAvailableDate = loginAvailableDate;
         this.rejoinPossibleDate = rejoinPossibleDate;
         this.isRejoin = Objects.isNull(isRejoin) ? Boolean.FALSE : isRejoin;

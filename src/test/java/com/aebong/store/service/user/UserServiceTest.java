@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
@@ -85,6 +87,7 @@ class UserServiceTest {
 //                .requiredPasswordChangeDatetime(LocalDateTime.now().plusDays(90))
                 .firstName("애봉")
                 .lastName("이")
+                .birthDate(LocalDate.of(1990, 1, 1))
                 .gender(Gender.MALE)
 //                .email("aebong@gmail.com")
                 .address1("대구광역시 동구 동대구로 503")

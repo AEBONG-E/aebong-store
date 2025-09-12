@@ -115,9 +115,9 @@
 
                                 <div class="form-radio">
                                     <p class="mb-3">성별</p>
-                                    <input type="radio" class="form-radio-input" id="genderM" name="gender" value="M">
+                                    <input type="radio" class="form-radio-input" id="genderM" name="gender" value="MALE">
                                     <label th:for="gender" class="form-check-label"> &nbsp;남자</label>
-                                    <input type="radio" class="form-radio-input" id="genderW" name="gender" value="W">
+                                    <input type="radio" class="form-radio-input" id="genderF" name="gender" value="FEMALE">
                                     <label th:for="gender" class="form-check-label"> &nbsp;여자</label>
                                 </div>
 
@@ -232,6 +232,24 @@
                             // });
                         <!-- 이메일 인증 끝 -->
 
+                            // yyMMdd → yyyy-MM-dd 변환 로직
+                            function formatBirthDate(yyMMdd) {
+                                if (!/^\d{6}$/.test(yyMMdd)) {
+                                    alert("생년월일은 6자리 숫자로 입력해주세요 (예: 900101)");
+                                    return null;
+                                }
+
+                                let yy = parseInt(yyMMdd.substring(0, 2), 10);
+                                let mm = yyMMdd.substring(2, 4);
+                                let dd = yyMMdd.substring(4, 6);
+
+                                // 00 ~ 24 -> 2000년대, 나머지 -> 1900년대
+                                let yyyy = (yy <= 24 ? 2000 : 1900) + yy;
+
+                                return `${yyyy}-${mm}-${dd}`; // yyyy-MM-dd
+                            }
+
+                            // form 양식 제출
                             $("#btnForm").click(function (e) {
 
                                 e.preventDefault(); // 폼 기본 전송 막기
@@ -248,6 +266,9 @@
 
                                 const gender = $("input[name='gender']:checked").val();
 
+                                const rawBirth = $("#birthDate").val(); // 예: 900101
+                                const formattedBirth = formatBirthDate(rawBirth); // 예: 1990-01-01
+
                                 $.ajax({
                                     type: "POST",
                                     url: "/api/v1/users/sign-up",
@@ -257,7 +278,7 @@
                                         userPassword: $("#userPassword").val(),
                                         firstName: $("#firstName").val(),
                                         lastName: $("#lastName").val(),
-                                        birthDate: $("#birthDate").val(),             // 예: 1990-01-01
+                                        birthDate: formattedBirth,             // 예: 1990-01-01
                                         gender: gender,                               // 예: MALE, FEMALE
                                         mobileNumber: $("#mobileNumber").val(),
                                         nickName: $("#nickName").val(),

@@ -27,7 +27,7 @@ public class UserDetailEntity extends AuditingEntity {
 
     @Comment("회원순번")
     @JoinColumn(name = "user_id", nullable = false)
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL, orphanRemoval = true)
     private UserEntity user;
 
     @Comment("이름")
