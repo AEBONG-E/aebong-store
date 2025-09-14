@@ -15,7 +15,7 @@ public class UserViewController {
     @GetMapping("/sign-up")
     public String getRegisterForm(Model model) {
         model.addAttribute("registerForm", new UserRegisterRequest());
-        return "user-register";
+        return "users/user-register";
     }
 
 }
