@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
 
 <head>
   <title>OH-bongs</title>
@@ -24,7 +25,7 @@
     rel="stylesheet">
 </head>
 
-<body>
+<div layout:fragment="content">
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol xmlns="http://www.w3.org/2000/svg" id="shopping-carriage" viewBox="0 0 24 24" fill="none">
       <path
@@ -380,169 +381,6 @@
   </div>
   <!-- Login -->
 
-  <header id="header" class="site-header text-black">
-    <div class="header-top border-bottom py-2">
-      <div class="container-lg">
-        <div class="row justify-content-evenly">
-          <div class="col">
-            <ul class="social-links list-unstyled d-flex m-0">
-              <li class="pe-2">
-                <a href="#">
-                  <svg class="facebook" width="20" height="20">
-                    <use xlink:href="#facebook"></use>
-                  </svg>
-                </a>
-              </li>
-              <li class="pe-2">
-                <a href="#">
-                  <svg class="instagram" width="20" height="20">
-                    <use xlink:href="#instagram"></use>
-                  </svg>
-                </a>
-              </li>
-              <li class="pe-2">
-                <a href="#">
-                  <svg class="youtube" width="20" height="20">
-                    <use xlink:href="#youtube"></use>
-                  </svg>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <svg class="pinterest" width="20" height="20">
-                    <use xlink:href="#pinterest"></use>
-                  </svg>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="col d-none d-md-block">
-            <p class="text-center text-black m-0"><strong>Special Offer</strong>: Free Shipping on all the orders above $100
-            </p>
-          </div>
-          <div class="col">
-            <ul class="d-flex justify-content-end gap-3 list-unstyled m-0">
-              <li>
-                <a href="#">Contact</a>
-              </li>
-              <li>
-                <a href="#">Cart</a>
-              </li>
-              <li>
-                <a href="#">Login</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <nav id="header-nav" class="navbar navbar-expand-lg">
-      <div class="container-lg">
-        <a class="navbar-brand" href="main.html">
-          <img th:src="@{/images/main-logo.png}" class="logo" alt="logo">
-        </a>
-        <button class="navbar-toggler d-flex d-lg-none order-3 border-0 p-1 ms-2" type="button" data-bs-toggle="offcanvas"
-          data-bs-target="#bdNavbar" aria-controls="bdNavbar" aria-expanded="false" aria-label="Toggle navigation">
-          <svg class="navbar-icon">
-            <use xlink:href="#navbar-icon"></use>
-          </svg>
-        </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="bdNavbar">
-          <div class="offcanvas-header px-4 pb-0">
-            <a class="navbar-brand ps-3" href="main.html">
-              <img th:src="@{/images/main-logo.png}" class="logo" alt="logo">
-            </a>
-            <button type="button" class="btn-close btn-close-black p-5" data-bs-dismiss="offcanvas" aria-label="Close"
-              data-bs-target="#bdNavbar"></button>
-          </div>
-          <div class="offcanvas-body">
-            <ul id="navbar" class="navbar-nav fw-bold justify-content-end align-items-center flex-grow-1">
-              <li class="nav-item dropdown">
-                <a class="nav-link me-5 active dropdown-toggle border-0" href="#" data-bs-toggle="dropdown"
-                  aria-expanded="false">Home</a>
-                <ul class="dropdown-menu fw-bold">
-                  <li>
-                    <a href="main.html" class="dropdown-item">Home V1</a>
-                  </li>
-                  <li>
-                    <a href="main.html" class="dropdown-item">Home V2 </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link me-5" href="#">Men</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link me-5" href="#">Women</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link me-5 active dropdown-toggle border-0" href="#" data-bs-toggle="dropdown"
-                  aria-expanded="false">Page</a>
-                <ul class="dropdown-menu fw-bold">
-                  <li>
-                    <a href="main.html" class="dropdown-item">About Us </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="main.html">Shop </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="main.html">Blog </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="main.html">Single Product </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="main.html">Single Post </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="main.html">Styles </a>
-                  </li>
-                  <li>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#modallong" class="dropdown-item">cart</a>
-                  </li>
-                  <li>
-                    <a href="#" data-bs-toggle="modal" data-bs-target="#modallogin" class="dropdown-item">Login</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link me-5" href="main.html">Shop</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link me-5" href="#">Sale</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="user-items ps-0 ps-md-5">
-          <ul class="d-flex justify-content-end list-unstyled align-item-center m-0">
-            <li class="pe-3">
-              <a href="login" data-bs-toggle="modal" data-bs-target="#modallogin" class="border-0">
-                <svg class="user" width="24" height="24">
-                  <use xlink:href="#user"></use>
-                </svg>
-              </a>
-            </li>
-            <li class="pe-3">
-              <a href="#" data-bs-toggle="modal" data-bs-target="#modallong" class="border-0">
-                <svg class="shopping-cart" width="24" height="24">
-                  <use xlink:href="#shopping-cart"></use>
-                </svg>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="search-item border-0" data-bs-toggle="collapse" data-bs-target="#search-box" aria-label="Toggle navigation">
-                <svg class="search" width="24" height="24">
-                  <use xlink:href="#search"></use>
-                </svg>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-
   <section id="intro" class="position-relative mt-4">
     <div class="container-lg">
       <div class="swiper main-swiper">
@@ -583,7 +421,7 @@
           </div>
           <div class="swiper-slide">
             <div class="card d-flex flex-row align-items-end border-0 large jarallax-keep-img">
-              <img src="images/card-image4.jpg" alt="shoes" class="img-fluid jarallax-img">
+              <img th:src="@{/images/card-image4.jpg}" alt="shoes" class="img-fluid jarallax-img">
               <div class="cart-concern p-3 m-3 p-lg-5 m-lg-5">
                 <h2 class="card-title display-3 light">Stylish shoes for men</h2>
                 <a href="main.html"
@@ -977,162 +815,14 @@
     </div>
   </section>
 
-  <footer id="footer" class="py-5 border-top">
-    <div class="container-lg">
-      <div class="row">
-        <div class="col-lg-2 pb-3">
-          <div class="footer-menu">
-            <h5 class="widget-title pb-2">Info</h5>
-            <ul class="menu-list list-unstyled">
-              <li class="pb-2">
-                <a href="#">Track Your Order</a>
-              </li>
-              <li class="pb-2">
-                <a href="main.html">Our Blog</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Privacy policy</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Shipping</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Contact Us</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Help</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Community</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-2 pb-3">
-          <div class="footer-menu">
-            <h5 class="widget-title pb-2">About</h5>
-            <ul class="menu-list list-unstyled">
-              <li class="pb-2">
-                <a href="#">History</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Our Team</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Services</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Company</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Manufacture</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Wholesale</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Retail</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-2 pb-3">
-          <div class="footer-menu">
-            <h5 class="widget-title pb-2">Women Shoes</h5>
-            <ul class="menu-list list-unstyled">
-              <li class="pb-2">
-                <a href="#">Track Your Order</a>
-              </li>
-              <li class="pb-2">
-                <a href="main.html">Our Blog</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Privacy policy</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Shipping</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Contact Us</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Help</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Community</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-2 pb-3">
-          <div class="footer-menu">
-            <h5 class="widget-title pb-2">Popular</h5>
-            <ul class="menu-list list-unstyled">
-              <li class="pb-2">
-                <a href="#">Prices Drop</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">New Products</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Best Sales</a>
-              </li>
-              <li class="pb-2">
-                <a href="main.html">Stores</a>
-              </li>
-              <li class="pb-2">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#modallogin">Login</a>
-              </li>
-              <li class="pb-2">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#modallong">Cart</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-2 pb-3">
-          <div class="footer-menu">
-            <h5 class="widget-title pb-2">Mens Collection</h5>
-            <ul class="menu-list list-unstyled">
-              <li class="pb-2">
-                <a href="#">Delivery</a>
-              </li>
-              <li class="pb-2">
-                <a href="main.html">About Us</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Shoes</a>
-              </li>
-              <li class="pb-2">
-                <a href="#">Contact Us</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-lg-2 pb-3">
-          <div class="footer-menu">
-            <h5 class="widget-title pb-3">Get In Touch</h5>
-            <div class="footer-contact-text">
-              <span>Stylish Online Store 123 Main Street, Toulouse - France. </span>
-              <span> Call us: (+33) 800 456 789-987 </span>
-              <span class="text-hover fw-bold light-border"><a href="mailto:contact@yourwebsite.com">contact@yourwebsite.com</a></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <p>© Copyright Stylish 2023.</p>
-        </div>
-        <div class="col-md-6 text-lg-end">
-          <p>Free HTML by <a href="https://templatesjungle.com/" target="_blank">TemplatesJungle</a><br> Distributed by <a href="https://themewagon.com" target="blank">ThemeWagon</a> </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <script th:src="@{/js/jquery-1.11.0.min.js}"></script>
+  <!-- footer layer -->
+
+</div>
+
+<th:block layout:fragment="script">
   <script th:src="@{/js/plugins.js}"></script>
   <script th:src="@{/js/script.js}"></script>
   <script th:src="@{/js/main.js}"></script>
-</body>
+</th:block>
 
 </html>

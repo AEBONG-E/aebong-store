@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+
 <head>
-    <title>회원 가입</title>
+    <title>회원가입|OH-bongs</title>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-          crossorigin="anonymous">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!--    <script src="/js/user.js" defer></script>-->
-
-
-    <!-- 사용자 css 추가 -->
+    <!-- individual CSS -->
     <th:block layout:fragment="css">
         <style>
 
@@ -23,8 +17,8 @@
             }
         </style>
     </th:block>
-
 </head>
+
 <div layout:fragment="content">
     <div class="container">
         <div class="d-flex justify-content-center">
@@ -54,6 +48,7 @@
 <!--                                        </button>-->
 <!--                                    </div>-->
                                 </div>
+
                                 <div class="row-sm-6">
                                     <label th:for="userPassword" class="form-label">비밀번호</label>
                                     <input type="password" id="userPassword" class="form-control" name="userPassword"
@@ -61,32 +56,10 @@
                                     <p class="fieldError" th:if="${passwordError}" th:text="${passwordError}"></p>
                                 </div>
 
-                                <!-- 비밀번호 검증 스크립트 -->
-                                <script>
-                                    function checkPasswordMatch() {
-                                        const password = document.getElementById("userPassword");
-                                        const passwordCheck = document.getElementById("passwordcheck");
-                                        const message = document.getElementById("passwordMatchMessage");
-
-                                        if (password.value !== "" && passwordCheck.value !== "") {
-                                            if (password.value === passwordCheck.value) {
-                                                message.style.color = "green";
-                                                message.innerHTML = "비밀번호가 일치합니다.";
-                                            } else {
-                                                message.style.color = "red";
-                                                message.innerHTML = "비밀번호가 일치하지 않습니다.";
-                                            }
-                                        } else {
-                                            message.innerHTML = "";
-                                        }
-                                    }
-                                </script>
-                                <!-- /비밀번호 검증 스크립트 -->
-
                                 <div class="row-sm-6">
-                                    <label for="passwordcheck" class="form-label">비밀번호 확인</label>
-                                    <input type="password" class="form-control" id="passwordcheck"
-                                           placeholder="똑같은 비밀번호를 입력해주세요." required onkeyup="checkPasswordMatch();">
+                                    <label for="passwordCheck" class="form-label">비밀번호 확인</label>
+                                    <input type="password" class="form-control" id="passwordCheck"
+                                           placeholder="똑같은 비밀번호를 입력해주세요." required>
                                     <p id="passwordMatchMessage"></p>
                                 </div>
 
@@ -173,252 +146,16 @@
                     </div>
                     <br>
                     <br>
-
-
-                    <script th:inline="javascript" layout:fragment="script">
-
-                        $(document).ready(function () {
-
-                            <!-- 이메일 인증 -->
-                            // 이메일 인증 요청
-                            // $("#authenticateEmail").click(function () {
-                            //     var email = $("input[name='email']").val(); // 사용자가 입력한 이메일 가져오기
-                            //
-                            //     $.ajax({
-                            //         type: "POST",
-                            //         url: "/kittop/emailConfirm",
-                            //         data: {
-                            //             email: email
-                            //         },
-                            //         success: function (response) {
-                            //             // 이메일 인증 코드 발송 성공
-                            //             alert("인증 메일이 발송되었습니다");
-                            //             console.log('ajax response:', response);
-                            //         },
-                            //         error: function (jqXHR, textStatus, errorThrown) {
-                            //             // 오류 처리
-                            //             console.error(textStatus + " " + errorThrown);
-                            //         }
-                            //     });
-                            // });
-
-                            // 인증 코드 검증 요청
-                            // $("#verifyCode").click(function () {
-                            //     var code = $("#authenticateEmailCode").val(); // 사용자가 입력한 인증 코드 가져오기
-                            //
-                            //     $.ajax({
-                            //         type: "POST",
-                            //         url: "/kittop/emailVerify",
-                            //         data: {
-                            //             code: code
-                            //         },
-                            //         success: function (response) {
-                            //             console.log(response);
-                            //             if (response.success) {
-                            //                 // 인증 성공 메시지 띄우고 모달창 닫기
-                            //                 alert("인증 성공");
-                            //                 $("#btnForm").prop("disabled", false); // 회원가입 버튼 활성화
-                            //             } else {
-                            //                 // 서버에서 전달받은 메시지를 에러 표시 영역에 표시
-                            //                 $("#codeError").text(response.message);
-                            //                 $("#btnForm").prop("disabled", true); // 회원가입 버튼 비활성화
-                            //             }
-                            //         },
-                            //         error: function (jqXHR, textStatus, errorThrown) {
-                            //             // 오류 처리
-                            //             console.error(textStatus + " " + errorThrown);
-                            //         }
-                            //     });
-                            // });
-                        <!-- 이메일 인증 끝 -->
-
-                            // yyMMdd → yyyy-MM-dd 변환 로직
-                            function formatBirthDate(yyMMdd) {
-                                if (!/^\d{6}$/.test(yyMMdd)) {
-                                    alert("생년월일은 6자리 숫자로 입력해주세요 (예: 900101)");
-                                    return null;
-                                }
-
-                                let yy = parseInt(yyMMdd.substring(0, 2), 10);
-                                let mm = yyMMdd.substring(2, 4);
-                                let dd = yyMMdd.substring(4, 6);
-
-                                // 00 ~ 24 -> 2000년대, 나머지 -> 1900년대
-                                let yyyy = (yy <= 24 ? 2000 : 1900) + yy;
-
-                                return `${yyyy}-${mm}-${dd}`; // yyyy-MM-dd
-                            }
-
-                            // form 양식 제출
-                            $("#btnForm").click(function (e) {
-
-                                e.preventDefault(); // 폼 기본 전송 막기
-
-                                const formObj = document.formObj;
-                                // const userCode = formObj.authenticateEmailCode;
-                                let serverCode = "";
-
-                                const phone1 = document.querySelector("input[name='phone1']").value;
-                                const phone2 = document.querySelector("input[name='phone2']").value;
-                                const phone3 = document.querySelector("input[name='phone3']").value;
-                                const mobileNumber = phone1 + phone2 + phone3;
-                                $("#mobileNumber").val(mobileNumber);  // hidden input에 세팅
-
-                                const gender = $("input[name='gender']:checked").val();
-
-                                const rawBirth = $("#birthDate").val(); // 예: 900101
-                                const formattedBirth = formatBirthDate(rawBirth); // 예: 1990-01-01
-
-                                $.ajax({
-                                    type: "POST",
-                                    url: "/api/v1/users/sign-up",
-                                    contentType: "application/json; charset=utf-8",   // JSON 전송 명시
-                                    data: JSON.stringify({
-                                        userAccount: $("#userAccount").val(),         // 폼 input 값
-                                        userPassword: $("#userPassword").val(),
-                                        firstName: $("#firstName").val(),
-                                        lastName: $("#lastName").val(),
-                                        birthDate: formattedBirth,             // 예: 1990-01-01
-                                        gender: gender,                               // 예: MALE, FEMALE
-                                        mobileNumber: $("#mobileNumber").val(),
-                                        nickName: $("#nickName").val(),
-                                        telNumber: $("#telNumber").val(),
-                                        address1: $("#address1").val(),
-                                        address2: $("#address2").val(),
-                                        zipcode: $("#zipcode").val()
-                                    }),
-                                    success: function (response) {
-                                        // 서버에서 인증 코드 가져옴
-                                        console.log('ajax response:', response);
-                                        serverCode = response;
-                                        // if (userCode.value === serverCode && userCode.value.length !== 0) {
-                                            // 인증 코드가 일치하고 입력되었을 경우에만 폼 제출
-                                            let next = true;
-                                            document.querySelectorAll(".needs-validation input").forEach(c => {
-                                                console.log(c + c.value)
-                                                if (c.value === "" && next) {
-                                                    next = false;
-                                                    alert("필수 입력값이 비어있습니다");
-                                                }
-                                            })
-                                            if (next) {
-                                                console.log(userCode.value, serverCode);
-                                                formObj.action = "/api/v1/users/sign-up";
-                                                formObj.method = "post";
-                                                console.log(formObj);
-                                                formObj.submit();
-                                            }
-                                        // } else {
-                                        //     alert("인증 코드가 틀렸습니다. 다시 입력해주세요.");
-                                        // }
-                                    },
-                                    error: function (jqXHR, textStatus, errorThrown) {
-                                        // 오류 처리
-                                        console.error(textStatus + " " + errorThrown);
-                                    }
-                                });
-                            });
-                        });
-
-                        // document.addEventListener("DOMContentLoaded", function () {
-                        //     // 폼 객체 참조
-                        //     const formObj = document.querySelector('#form');
-                        //     console.log(formObj);
-                        //
-                        //     const btnForm = document.querySelector('#btnForm');
-                        //     // 폼 제출 이벤트 리스너
-                        //     btnForm.addEventListener("click", function (event) {
-                        //
-                        //         // 기본 form 제출 동작 막기
-                        //         event.preventDefault();
-                        //
-                        //         // 각 필드 값 참조
-                        // //         const email = document.querySelector("input[name='email']").value;
-                        // //         const password = document.querySelector("input[name='password']").value;
-                        // //         const nickName = document.querySelector("input[name='nickName']").value;
-                        // //         const name = document.querySelector("input[name='name']").value;
-                        // //         const birth = document.querySelector("input[name='birth']").value;
-                        //         // 라디오 버튼 중 체크된 값 가져오기
-                        //         const genderRadios = document.querySelectorAll("input[name='gender']");
-                        //         let gender;
-                        //         for (let i = 0; i < genderRadios.length; i++) {
-                        //             if (genderRadios[i].checked) {
-                        //                 gender = genderRadios[i].value;
-                        //                 break;
-                        //             }
-                        //         }
-                        // //
-                        // //         const zipcode = document.querySelector("input[name='zipcode']").value;
-                        // //         const addr1 = document.querySelector("input[name='addr1']").value;
-                        // //         const addr2 = document.querySelector("input[name='addr2']").value;
-                        //         const phone1 = document.querySelector("input[name='phone1']").value;
-                        //         const phone2 = document.querySelector("input[name='phone2']").value;
-                        //         const phone3 = document.querySelector("input[name='phone3']").value;
-                        // //         console.log('zipcode: ' + zipcode);
-                        // //         console.log('addr1: ' + addr1);
-                        // //         console.log('addr2: ' + addr2);
-                        // //         console.log('phone1: ' + phone1);
-                        // //         console.log('phone2: ' + phone2);
-                        // //         console.log('phone3: ' + phone3);
-                        // //
-                        // //         // addr과 phone 필드에 값을 설정
-                        // //         document.querySelector("input[name='addr']").value = zipcode + '/' + addr1 + '/' + addr2;
-                        //         document.querySelector("input[name='mobileNumber']").value = phone1 + '-' + phone2 + '-' + phone3;
-                        // //
-                        // //         console.log('addr: ' + document.querySelector("input[name='addr']").value);
-                        // //         console.log('phone: ' + document.querySelector("input[name='phone']").value);
-                        //     });
-                        // });
-                    </script>
-
-                    <!-- 우편번호 검색 API (카카오) -->
-<!--                    <script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>-->
-<!--                    <script>-->
-<!--                        function execDaumPostcode() {-->
-<!--                            new daum.Postcode({-->
-<!--                                oncomplete: function (data) {-->
-<!--                                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.-->
-
-<!--                                    // 각 주소의 노출 규칙에 따라 주소를 조합한다.-->
-<!--                                    // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.-->
-<!--                                    var fullAddr = ''; // 최종 주소 변수-->
-<!--                                    var extraAddr = ''; // 조합형 주소 변수-->
-
-<!--                                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.-->
-<!--                                    if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우-->
-<!--                                        fullAddr = data.roadAddress;-->
-<!--                                    } else { // 사용자가 지번 주소를 선택했을 경우(J)-->
-<!--                                        fullAddr = data.jibunAddress;-->
-<!--                                    }-->
-
-<!--                                    // 사용자가 선택한 주소가 도로명 타입일때 조합한다.-->
-<!--                                    if (data.userSelectedType === 'R') {-->
-<!--                                        //법정동명이 있을 경우 추가한다.-->
-<!--                                        if (data.bname !== '') {-->
-<!--                                            extraAddr += data.bname;-->
-<!--                                        }-->
-<!--                                        // 건물명이 있을 경우 추가한다.-->
-<!--                                        if (data.buildingName !== '') {-->
-<!--                                            extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);-->
-<!--                                        }-->
-<!--                                        // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.-->
-<!--                                        fullAddr += (extraAddr !== '' ? ' (' + extraAddr + ')' : '');-->
-<!--                                    }-->
-
-<!--                                    // 우편번호와 주소 정보를 해당 필드에 넣는다.-->
-<!--                                    document.querySelector('input[name=zipcode]').value = data.zonecode; //5자리 새우편번호 사용-->
-<!--                                    document.querySelector('input[name=addr1]').value = fullAddr;-->
-
-<!--                                    // 커서를 상세주소 필드로 이동한다.-->
-<!--                                    document.querySelector('input[name=addr2]').focus();-->
-<!--                                }-->
-<!--                            }).open();-->
-<!--                        }-->
-<!--                    </script>-->
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/users/register.js}"></script>
+    <!-- kakao 도로명 주소 api -->
+    <script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
+</th:block>
 
 </html>
