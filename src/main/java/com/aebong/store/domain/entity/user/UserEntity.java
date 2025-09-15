@@ -77,9 +77,9 @@ public class UserEntity extends AuditingEntity {
     @Column(name = "login_available_date")
     private LocalDate loginAvailableDate;
 
-    @Comment("재가입 가능일자")
-    @Column(name = "rejoin_possible_date")
-    private LocalDate rejoinPossibleDate;
+//    @Comment("재가입 가능일자")
+//    @Column(name = "rejoin_possible_date")
+//    private LocalDate rejoinPossibleDate;
 
 //    todo: NICE 인증 모듈 구현 시 추가 예정
 //    @Comment("CI 인증정보 순번")
@@ -87,9 +87,9 @@ public class UserEntity extends AuditingEntity {
 //    @JoinColumn(name = "user_connecting_information_id")
 //    private UserConnectingInformationEntity userConnectingInformation;
 
-    @Comment("재가입여부")
-    @Column(name = "rejoin_yn", nullable = false)
-    private Boolean isRejoin;
+//    @Comment("재가입여부")
+//    @Column(name = "rejoin_yn", nullable = false)
+//    private Boolean isRejoin;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserInformationChangeHistoryEntity> userInformationChangeHistories = new ArrayList<>();
@@ -139,8 +139,8 @@ public class UserEntity extends AuditingEntity {
         this.lastPasswordChangeDatetime = Objects.isNull(lastPasswordChangeDatetime) ? LocalDateTime.now() : lastPasswordChangeDatetime;
         this.requiredPasswordChangeDatetime = Objects.isNull(requiredPasswordChangeDatetime) ? LocalDateTime.now().plusMonths(6) : requiredPasswordChangeDatetime;
         this.loginAvailableDate = loginAvailableDate;
-        this.rejoinPossibleDate = rejoinPossibleDate;
-        this.isRejoin = Objects.isNull(isRejoin) ? Boolean.FALSE : isRejoin;
+//        this.rejoinPossibleDate = rejoinPossibleDate;
+//        this.isRejoin = Objects.isNull(isRejoin) ? Boolean.FALSE : isRejoin;
     }
 
 }

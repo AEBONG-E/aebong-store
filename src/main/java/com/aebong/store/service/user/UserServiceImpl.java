@@ -7,6 +7,7 @@ import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
+import com.aebong.store.service.user.dto.UserReadInfo;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,19 @@ public class UserServiceImpl implements UserService {
 
         UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
         userDetailRepository.save(userDetail);
+
+    }
+
+    @Override
+    public UserReadInfo getUser(String userAccount) {
+
+        if (Objects.isNull(userAccount))
+            throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "userAccount is not null");
+
+        // todo: find user entity, userDetail entity (is not exist throw exception)
+
+        // todo: UserReadInfo mapping return
+        return UserReadInfo.builder().build();
 
     }
 
