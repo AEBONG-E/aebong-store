@@ -5,7 +5,7 @@ spring:
 ---
 
 spring.config.activate.on-profile: test
-server.port: 8881
+server.port: 8880
 
 ---
 

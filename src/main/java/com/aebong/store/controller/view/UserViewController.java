@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -16,6 +17,12 @@ public class UserViewController {
     public String getRegisterForm(Model model) {
         model.addAttribute("registerForm", new UserRegisterRequest());
         return "users/user-register";
+    }
+
+    @GetMapping("/info")
+    public String getUserInfo(@RequestParam String userAccount, Model model) {
+        model.addAttribute("userAccount", userAccount);
+        return "users/user-get";
     }
 
 }

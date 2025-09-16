@@ -16,7 +16,7 @@
   <meta name="description" content="Stylish - Shoes Online Store HTML Template">
 
   <link rel="stylesheet" th:href="@{/css/vendor.css}">
-  <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/stylish.css}">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -354,7 +354,7 @@
             <div class="login-form p-0">
               <div class="col-lg-12 mx-auto">
                 <form id="login-form">
-                  <input type="text" name="username" placeholder="Username or Email Address *"
+                  <input type="text" name="userAccount" id="userAccount" placeholder="Username or Email Address *"
                     class="mb-3 ps-3 text-input">
                   <input type="password" name="password" placeholder="Password" class="ps-3 text-input">
                   <div class="checkbox d-flex justify-content-between mt-4">
@@ -370,7 +370,7 @@
               </div>
             </div>
             <div class="modal-footer mt-5 d-flex justify-content-center">
-              <button type="button" class="btn btn-red hvr-sweep-to-right dark-sweep">Login</button>
+              <button type="button" class="btn btn-red hvr-sweep-to-right dark-sweep" id="loginBtn">Login</button>
               <button type="button" id="registerBtn"
                 class="btn btn-outline-gray hvr-sweep-to-right dark-sweep">Register</button>
             </div>
