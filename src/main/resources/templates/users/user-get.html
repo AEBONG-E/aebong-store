@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<head>
+    <title>사용자 정보</title>
+    <meta charset="UTF-8">
+
+    <!-- individual CSS -->
+    <th:block layout:fragment="css">
+        <link th:href="@{/css/sidebars.css}" rel="stylesheet">
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sidebars/">
+
+        <style>
+            #content {
+                min-height: 90vh;
+            }
+
+            .fieldError {
+                color: #f00;
+            }
+        </style>
+    </th:block>
+    <!-- individual CSS -->
+
+</head>
+
+<div layout:fragment="content" id="content">
+    <div class="container-fluid">
+        <div class="row">
+<!--            <div class="flex-shrink-0 p-3 bg-white col-md-2" style="width: 280px;"> &lt;!&ndash; th:if="${#authentication}" th:with="currentUser=${#authentication.principal}" &ndash;&gt;-->
+<!--                <a th:href="@{/kittop/user/info(userId=${currentUser.userId})}" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">-->
+<!--                    <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"/></svg>-->
+<!--                    <span class="fs-5 fw-semibold">사용자 정보</span>-->
+<!--                </a>-->
+<!--                <ul class="list-unstyled ps-0">-->
+<!--                    <li class="mb-1">-->
+<!--                        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">-->
+<!--                            정보관리-->
+<!--                        </button>-->
+<!--                        <div class="collapse show" id="home-collapse">-->
+<!--                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+<!--                                <li th:if="${#authentication}" th:with="currentUser=${#authentication.principal}">-->
+<!--                                    <a th:href="@{/kittop/user/modify(userId=${currentUser.userId})}" class="link-dark rounded">정보수정</a>-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="mb-1">-->
+<!--                        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">-->
+<!--                            주문내역-->
+<!--                        </button>-->
+<!--                        <div class="collapse" id="dashboard-collapse">-->
+<!--                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+<!--                                <li><a th:href="@{/kittop/cart/list}" class="link-dark rounded">장바구니</a></li>-->
+<!--                                <li><a th:href="@{/kittop/order/list}" class="link-dark rounded">주문내역</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="mb-1">-->
+<!--                        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">-->
+<!--                            게시판-->
+<!--                        </button>-->
+<!--                        <div class="collapse" id="orders-collapse">-->
+<!--                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+<!--                                <li><a th:href="@{/kittop/board/list}" class="link-dark rounded">Q/A</a></li>-->
+<!--                                <li><a th:href="@{/kittop/review/list}" class="link-dark rounded">리뷰</a></li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+<!--                    </li>-->
+<!--                    <li class="border-top my-3"></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+
+            <div class="bg-white d-flex align-items-center justify-content-center col-md-8" style="min-height: 70vh;">
+                <div class="container d-flex justify-content-center">
+                    <div class="d-flex justify-content-center">
+                        <div class="g-5 d-flex justify-content-center">
+                            <div class="col-md-7 col-lg-6">
+                                <h4 class="mb-3">회원 정보</h4>
+                                    <input type="hidden" class="form-control" id="userId" name="userId">
+                                    <input type="hidden" class="form-control" id="userDetailId" name="userDetailId">
+                                    <input type="hidden" class="form-control" id="userAccount" name="userAccount">
+                                    <input type="hidden" class="form-control" id="userPassword" name="userPassword">
+                                    <input type="hidden" class="form-control" id="lastName" name="lastName">
+                                    <input type="hidden" class="form-control" id="address1" name="address1">
+                                    <input type="hidden" class="form-control" id="address2" name="address2">
+
+                                    <div class="row g-3">
+                                        <div class="row-sm-6">
+                                            이메일: <p id="email">
+                                        </div>
+                                        <div class="row-sm-6">
+                                            닉네임: <p id="nickName">
+                                        </div>
+                                        <div class="row-sm-6">
+                                            이름: <p id="name">
+                                        </div>
+                                        <div class="row-sm-6">
+                                            생년월일: <p id="birthDate">
+                                        </div>
+                                        <div class="form-radio">
+                                            성별: <p id="gender"></p>
+                                        </div>
+                                        <div class="row-sm-6">
+                                            <label th:for="zipcode" class="form-label">우편번호</label>
+                                            <input type="text" class="form-control" name="zipcode" id="zipcode" readonly>
+                                            <label th:for="address" class="form-label">주소</label>
+                                            <input type="text" class="form-control" name="address" id="address" readonly>
+                                        </div>
+                                        <div class="row-sm-6">
+                                            <label th:for="mobileNumber" class="form-label">휴대폰번호</label>
+                                            <p id="mobileNumber">
+                                        </div>
+
+<!--                                        <div th:if="${#authentication}" th:with="currentUser=${#authentication.principal}">-->
+<!--                                            <a th:href="@{/kittop/user/modify(userId=${currentUser.userId})}" style="text-decoration: none; color: #fff;">-->
+<!--                                                <button class="w-100 btn btn-dark btn-lg mx-auto" type="button" style="display: block;">정보수정</button></a>-->
+<!--                                        </div>-->
+                                    </div>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/users/user-get.js}"></script>
+</th:block>
+
+</html>

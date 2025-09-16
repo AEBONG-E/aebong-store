@@ -62,7 +62,9 @@ public class UserGetResponse {
                            String nickName,
                            String telNumber,
                            String email,
-                           Address address,
+                           String address1,
+                           String address2,
+                           String zipcode,
                            LocalDateTime joinDatetime) {
         this.userId = userId;
         this.userDetailId = userDetailId;
@@ -80,9 +82,9 @@ public class UserGetResponse {
         this.nickName = nickName;
 //        this.telNumber = telNumber;
         this.email = email;
-        this.address1 = address.getAddress1();
-        this.address2 = address.getAddress2();
-        this.zipcode = address.getZipcode();
+        this.address1 = address1;
+        this.address2 = address2;
+        this.zipcode = zipcode;
         this.joinDatetime = joinDatetime;
     }
 
@@ -101,7 +103,9 @@ public class UserGetResponse {
                 .mobileNumber(userGetInfo.getMobileNumber())
                 .nickName(userGetInfo.getNickName())
                 .email(userGetInfo.getEmail())
-                .address(userGetInfo.getAddress())
+                .address1(userGetInfo.getAddress().getAddress1())
+                .address2(userGetInfo.getAddress().getAddress2())
+                .zipcode(userGetInfo.getAddress().getZipcode())
                 .joinDatetime(userGetInfo.getJoinDatetime())
                 .build();
     }
