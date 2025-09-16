@@ -7,7 +7,7 @@ import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
-import com.aebong.store.service.user.dto.UserReadInfo;
+import com.aebong.store.service.user.dto.UserGetInfo;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserReadInfo getUser(String userAccount) {
+    public UserGetInfo getUser(String userAccount) {
 
         if (Objects.isNull(userAccount))
             throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "userAccount is not null");
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER.getMessage()));
 
-        return UserReadInfo.from(user, userDetail);
+        return UserGetInfo.to(user, userDetail);
 
     }
 

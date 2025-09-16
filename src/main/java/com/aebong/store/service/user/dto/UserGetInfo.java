@@ -4,22 +4,19 @@ import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
-import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
-public class UserReadInfo {
+public class UserGetInfo {
 
     private Long userId;
     private Long userDetailId;
@@ -52,35 +49,35 @@ public class UserReadInfo {
     private LocalDateTime dormantDatetime;
 
     @Builder
-    public UserReadInfo(Long userId,
-                        Long userDetailId,
-                        UserType userType,
-                        String userAccount,
-                        UserAccountType userAccountType,
-                        String userPassword,
-                        UserStatus userStatus,
-                        Boolean passwordInitYn,
-                        int failPasswordCount,
-                        LocalDateTime accountLockedDatetime,
-                        LocalDateTime lastLoginDatetime,
-                        LocalDateTime lastPasswordChangeDatetime,
-                        LocalDateTime requiredPasswordChangeDatetime,
-                        LocalDate loginAvailableDate,
-                        String firstName,
-                        String lastName,
-                        LocalDate birthDate,
-                        Gender gender,
-                        String mobileNumber,
-                        String rrn,
-                        String nickName,
-                        String telNumber,
-                        String email,
-                        Address address,
-                        LocalDateTime joinDatetime,
-                        LocalDateTime activatedDatetime,
-                        LocalDateTime inactivatedDatetime,
-                        LocalDateTime withdrawalDatetime,
-                        LocalDateTime dormantDatetime) {
+    public UserGetInfo(Long userId,
+                       Long userDetailId,
+                       UserType userType,
+                       String userAccount,
+                       UserAccountType userAccountType,
+                       String userPassword,
+                       UserStatus userStatus,
+                       Boolean passwordInitYn,
+                       int failPasswordCount,
+                       LocalDateTime accountLockedDatetime,
+                       LocalDateTime lastLoginDatetime,
+                       LocalDateTime lastPasswordChangeDatetime,
+                       LocalDateTime requiredPasswordChangeDatetime,
+                       LocalDate loginAvailableDate,
+                       String firstName,
+                       String lastName,
+                       LocalDate birthDate,
+                       Gender gender,
+                       String mobileNumber,
+                       String rrn,
+                       String nickName,
+                       String telNumber,
+                       String email,
+                       Address address,
+                       LocalDateTime joinDatetime,
+                       LocalDateTime activatedDatetime,
+                       LocalDateTime inactivatedDatetime,
+                       LocalDateTime withdrawalDatetime,
+                       LocalDateTime dormantDatetime) {
         this.userId = userId;
         this.userDetailId = userDetailId;
         this.userType = userType;
@@ -112,10 +109,10 @@ public class UserReadInfo {
         this.dormantDatetime = dormantDatetime;
     }
 
-    public static UserReadInfo from(UserEntity user, UserDetailEntity userDetail) {
+    public static UserGetInfo to(UserEntity user, UserDetailEntity userDetail) {
         if (user == null) return null;
 
-        return UserReadInfo.builder()
+        return UserGetInfo.builder()
                 .userId(user.getId())
                 .userDetailId(userDetail.getId())
                 .userType(user.getUserType())

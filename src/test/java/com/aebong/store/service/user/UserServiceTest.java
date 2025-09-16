@@ -8,7 +8,7 @@ import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
-import com.aebong.store.service.user.dto.UserReadInfo;
+import com.aebong.store.service.user.dto.UserGetInfo;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -34,7 +34,7 @@ class UserServiceTest {
 
 
     @Test
-    void 회원등록_실패_중복된_userAccount가_들어온_케이스() {
+    void 사용자등록_실패_중복된_userAccount가_들어온_케이스() {
 
         // given
         UserRegisterRequest request = createUserRegisterInfo();
@@ -58,7 +58,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 회원등록_정상_케이스() {
+    void 사용자등록_정상_케이스() {
 
         // given
         UserRegisterRequest request = createUserRegisterInfo();
@@ -96,7 +96,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 회원조회_실패_등록되지_않은_userAccount가_들어온_케이스() {
+    void 사용자조회_실패_등록되지_않은_userAccount가_들어온_케이스() {
 
         // given
         UserRegisterRequest request = createUserRegisterInfo();
@@ -120,7 +120,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 회원조회_정상_케이스() {
+    void 사용자조회_정상_케이스() {
 
         // given
         UserRegisterRequest request = createUserRegisterInfo();
@@ -136,7 +136,7 @@ class UserServiceTest {
         given(userDetailRepository.findByUser(user)).willReturn(Optional.of(userDetail));
 
         // when
-        UserReadInfo readInfo = service.getUser(requestUserAccount);
+        UserGetInfo readInfo = service.getUser(requestUserAccount);
 
         // then
         assertThat(readInfo).isNotNull();
