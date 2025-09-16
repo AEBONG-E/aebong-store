@@ -19,16 +19,16 @@ $(document).ready(function () {
                     $("#userPassword").text(info.userPassword);         // hidden
                     $("#lastName").text(info.lastName);                 // hidden
                     $("#firstName").text(info.firstName);               // hidden
+                    $("#address1").val(info.address1);                  // hidden
+                    $("#address2").val(info.address2);                  // hidden
                     $("#name").text(info.lastName + "" + info.firstName);
                     $("#birthDate").text(info.birthDate);
                     $("#gender").text(info.gender);
                     $("#mobileNumber").text(info.mobileNumber);
                     $("#nickName").text(info.nickName);
                     $("#email").text(info.email);
-                    $("#address1").text(info.address1);
-                    $("#address2").text(info.address2);
-                    $("#address").text(info.address1 + "" + info.address2);
-                    $("#zipcode").text(info.zipcode);
+                    $("#address").val(info.address1 + ", " + info.address2);
+                    $("#zipcode").val(info.zipcode);
                     $("#joinDatetime").text(info.joinDatetime);
                 }
             },
