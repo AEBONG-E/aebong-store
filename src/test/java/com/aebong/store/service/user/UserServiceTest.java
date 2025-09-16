@@ -143,12 +143,16 @@ class UserServiceTest {
         assertThat(readInfo.getUserAccount()).isEqualTo(requestUserAccount);
 
         assertThat(readInfo)
+                .hasFieldOrPropertyWithValue("userType", user.getUserType())
                 .hasFieldOrPropertyWithValue("userAccount", user.getUserAccount())
+                .hasFieldOrPropertyWithValue("userAccountType", user.getUserAccountType())
                 .hasFieldOrPropertyWithValue("userPassword", user.getUserPassword())
                 .hasFieldOrPropertyWithValue("lastName", userDetail.getLastName())
                 .hasFieldOrPropertyWithValue("firstName", userDetail.getFirstName())
                 .hasFieldOrPropertyWithValue("birthDate", userDetail.getBirthDate())
                 .hasFieldOrPropertyWithValue("gender", userDetail.getGender())
+                .hasFieldOrPropertyWithValue("mobileNumber", userDetail.getMobileNumber())
+                .hasFieldOrPropertyWithValue("nickName", userDetail.getNickName())
                 .hasFieldOrPropertyWithValue("address", userDetail.getAddress());
 
         then(userRepository).should().findByUserAccount(requestUserAccount);
@@ -163,13 +167,11 @@ class UserServiceTest {
                 .firstName("bong")
                 .birthDate(LocalDate.of(1990, 1, 1))
                 .gender(Gender.MALE)
+                .mobileNumber("01011111234")
+                .nickName("aebong")
                 .address1("테스트시 테스트구 테스트로 1")
+                .address2("테스트")
                 .zipcode("00000")
-                .build();
-    }
-
-    private UserReadInfo createUserReadInfo() {
-        return UserReadInfo.builder()
                 .build();
     }
 

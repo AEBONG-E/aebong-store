@@ -112,11 +112,12 @@ public class UserReadInfo {
         this.dormantDatetime = dormantDatetime;
     }
 
-    public static UserReadInfo from(UserEntity user) {
+    public static UserReadInfo from(UserEntity user, UserDetailEntity userDetail) {
         if (user == null) return null;
 
         return UserReadInfo.builder()
                 .userId(user.getId())
+                .userDetailId(userDetail.getId())
                 .userType(user.getUserType())
                 .userAccount(user.getUserAccount())
                 .userAccountType(user.getUserAccountType())
@@ -129,14 +130,6 @@ public class UserReadInfo {
                 .lastPasswordChangeDatetime(user.getLastPasswordChangeDatetime())
                 .requiredPasswordChangeDatetime(user.getRequiredPasswordChangeDatetime())
                 .loginAvailableDate(user.getLoginAvailableDate())
-                .build();
-    }
-
-    public static UserReadInfo from(UserDetailEntity userDetail) {
-        if (userDetail == null) return null;
-
-        return UserReadInfo.builder()
-                .userDetailId(userDetail.getId())
                 .firstName(userDetail.getFirstName())
                 .lastName(userDetail.getLastName())
                 .birthDate(userDetail.getBirthDate())
@@ -153,7 +146,6 @@ public class UserReadInfo {
                 .withdrawalDatetime(userDetail.getWithdrawalDatetime())
                 .dormantDatetime(userDetail.getDormantDatetime())
                 .build();
-
     }
 
 }
