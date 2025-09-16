@@ -2,13 +2,12 @@ package com.aebong.store.controller.api;
 
 import com.aebong.store.common.api.ApiResponse;
 import com.aebong.store.controller.req.UserRegisterRequest;
+import com.aebong.store.controller.res.UserGetResponse;
 import com.aebong.store.service.user.UserService;
-import com.aebong.store.service.user.dto.UserRegisterInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
@@ -18,9 +17,14 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    ApiResponse<Void> registerUser(@RequestBody UserRegisterRequest registerRequest) {
+    public ResponseEntity<ApiResponse<Void>> registerUser(@RequestBody UserRegisterRequest registerRequest) {
         userService.registerUser(registerRequest);
-        return ApiResponse.success();
+        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{userAccount}")
+    public ResponseEntity<ApiResponse<UserGetResponse>> getUser(@PathVariable String userAccount) {
+        return new ResponseEntity<>(ApiResponse.success(UserGetResponse.to(userService.getUser(userAccount))), HttpStatus.OK);
     }
 
 }

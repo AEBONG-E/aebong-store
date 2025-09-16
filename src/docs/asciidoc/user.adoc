@@ -3,12 +3,34 @@
 :toclevels: 2
 :sectlinks:
 
-== 회원 API
+== 사용자 API
 
-=== 회원 등록
+=== 사용자등록_실패
+include::{snippets}/user-register-fail/http-request.adoc[]
+include::{snippets}/user-register-fail/request-fields.adoc[]
+include::{snippets}/user-register-fail/request-body.adoc[]
+include::{snippets}/user-register-fail/http-response.adoc[]
+include::{snippets}/user-register-fail/response-fields.adoc[]
+include::{snippets}/user-register-fail/response-body.adoc[]
+
+=== 사용자등록_성공
 include::{snippets}/user-register/http-request.adoc[]
 include::{snippets}/user-register/request-fields.adoc[]
+include::{snippets}/user-register/request-body.adoc[]
 include::{snippets}/user-register/http-response.adoc[]
 include::{snippets}/user-register/response-fields.adoc[]
+include::{snippets}/user-register/response-body.adoc[]
 
-#15 Feat: Define and document the membership registration API
+=== 사용자조회_실패
+include::{snippets}/user-get-fail/http-request.adoc[]
+include::{snippets}/user-get-fail/request-body.adoc[]
+include::{snippets}/user-get-fail/http-response.adoc[]
+include::{snippets}/user-get-fail/response-fields.adoc[]
+include::{snippets}/user-get-fail/response-body.adoc[]
+
+=== 사용자조회_성공
+include::{snippets}/user-get/http-request.adoc[]
+include::{snippets}/user-get/request-body.adoc[]
+include::{snippets}/user-get/http-response.adoc[]
+include::{snippets}/user-get/response-fields.adoc[]
+include::{snippets}/user-get/response-body.adoc[]
