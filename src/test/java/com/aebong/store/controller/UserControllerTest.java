@@ -7,6 +7,7 @@ import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.common.exceptions.UserApplicationException;
 import com.aebong.store.controller.api.UserController;
+import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.controller.res.UserGetResponse;
 import com.aebong.store.domain.entity.Address;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -68,8 +70,8 @@ class UserControllerTest {
                                 requestFields(
                                         fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
                                         fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호"),
-                                        fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("lastName").type(JsonFieldType.STRING).description("성"),
+                                        fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일"),
                                         fieldWithPath("gender").type(JsonFieldType.STRING).description("성별 (예: MALE, FEMALE, NON_BINARY, OTHER"),
                                         fieldWithPath("mobileNumber").type(JsonFieldType.STRING).description("휴대폰번호"),
@@ -95,10 +97,12 @@ class UserControllerTest {
         // given
         UserRegisterRequest registerRequest = createUserRegisterInfo();
 
+        doNothing().when(userService).registerUser(any(UserRegisterRequest.class));
+
         // when & then
         mockMvc.perform(post("/api/v1/users/sign-up")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(registerRequest)))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(registerRequest)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("user-register",
@@ -107,8 +111,8 @@ class UserControllerTest {
                         requestFields(
                                 fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
                                 fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호"),
-                                fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
                                 fieldWithPath("lastName").type(JsonFieldType.STRING).description("성"),
+                                fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
                                 fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일"),
                                 fieldWithPath("gender").type(JsonFieldType.STRING).description("성별 (예: MALE, FEMALE, NON_BINARY, OTHER"),
                                 fieldWithPath("mobileNumber").type(JsonFieldType.STRING).description("휴대폰번호"),
@@ -146,18 +150,18 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value("사용자를 찾을 수 없습니다."))
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andDo(document("user-get-fail",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                pathParameters(
-                                        parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
-                                ),
-                                responseFields(
-                                        fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
-                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답메시지").optional(),
-                                        subsectionWithPath("data").type(JsonFieldType.OBJECT).description("사용자 데이터 객체").optional()
-                                ),
-                                requestBody(),
-                                responseBody()
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답메시지").optional(),
+                                subsectionWithPath("data").type(JsonFieldType.OBJECT).description("사용자 데이터 객체").optional()
+                        ),
+                        requestBody(),
+                        responseBody()
                 ));
 
 
@@ -203,6 +207,108 @@ class UserControllerTest {
                                 fieldWithPath("data.address1").type(JsonFieldType.STRING).description("주소(도로명주소|지번주소)"),
                                 fieldWithPath("data.address2").type(JsonFieldType.STRING).description("상세주소").optional(),
                                 fieldWithPath("data.zipcode").type(JsonFieldType.STRING).description("우편번호")
+                        ),
+                        requestBody(),
+                        responseBody()
+                ));
+
+
+    }
+
+    @Test
+    void 사용자수정_실패() throws Exception {
+
+        // given
+        String requestUserAccount = "test@gmail.com";
+        UserModifyRequest modifyRequest = createUserModifyInfo();
+
+        doThrow(new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessageKr()))
+                .when(userService).modifyUser(any(String.class), any(UserModifyRequest.class));
+
+        // when & then
+        mockMvc.perform(patch("/api/v1/users/{userAccount}", requestUserAccount)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(modifyRequest)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND_USER"))
+                .andExpect(jsonPath("$.message").value("사용자를 찾을 수 없습니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andDo(document("user-modify-fail",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
+                        ),
+                        requestFields(
+                                fieldWithPath("userId").type(JsonFieldType.NUMBER).description("사용자 고유번호"),
+                                fieldWithPath("userDetailId").type(JsonFieldType.NUMBER).description("사용자상세 고유번호"),
+                                fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
+                                fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호"),
+                                fieldWithPath("lastName").type(JsonFieldType.STRING).description("성"),
+                                fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
+                                fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일"),
+                                fieldWithPath("gender").type(JsonFieldType.STRING).description("성별 (예: MALE, FEMALE, NON_BINARY, OTHER"),
+                                fieldWithPath("mobileNumber").type(JsonFieldType.STRING).description("휴대폰번호"),
+                                fieldWithPath("nickName").type(JsonFieldType.STRING).description("별칭(닉네임)"),
+                                fieldWithPath("telNumber").type(JsonFieldType.STRING).description("전화번호").optional(),
+                                fieldWithPath("address1").type(JsonFieldType.STRING).description("주소(도로명주소|지번주소)"),
+                                fieldWithPath("address2").type(JsonFieldType.STRING).description("상세주소").optional(),
+                                fieldWithPath("zipcode").type(JsonFieldType.STRING).description("우편번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답메시지").optional(),
+                                subsectionWithPath("data").type(JsonFieldType.OBJECT).description("사용자 데이터 객체").optional()
+                        ),
+                        requestBody(),
+                        responseBody()
+                ));
+
+
+    }
+
+    @Test
+    void 사용자수정_성공() throws Exception {
+
+        // given
+        String requestUserAccount = "test@gmail.com";
+        UserModifyRequest modifyRequest = createUserModifyInfo();
+
+        doNothing().when(userService).modifyUser(any(String.class), any(UserModifyRequest.class));
+
+        // when & then
+        mockMvc.perform(patch("/api/v1/users/{userAccount}", requestUserAccount)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(modifyRequest)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user-modify",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
+                        ),
+                        requestFields(
+                                fieldWithPath("userId").type(JsonFieldType.NUMBER).description("사용자 고유번호"),
+                                fieldWithPath("userDetailId").type(JsonFieldType.NUMBER).description("사용자상세 고유번호"),
+                                fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
+                                fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호"),
+                                fieldWithPath("lastName").type(JsonFieldType.STRING).description("성"),
+                                fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
+                                fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일"),
+                                fieldWithPath("gender").type(JsonFieldType.STRING).description("성별 (예: MALE, FEMALE, NON_BINARY, OTHER"),
+                                fieldWithPath("mobileNumber").type(JsonFieldType.STRING).description("휴대폰번호"),
+                                fieldWithPath("nickName").type(JsonFieldType.STRING).description("별칭(닉네임)"),
+                                fieldWithPath("telNumber").type(JsonFieldType.STRING).description("전화번호").optional(),
+                                fieldWithPath("address1").type(JsonFieldType.STRING).description("주소(도로명주소|지번주소)"),
+                                fieldWithPath("address2").type(JsonFieldType.STRING).description("상세주소").optional(),
+                                fieldWithPath("zipcode").type(JsonFieldType.STRING).description("우편번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("응답메시지").optional(),
+                                subsectionWithPath("data").type(JsonFieldType.OBJECT).description("사용자 데이터 객체").optional()
                         ),
                         requestBody(),
                         responseBody()
@@ -265,6 +371,24 @@ class UserControllerTest {
                 .inactivatedDatetime(null)
                 .withdrawalDatetime(null)
                 .dormantDatetime(null)
+                .build();
+    }
+
+    private UserModifyRequest createUserModifyInfo() {
+        return UserModifyRequest.builder()
+                .userId(0L)
+                .userDetailId(0L)
+                .userAccount("aebong@gmail.com")
+                .userPassword("nonencodepassword")
+                .lastName("ae")
+                .firstName("bong")
+                .birthDate(LocalDate.of(1990, 1, 1))
+                .gender(Gender.MALE)
+                .mobileNumber("01022221234")
+                .nickName("aebong1")
+                .address1("테스트시 테스트구 테스트로 2")
+                .address2("테스트")
+                .zipcode("00001")
                 .build();
     }
 
