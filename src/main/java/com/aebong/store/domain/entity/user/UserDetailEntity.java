@@ -3,6 +3,7 @@ package com.aebong.store.domain.entity.user;
 import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.user.dto.UserModifyInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -105,7 +106,22 @@ public class UserDetailEntity extends AuditingEntity {
     }
 
     @Builder
-    private UserDetailEntity(UserEntity user, String firstName, String lastName, LocalDate birthDate, Gender gender, String mobileNumber, String rrn, String nickName, String telNumber, String email, Address address, LocalDateTime joinDatetime, LocalDateTime activatedDatetime, LocalDateTime inactivatedDatetime, LocalDateTime withdrawalDatetime, LocalDateTime dormantDatetime) {
+    private UserDetailEntity(UserEntity user,
+                             String firstName,
+                             String lastName,
+                             LocalDate birthDate,
+                             Gender gender,
+                             String mobileNumber,
+                             String rrn,
+                             String nickName,
+                             String telNumber,
+                             String email,
+                             Address address,
+                             LocalDateTime joinDatetime,
+                             LocalDateTime activatedDatetime,
+                             LocalDateTime inactivatedDatetime,
+                             LocalDateTime withdrawalDatetime,
+                             LocalDateTime dormantDatetime) {
         this.user = user;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -122,6 +138,18 @@ public class UserDetailEntity extends AuditingEntity {
         this.inactivatedDatetime = inactivatedDatetime;
         this.withdrawalDatetime = withdrawalDatetime;
         this.dormantDatetime = dormantDatetime;
+    }
+
+    // modify user info
+    public void update(UserModifyInfo modifyInfo) {
+        this.firstName = modifyInfo.getFirstName();
+        this.lastName = modifyInfo.getLastName();
+        this.birthDate = modifyInfo.getBirthDate();
+        this.gender = modifyInfo.getGender();
+        this.mobileNumber = modifyInfo.getMobileNumber();
+        this.nickName = modifyInfo.getNickName();
+        this.telNumber = modifyInfo.getTelNumber();
+        this.address = modifyInfo.getAddress();
     }
 
 }
