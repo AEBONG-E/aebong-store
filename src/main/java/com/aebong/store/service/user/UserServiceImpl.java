@@ -77,20 +77,23 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void modifyUser(UserModifyRequest userModifyRequest) {
+    public void modifyUser(String userAccount, UserModifyRequest userModifyRequest) {
+
+        if (Objects.isNull(userAccount))
+            throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "userAccount is not null");
 
         if (Objects.isNull(userModifyRequest)) {
             throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "modifyInfo must not be null");
         }
 
-        // request -> dto mapping
-        UserModifyInfo userModifyInfo = UserModifyInfo.to(userModifyRequest);
-
         // find user entity, userDetail entity
-        UserEntity user = userRepository.findById(userModifyInfo.getUserId()).orElseThrow(
+        UserEntity user = userRepository.findByUserAccount(userAccount).orElseThrow(
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
         UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
+
+        // request -> dto mapping
+        UserModifyInfo userModifyInfo = UserModifyInfo.to(userModifyRequest);
 
         // update user entity, userDetail entity (dirty checking)
         user.update(userModifyInfo);

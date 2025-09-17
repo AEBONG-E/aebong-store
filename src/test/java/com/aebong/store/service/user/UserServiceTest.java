@@ -167,18 +167,20 @@ class UserServiceTest {
     void 사용자수정_실패_등록된_사용자를_찾을수없는_케이스() {
 
         // given
+        String requestUserAccount = "aebong@gmail.com";
+
         UserModifyRequest request = createUserModifyInfo();
         UserModifyInfo registerInfo = UserModifyInfo.to(request);
 
-        given(userRepository.findById(registerInfo.getUserId())).willReturn(Optional.empty());
+        given(userRepository.findByUserAccount(requestUserAccount)).willReturn(Optional.empty());
 
         // when
-        assertThatThrownBy(() -> service.modifyUser(request))
+        assertThatThrownBy(() -> service.modifyUser(requestUserAccount, request))
                 .isInstanceOf(UserApplicationException.class)
                 .hasMessage(CustomErrorType.NOT_FOUND_USER.getMessage());
 
         // then
-        then(userRepository).should(times(1)).findById(registerInfo.getUserId());
+        then(userRepository).should(times(1)).findByUserAccount(requestUserAccount);
         then(userDetailRepository).shouldHaveNoInteractions();
     }
 
@@ -186,6 +188,8 @@ class UserServiceTest {
     void 사용자수정_정상_케이스() {
 
         // given
+        String requestUserAccount = "aebong@gmail.com";
+
         UserModifyRequest request = createUserModifyInfo();
         UserModifyInfo modifyInfo = UserModifyInfo.to(request);
 
@@ -195,14 +199,14 @@ class UserServiceTest {
         UserEntity user = registerInfo.toUserEntity();
         UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
 
-        given(userRepository.findById(modifyInfo.getUserId())).willReturn(Optional.of(user));
+        given(userRepository.findByUserAccount(requestUserAccount)).willReturn(Optional.of(user));
         given(userDetailRepository.findByUser(user)).willReturn(Optional.of(userDetail));
 
         // when
-        service.modifyUser(request);
+        service.modifyUser(requestUserAccount, request);
 
         // then
-        then(userRepository).should(times(1)).findById(modifyInfo.getUserId());
+        then(userRepository).should(times(1)).findByUserAccount(requestUserAccount);
         then(userDetailRepository).should(times(1)).findByUser(user);
 
         // check dirty checking
