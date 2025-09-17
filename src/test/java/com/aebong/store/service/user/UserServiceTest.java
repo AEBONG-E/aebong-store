@@ -3,12 +3,14 @@ package com.aebong.store.service.user;
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.common.exceptions.UserApplicationException;
+import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
 import com.aebong.store.service.user.dto.UserGetInfo;
+import com.aebong.store.service.user.dto.UserModifyInfo;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -46,11 +48,12 @@ class UserServiceTest {
 
         given(userRepository.existsByUserAccount(validateUserAccount)).willReturn(true);
 
-        // when & then
+        // when
         assertThatThrownBy(() -> service.registerUser(request))
                                         .isInstanceOf(UserApplicationException.class)
                                         .hasMessage(validateUserAccount + " already exists userAccount");
 
+        // then
         then(userRepository).should(times(1)).existsByUserAccount(validateUserAccount);
         then(userRepository).should(never()).save(any());
         then(userDetailRepository).shouldHaveNoInteractions(); // not running
@@ -96,7 +99,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 사용자조회_실패_등록되지_않은_userAccount가_들어온_케이스() {
+    void 사용자조회_실패_등록된_사용자를_찾을수없는_케이스() {
 
         // given
         UserRegisterRequest request = createUserRegisterInfo();
@@ -110,11 +113,12 @@ class UserServiceTest {
         String requestUserAccount = "test@gmail.com";
         given(userRepository.findByUserAccount(requestUserAccount)).willReturn(Optional.empty());
 
-        // when & then
+        // when
         assertThatThrownBy(() -> service.getUser(requestUserAccount))
                                         .isInstanceOf(UserApplicationException.class)
                                         .hasMessage(CustomErrorType.NOT_FOUND_USER.getMessage());
 
+        // then
         then(userRepository).should(times(1)).findByUserAccount(requestUserAccount);
         then(userDetailRepository).shouldHaveNoInteractions();
     }
@@ -159,6 +163,57 @@ class UserServiceTest {
         then(userDetailRepository).should().findByUser(user);
     }
 
+    @Test
+    void 사용자수정_실패_등록된_사용자를_찾을수없는_케이스() {
+
+        // given
+        UserModifyRequest request = createUserModifyInfo();
+        UserModifyInfo registerInfo = UserModifyInfo.to(request);
+
+        given(userRepository.findById(registerInfo.getUserId())).willReturn(Optional.empty());
+
+        // when
+        assertThatThrownBy(() -> service.modifyUser(request))
+                .isInstanceOf(UserApplicationException.class)
+                .hasMessage(CustomErrorType.NOT_FOUND_USER.getMessage());
+
+        // then
+        then(userRepository).should(times(1)).findById(registerInfo.getUserId());
+        then(userDetailRepository).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void 사용자수정_정상_케이스() {
+
+        // given
+        UserModifyRequest request = createUserModifyInfo();
+        UserModifyInfo modifyInfo = UserModifyInfo.to(request);
+
+        UserRegisterRequest registerRequest = createUserRegisterInfo();
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(registerRequest);
+
+        UserEntity user = registerInfo.toUserEntity();
+        UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
+
+        given(userRepository.findById(modifyInfo.getUserId())).willReturn(Optional.of(user));
+        given(userDetailRepository.findByUser(user)).willReturn(Optional.of(userDetail));
+
+        // when
+        service.modifyUser(request);
+
+        // then
+        then(userRepository).should(times(1)).findById(modifyInfo.getUserId());
+        then(userDetailRepository).should(times(1)).findByUser(user);
+
+        // check dirty checking
+        assertThat(userDetail.getMobileNumber()).isNotEqualTo(registerInfo.getMobileNumber());
+        assertThat(userDetail.getNickName()).isNotEqualTo(registerInfo.getNickName());
+        assertThat(userDetail.getAddress().getAddress1()).isNotEqualTo(registerInfo.getAddress().getAddress1());
+        assertThat(userDetail.getAddress().getZipcode()).isNotEqualTo(registerInfo.getAddress().getZipcode());
+
+    }
+
+
     private UserRegisterRequest createUserRegisterInfo() {
         return UserRegisterRequest.builder()
                 .userAccount("aebong@gmail.com")
@@ -172,6 +227,24 @@ class UserServiceTest {
                 .address1("테스트시 테스트구 테스트로 1")
                 .address2("테스트")
                 .zipcode("00000")
+                .build();
+    }
+
+    private UserModifyRequest createUserModifyInfo() {
+        return UserModifyRequest.builder()
+                .userId(0L)
+                .userDetailId(0L)
+                .userAccount("aebong@gmail.com")
+                .userPassword("nonencodepassword")
+                .lastName("ae")
+                .firstName("bong")
+                .birthDate(LocalDate.of(1990, 1, 1))
+                .gender(Gender.MALE)
+                .mobileNumber("01022221234")
+                .nickName("aebong1")
+                .address1("테스트시 테스트구 테스트로 2")
+                .address2("테스트")
+                .zipcode("00001")
                 .build();
     }
 

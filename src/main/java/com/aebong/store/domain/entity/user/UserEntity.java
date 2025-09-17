@@ -4,6 +4,7 @@ import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.user.dto.UserModifyInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -141,6 +142,11 @@ public class UserEntity extends AuditingEntity {
         this.loginAvailableDate = loginAvailableDate;
 //        this.rejoinPossibleDate = rejoinPossibleDate;
 //        this.isRejoin = Objects.isNull(isRejoin) ? Boolean.FALSE : isRejoin;
+    }
+
+    // modify user info
+    public void update(UserModifyInfo modifyInfo) {
+        this.userPassword = modifyInfo.getUserPassword();
     }
 
 }
