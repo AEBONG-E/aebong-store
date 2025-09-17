@@ -66,15 +66,16 @@ public class UserServiceImpl implements UserService {
 
         // find user entity, userDetail entity
         UserEntity user = userRepository.findByUserAccount(userAccount).orElseThrow(
-                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER.getMessage()));
+                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
 
         UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
-                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER.getMessage()));
+                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
 
         return UserGetInfo.to(user, userDetail);
 
     }
 
+    @Transactional
     @Override
     public void modifyUser(UserModifyRequest userModifyRequest) {
 
@@ -85,8 +86,13 @@ public class UserServiceImpl implements UserService {
         // request -> dto mapping
         UserModifyInfo userModifyInfo = UserModifyInfo.to(userModifyRequest);
 
-        // modify user / userDetail
+        // find user entity, userDetail entity
+        UserEntity user = userRepository.findById(userModifyInfo.getUserId()).orElseThrow(
+                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
+        UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
+                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
 
+        // update user entity, userDetail entity (dirty checking)
 
     }
 

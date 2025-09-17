@@ -17,6 +17,8 @@ import java.util.Objects;
 @Getter
 public class UserModifyInfo {
 
+    private Long userId;
+    private Long userDetailId;
     private String userPassword;
     private String firstName;
     private String lastName;
@@ -30,7 +32,9 @@ public class UserModifyInfo {
     private Address address;
 
     @Builder
-    public UserModifyInfo(String userPassword,
+    public UserModifyInfo(Long userId,
+                          Long userDetailId,
+                          String userPassword,
                           String firstName,
                           String lastName,
                           LocalDate birthDate,
@@ -43,6 +47,8 @@ public class UserModifyInfo {
                           String address1,
                           String address2,
                           String zipcode) {
+        this.userId = userId;
+        this.userDetailId = userDetailId;
         this.userPassword = userPassword;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,6 +69,8 @@ public class UserModifyInfo {
     public static UserModifyInfo to(UserModifyRequest modifyRequest) {
         if (modifyRequest == null) return null;
         return UserModifyInfo.builder()
+                .userId(modifyRequest.getUserId())
+                .userDetailId(modifyRequest.getUserDetailId())
                 .userPassword(modifyRequest.getUserPassword())
                 .firstName(modifyRequest.getFirstName())
                 .lastName(modifyRequest.getLastName())
