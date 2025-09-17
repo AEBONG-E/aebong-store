@@ -2,31 +2,46 @@
 
 $(document).ready(function () {
 
+    // loginBtn query parameter parsing
+    const params = new URLSearchParams(window.location.search);
+    const userAccount = params.get("userAccount");
+
     // -------------------- get user api call --------------------
 
-    $.ajax({
-        type: "GET",
-        url: `/api/v1/users/{userAccount}`,
-        success: function (res) {
-            const info = res.data;
-            $("#userId").val(info.userId);
-            $("#userDetailId").val(info.userDetailId);
-            $("#lastName").val(info.lastName);
-            $("#firstName").val(info.firstName);
-            $("#mobileNumber").val(info.mobileNumber);
-            $("#address1").val(info.address1);
-            $("#address2").val(info.address2);
-            $("#zipcode").val(info.zipcode);
-        },
-        error: function () {
-            alert("회원 정보를 불러올 수 없습니다.");
-        }
-    })
+    if (userAccount) {
+        $.ajax({
+            url: "/api/v1/users/" + encodeURIComponent(userAccount),
+            type: "GET",
+            success: function (response) {
+                if (response.code === "SUCCESS") {
+                    const info = response.data;
+                    $("#userId").val(info.userId);                  // hidden
+                    $("#userDetailId").val(info.userDetailId);      // hidden
+                    $("#userAccount").val(info.userAccount);
+                    $("#userPassword").val(info.userPassword);      // hidden
+                    $("#lastName").val(info.lastName);
+                    $("#firstName").val(info.firstName);
+                    $("#birthDate").val(info.birthDate);
+                    $("#gender").val(info.gender);
+                    $("#mobileNumber").val(info.mobileNumber);      // hidden
+                    $("#nickName").val(info.nickName);
+                    $("#address1").val(info.address1);
+                    $("#address2").val(info.address2);
+                    $("#zipcode").val(info.zipcode);
+
+                    checkGender(info.gender);
+                    mobileNumberSubstring(info.mobileNumber);
+                }
+            },
+            error: function () {
+                alert("사용자 정보를 불러오는 중 오류가 발생했습니다.");
+            }
+        });
+    }
 
     // -------------------- get user api call --------------------
 
     // -------------------- check password match --------------------
-
     $("#passwordCheck, #userPassword").on("keyup", function () {
         const password = $("#userPassword").val();
         const passwordCheck = $("#passwordCheck").val();
@@ -42,8 +57,31 @@ $(document).ready(function () {
             message.text("");
         }
     });
-
     // -------------------- check password match --------------------
+
+    // ------------------- check gender -------------------
+    function checkGender(gender) {
+        if (gender === "MALE") {
+            $("#genderM").prop("checked", true);
+        } else if (gender === "FEMALE") {
+            $("#genderF").prop("checked", true);
+        }
+    }
+    // ------------------- check gender -------------------
+
+    // ------------------- mobile number substring -------------------
+    function mobileNumberSubstring(mobileNumber) {
+        if (!mobileNumber) return;
+        // 휴대폰번호 패턴: 3-4-4
+        const phone1 = mobileNumber.substring(0, 3);  // 010
+        const phone2 = mobileNumber.substring(3, 7);  // 2222
+        const phone3 = mobileNumber.substring(7);     // 1234
+
+        $("input[name=phone1]").val(phone1);
+        $("input[name=phone2]").val(phone2);
+        $("input[name=phone3]").val(phone3);
+    }
+    // ------------------- mobile number substring -------------------
 
     // -------------------- zipcode kakao api --------------------
 
@@ -187,21 +225,20 @@ $(document).ready(function () {
         });
     });
 
-    // ------------------- user register form submit -------------------
-
+    // ------------------- user modify form submit -------------------
 
 
 });
 
-// -------------------- delete api call --------------------
-const formObj = document.querySelector('form');
-document.querySelector("#deleteBtn").addEventListener('click', function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    formObj.action = `/kittop/user/delete`;
-    formObj.method = 'post';
-    formObj.submit();
-
-}, false);
-// -------------------- delete api call --------------------
+// // -------------------- delete api call --------------------
+// const formObj = document.querySelector('form');
+// document.querySelector("#deleteBtn").addEventListener('click', function (e) {
+//     e.preventDefault();
+//     e.stopPropagation();
+//
+//     formObj.action = `/kittop/user/delete`;
+//     formObj.method = 'post';
+//     formObj.submit();
+//
+// }, false);
+// // -------------------- delete api call --------------------

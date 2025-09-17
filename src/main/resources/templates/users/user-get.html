@@ -10,7 +10,7 @@
     <!-- individual CSS -->
     <th:block layout:fragment="css">
         <link th:href="@{/css/sidebars.css}" rel="stylesheet">
-        <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sidebars/">
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sidebars/">
 
         <style>
             #content {
@@ -28,8 +28,8 @@
 
 <div layout:fragment="content" id="content">
     <div class="container-fluid">
-        <div class="row">
-            <div class="bg-white d-flex align-items-center justify-content-center col-md-8" style="min-height: 70vh;">
+        <div class="row min-vh-100 d-flex align-items-center justify-content-center">
+            <div class="bg-white" style="min-height: 80vh;">
                 <div class="container d-flex justify-content-center">
                     <div class="d-flex justify-content-center">
                         <div class="g-5 d-flex justify-content-center">
@@ -70,10 +70,9 @@
                                             <p id="mobileNumber">
                                         </div>
 
-<!--                                        <div th:if="${#authentication}" th:with="currentUser=${#authentication.principal}">-->
-<!--                                            <a th:href="@{/kittop/user/modify(userId=${currentUser.userId})}" style="text-decoration: none; color: #fff;">-->
-<!--                                                <button class="w-100 btn btn-dark btn-lg mx-auto" type="button" style="display: block;">정보수정</button></a>-->
-<!--                                        </div>-->
+                                        <div>
+                                            <button class="w-100 btn btn-dark btn-lg mx-auto" name="modifyBtn" id="modifyBtn" type="button" style="display: block;">정보수정</button>
+                                        </div>
                                     </div>
                                 <br>
                                 <br>
