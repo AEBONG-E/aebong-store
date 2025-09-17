@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 정보 수정</title>
+
+    <script src="/js/user.js" defer></script>
+
+    <!-- individual CSS -->
+    <th:block layout:fragment="css">
+        <link th:href="@{/css/sidebars.css}" rel="stylesheet">
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sidebars/">
+
+        <style>
+
+            body {
+            }
+
+            .fieldError {
+                color: #f00;
+            }
+
+        </style>
+    </th:block>
+    <!-- individual CSS -->
+
+</head>
+
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="bg-white d-flex align-items-center col-md-8">
+                <div class="container d-flex justify-content-center">
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="col-md-7 col-lg-6">
+                                <br>
+                                <h4 class="mb-3">회원 정보 수정</h4>
+                                <div>
+                                    <form id="form" class="needs-validation" action="/api/v1/api/v1/users/" method="post">
+                                        <input type="hidden" class="form-control" id="userId" name="userId" value="">
+                                        <input type="hidden" class="form-control" id="userDetailId" name="userDetailId" value="">
+
+                                        <div class="row g-3">
+                                            <div class="row-sm-6">
+                                                <label th:for="email" class="form-label">아이디(이메일)</label>
+                                                <input type="email" class="form-control" name="email"
+                                                       placeholder="이메일을 입력해주세요" th:value="${userDTO.email}" readonly>
+                                            </div>
+                                            <!-- sec:authorize="hasAnyAuthority('GOOGLE', 'GOOGLE_USER')"
+                                         구글계정(GOOGLE or GOOGLE_USER ROLE)으로 로그인한 경우 보이지 않도록 설정-->
+                                            <div class="row-sm-6" sec:authorize="hasAnyAuthority('ROLE_USER')">
+                                                <label th:for="password" class="form-label">비밀번호</label>
+                                                <input type="password" name="password"
+                                                       class="form-control password" placeholder="비밀번호는 8~14 자리로 입력해주세요."
+                                                       required>
+                                                <p class="fieldError" th:if="${passwordError}"
+                                                   th:text="${passwordError}"></p>
+                                            </div>
+
+                                            <!-- sec:authorize="hasAnyAuthority('GOOGLE', 'GOOGLE_USER')"
+                                         구글계정(GOOGLE or GOOGLE_USER ROLE)으로 로그인한 경우 보이지 않도록 설정-->
+                                            <div class="row-sm-6" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                                                <label th:for="password" class="form-label">비밀번호</label>
+                                                <input type="password" name="password"
+                                                       class="form-control password" placeholder="비밀번호는 8~14 자리로 입력해주세요."
+                                                       required>
+                                                <p class="fieldError" th:if="${passwordError}"
+                                                   th:text="${passwordError}"></p>
+                                            </div>
+
+                                            <!-- sec:authorize="hasAnyAuthority('GOOGLE', 'GOOGLE_USER')"
+                                         구글계정(GOOGLE or GOOGLE_USER ROLE)으로 로그인한 경우 보이지 않도록 설정-->
+                                            <div class="row-sm-6" sec:authorize="hasAnyAuthority('ROLE_USER')">
+                                                <label class="form-label">비밀번호 확인</label>
+                                                <input type="password" class="form-control passwordcheck"
+                                                       placeholder="똑같은 비밀번호를 입력해주세요." required
+                                                       onkeyup="checkPasswordMatch();">
+                                                <p class="passwordMatchMessage"></p>
+                                            </div>
+
+                                            <!-- /비밀번호 검증 스크립트 -->
+                                            <!-- sec:authorize="hasAnyAuthority('GOOGLE', 'GOOGLE_USER')"
+                                         구글계정(GOOGLE or GOOGLE_USER ROLE)으로 로그인한 경우 보이지 않도록 설정-->
+                                            <div class="row-sm-6" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                                                <label class="form-label">비밀번호 확인</label>
+                                                <input type="password" class="form-control passwordcheck"
+                                                       placeholder="똑같은 비밀번호를 입력해주세요." required
+                                                       onkeyup="checkPasswordMatch();">
+                                                <p class="passwordMatchMessage"></p>
+                                            </div>
+                                            <div class="row-sm-6">
+                                                <label th:for="nickName" class="form-label">닉네임</label>
+                                                <input type="text" class="form-control" name="nickName"
+                                                       placeholder="닉네임을 입력해주세요." th:value="${userDTO.nickName}"
+                                                       required>
+                                                <p class="fieldError" th:if="${nickNameError}"
+                                                   th:text="${nickNameError}"></p>
+                                                <span class="nickNameCheck"></span>
+                                            </div>
+                                            <div class="row-sm-6">
+                                                <label th:for="name" class="form-label">이름</label>
+                                                <input type="text" class="form-control" name="name"
+                                                       placeholder="이름 입력해주세요." th:value="${userDTO.name}" required>
+                                                <p class="fieldError" th:if="${nameError}" th:text="${nameError}"></p>
+                                            </div>
+                                            <div class="row-sm-6">
+                                                <label th:for="birth" class="form-label">생년월일</label>
+                                                <input type="text" class="form-control" name="birth"
+                                                       placeholder="생년월일은 6자리로 입력해주세요" th:value="${userDTO.birth}"
+                                                       required>
+                                                <p class="fieldError" th:if="${birthError}" th:text="${birthError}"></p>
+                                            </div>
+                                            <div class="form-radio">
+                                                <p class="mb-3">성별</p>
+                                                <input type="radio" class="form-radio-input" name="gender" value="M"
+                                                       th:checked="${userDTO.gender == 'M'}">
+                                                <label th:for="gender" class="form-check-label"> &nbsp;남자</label>
+                                                <input type="radio" class="form-radio-input" name="gender" value="W"
+                                                       th:checked="${userDTO.gender == 'W'}">
+                                                <label th:for="gender" class="form-check-label"> &nbsp;여자</label>
+                                            </div>
+                                            <div class="row-sm-6">
+                                                <label th:for="zipcode" class="form-label">우편번호</label>
+                                                <input type="text" class="form-control" name="zipcode"
+                                                       placeholder="우편번호 검색" readonly>
+                                                <input type="button" class="btn btn-secondary btn-sm" name="zipcodeBtn"
+                                                       value="우편번호 검색" onclick="execDaumPostcode();">
+                                                <label th:for="addr1" class="form-label"></label>
+                                                <input type="text" class="form-control" name="addr1"
+                                                       placeholder="주소를 입력해주세요." required>
+                                                <p id="addr1Error" class="fieldError"></p>
+                                                <input type="text" class="form-control" name="addr2"
+                                                       placeholder="상세 주소를 입력해주세요." required>
+                                                <p id="addr2Error" class="fieldError"></p>
+                                            </div>
+                                            <div class="row-sm-6">
+                                                <label th:for="phone" class="form-label">전화번호</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <input type="tel" class="form-control" name="phone1"
+                                                               placeholder="0000" maxlength="4" required>
+                                                        <p id="phone1Error" class="fieldError"></p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <input type="tel" class="form-control" name="phone2"
+                                                               placeholder="0000" maxlength="4" required>
+                                                        <p id="phone2Error" class="fieldError"></p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <input type="tel" class="form-control" name="phone3"
+                                                               placeholder="0000" maxlength="4" required>
+                                                        <p id="phone3Error" class="fieldError"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <button id="btnForm" class="w-50 btn btn-dark btn-lg" type="button">
+                                                    정보수정
+                                                </button>
+                                                <button id="deleteBtn" class="w-50 btn btn-white btn-lg" type="button">
+                                                    회원탈퇴
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <br>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/users/user-modify.js}"></script>
+    <!-- kakao 도로명 주소 api -->
+    <script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
+</th:block>
+
+</html>
