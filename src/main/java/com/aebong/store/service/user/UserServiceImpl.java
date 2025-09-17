@@ -93,6 +93,8 @@ public class UserServiceImpl implements UserService {
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
 
         // update user entity, userDetail entity (dirty checking)
+        user.update(userModifyInfo);
+        userDetail.update(userModifyInfo);
 
     }
 
