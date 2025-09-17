@@ -1,5 +1,6 @@
 package com.aebong.store.service.user;
 
+import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.service.user.dto.UserGetInfo;
 
@@ -17,5 +18,11 @@ public interface UserService {
      * @return UserGetInfo
      */
     UserGetInfo getUser(String userAccount);
+
+    /**
+     * 사용자 정보 수정
+     * @param userModifyRequest 사용자 조회 response
+     */
+    void modifyUser(UserModifyRequest userModifyRequest);
 
 }

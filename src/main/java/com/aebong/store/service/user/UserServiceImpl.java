@@ -2,12 +2,14 @@ package com.aebong.store.service.user;
 
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.exceptions.UserApplicationException;
+import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
 import com.aebong.store.service.user.dto.UserGetInfo;
+import com.aebong.store.service.user.dto.UserModifyInfo;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,6 +72,21 @@ public class UserServiceImpl implements UserService {
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER.getMessage()));
 
         return UserGetInfo.to(user, userDetail);
+
+    }
+
+    @Override
+    public void modifyUser(UserModifyRequest userModifyRequest) {
+
+        if (Objects.isNull(userModifyRequest)) {
+            throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "modifyInfo must not be null");
+        }
+
+        // request -> dto mapping
+        UserModifyInfo userModifyInfo = UserModifyInfo.to(userModifyRequest);
+
+        // modify user / userDetail
+
 
     }
 
