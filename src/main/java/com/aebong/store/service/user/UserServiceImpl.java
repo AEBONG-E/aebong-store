@@ -24,19 +24,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
 
-    /**
-     * 회원 등록
-     * @param registerRequest 회원 등록 정보(api 통해 request 로 부터 받아올 매개변수)
-     */
+
     @Transactional
     @Override
     public void registerUser(UserRegisterRequest registerRequest) {
 
         if (Objects.isNull(registerRequest)) {
-            throw new IllegalArgumentException("registerInfo must not be null");
+            throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "registerInfo must not be null");
         }
 
-        // 회원 계정 중복 검증
+        // check if user exists
         if (validateUserAccountIsExists(registerRequest.getUserAccount())) {
             throw new UserApplicationException(CustomErrorType.IS_EXIST_USER,
                     String.format("%s already exists userAccount", registerRequest.getUserAccount()));
@@ -49,7 +46,8 @@ public class UserServiceImpl implements UserService {
 
         UserRegisterInfo registerInfo = UserRegisterInfo.to(registerRequest);
 
-        // 회원 DB 저장 데이터 생성 (todo: 회원 기본 정보 DB 저장 전 비밀번호 암호화 처리 필요)
+        //  todo: 회원 기본 정보 DB 저장 전 비밀번호 암호화 처리 필요
+
         UserEntity user = registerInfo.toUserEntity();
         userRepository.save(user);
 
