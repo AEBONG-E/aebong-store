@@ -152,4 +152,9 @@ public class UserDetailEntity extends AuditingEntity {
         this.address = modifyInfo.getAddress();
     }
 
+    public void delete() {
+        this.withdrawalDatetime = LocalDateTime.now();
+        setDelete();
+    }
+
 }

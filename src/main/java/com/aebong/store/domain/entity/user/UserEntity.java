@@ -124,9 +124,7 @@ public class UserEntity extends AuditingEntity {
                        LocalDateTime lastLoginDatetime,
                        LocalDateTime lastPasswordChangeDatetime,
                        LocalDateTime requiredPasswordChangeDatetime,
-                       LocalDate loginAvailableDate,
-                       LocalDate rejoinPossibleDate,
-                       Boolean isRejoin)
+                       LocalDate loginAvailableDate)
     {
         this.userType = userType;
         this.userAccount = userAccount;
@@ -140,13 +138,16 @@ public class UserEntity extends AuditingEntity {
         this.lastPasswordChangeDatetime = Objects.isNull(lastPasswordChangeDatetime) ? LocalDateTime.now() : lastPasswordChangeDatetime;
         this.requiredPasswordChangeDatetime = Objects.isNull(requiredPasswordChangeDatetime) ? LocalDateTime.now().plusMonths(6) : requiredPasswordChangeDatetime;
         this.loginAvailableDate = loginAvailableDate;
-//        this.rejoinPossibleDate = rejoinPossibleDate;
-//        this.isRejoin = Objects.isNull(isRejoin) ? Boolean.FALSE : isRejoin;
     }
 
     // modify user info
     public void update(UserModifyInfo modifyInfo) {
         this.userPassword = modifyInfo.getUserPassword();
+    }
+
+    public void delete() {
+        this.userStatus = UserStatus.WITHDRAWAL;
+        setDelete();
     }
 
 }

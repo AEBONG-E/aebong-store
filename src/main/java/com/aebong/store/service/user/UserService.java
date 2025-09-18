@@ -25,4 +25,10 @@ public interface UserService {
      */
     void modifyUser(UserModifyRequest userModifyRequest);
 
+    /**
+     * 사용자 삭제
+     * @param userAccount 로그인 시 받은 회원 계정
+     */
+    void deleteUser(String userAccount);
+
 }

@@ -98,6 +98,22 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Transactional
+    @Override
+    public void deleteUser(String userAccount) {
+
+        if (Objects.isNull(userAccount))
+            throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "userAccount is not null");
+
+        // find user entity, userDetail entity
+        UserEntity user = userRepository.findByUserAccount(userAccount).orElseThrow(
+                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
+
+        UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
+                () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
+
+    }
+
     private boolean validateUserAccountIsExists(String userAccount) {
         if (Objects.isNull(userAccount)) {
             throw new IllegalArgumentException("userAccount is null");
