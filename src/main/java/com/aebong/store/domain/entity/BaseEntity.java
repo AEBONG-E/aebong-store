@@ -38,4 +38,8 @@ public abstract class BaseEntity {
     @LastModifiedDate
     private LocalDateTime modifiedDatetime;
 
+    protected void setDelete() {
+        this.isDeleted = Boolean.TRUE;
+    }
+
 }
