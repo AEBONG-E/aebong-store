@@ -18,7 +18,6 @@ $(document).ready(function () {
                     $("#userId").val(info.userId);                  // hidden
                     $("#userDetailId").val(info.userDetailId);      // hidden
                     $("#userAccount").val(info.userAccount);
-                    $("#userPassword").val(info.userPassword);      // hidden
                     $("#lastName").val(info.lastName);
                     $("#firstName").val(info.firstName);
                     $("#birthDate").val(info.birthDate);
@@ -147,8 +146,8 @@ $(document).ready(function () {
         });
         if (!isValid) return; // invalid value
 
-        const rawBirth = $("#birthDate").val(); // 예: 900101
-        const formattedBirth = formatBirthDate(rawBirth); // ex: 900101 -> 1990-01-01
+        // const rawBirth = $("#birthDate").val(); // 예: 900101
+        // const formattedBirth = formatBirthDate(rawBirth); // ex: 900101 -> 1990-01-01
 
         // mobile number formatting
         const phone1 = document.querySelector("input[name='phone1']").value;
@@ -167,16 +166,16 @@ $(document).ready(function () {
         // }
 
         $.ajax({
-            type: "POST",
-            url: "/api/v1/users/sign-up",
+            type: "PATCH",
+            url: "/api/v1/users/" + encodeURIComponent(userAccount),
             contentType: "application/json; charset=utf-8",   // JSON 전송 명시
             data: JSON.stringify({
-                userAccount: $("#userAccount").val(),         // 폼 input 값
+                userAccount: $("#userAccount").val(),
                 userPassword: $("#userPassword").val(),
                 firstName: $("#firstName").val(),
                 lastName: $("#lastName").val(),
-                birthDate: formattedBirth,                    // 예: 1990-01-01
-                gender: gender,                               // 예: MALE, FEMALE
+                birthDate: $("#birthDate").val(),
+                gender: gender,
                 mobileNumber: mobileNumber,
                 nickName: $("#nickName").val(),
                 telNumber: $("#telNumber").val(),
@@ -188,11 +187,11 @@ $(document).ready(function () {
                 console.log('ajax response:', response);
                 serverCode = response;
 
-                // TODO: 서버 응답 데이터(response.data)로 환영 메시지 or 안내 페이지 표시 가능
-                alert("회원가입이 완료되었습니다!");
+                // TODO: 서버 응답 데이터(response.data)로 환영 메시지이or 안내 페이지 표시 가능
+                alert("정보수정 완료되었습니다!");
 
-                // main view redirect
-                window.location.href = "/";
+                // user get view redirect
+                window.location.href = "/users/info?userAccount=" + encodeURIComponent(userAccount);
 
                 // let next = true;
                 // if (next) {
