@@ -28,11 +28,11 @@ public class UserModifyRequest {
 //    private String rrn;
     private String nickName;
 //    private String telNumber;
-    private String email;
+//    private String email;
     private String address1;
     private String address2;
     private String zipcode;
-    private LocalDateTime joinDatetime;
+//    private LocalDateTime joinDatetime;
 
     @Builder
     public UserModifyRequest(Long userId,
@@ -64,11 +64,11 @@ public class UserModifyRequest {
 //        this.rrn = rrn;
         this.nickName = nickName;
 //        this.telNumber = telNumber;
-        this.email = email;
+//        this.email = email;
         this.address1 = address1;
         this.address2 = address2;
         this.zipcode = zipcode;
-        this.joinDatetime = joinDatetime;
+//        this.joinDatetime = joinDatetime;
     }
 
 }

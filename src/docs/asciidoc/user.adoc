@@ -34,3 +34,20 @@ include::{snippets}/user-get/request-body.adoc[]
 include::{snippets}/user-get/http-response.adoc[]
 include::{snippets}/user-get/response-fields.adoc[]
 include::{snippets}/user-get/response-body.adoc[]
+
+=== 사용자수정_실패
+include::{snippets}/user-modify-fail/http-request.adoc[]
+include::{snippets}/user-modify-fail/request-fields.adoc[]
+include::{snippets}/user-modify-fail/request-body.adoc[]
+include::{snippets}/user-modify-fail/http-response.adoc[]
+include::{snippets}/user-modify-fail/response-fields.adoc[]
+include::{snippets}/user-modify-fail/response-body.adoc[]
+
+=== 사용자수정_성공
+include::{snippets}/user-modify/http-request.adoc[]
+include::{snippets}/user-modify/request-fields.adoc[]
+include::{snippets}/user-modify/request-body.adoc[]
+include::{snippets}/user-modify/http-response.adoc[]
+include::{snippets}/user-modify/response-fields.adoc[]
+include::{snippets}/user-modify/response-body.adoc[]
+

@@ -6,6 +6,8 @@ $(document).ready(function () {
     const params = new URLSearchParams(window.location.search);
     const userAccount = params.get("userAccount");
 
+    // -------------------- get user api call --------------------
+
     if (userAccount) {
         $.ajax({
             url: "/api/v1/users/" + encodeURIComponent(userAccount),
@@ -23,7 +25,7 @@ $(document).ready(function () {
                     $("#address2").val(info.address2);                  // hidden
                     $("#name").text(info.lastName + "" + info.firstName);
                     $("#birthDate").text(info.birthDate);
-                    $("#gender").text(info.gender);
+                    $("#gender").text(info.gender);                     // hidden
                     $("#mobileNumber").text(info.mobileNumber);
                     $("#nickName").text(info.nickName);
                     $("#email").text(info.email);
@@ -37,5 +39,17 @@ $(document).ready(function () {
             }
         });
     }
+
+    // -------------------- get user api call --------------------
+
+    // -------------------- user modify view --------------------
+    $("#modifyBtn").on("click", function () {
+        if (userAccount) {
+            window.location.href = "/users/modify?userAccount=" + encodeURIComponent(userAccount);
+        } else {
+            alert("userAccount가 없습니다.");
+        }
+    });
+    // -------------------- user modify view --------------------
 
 });

@@ -21,8 +21,9 @@ public interface UserService {
 
     /**
      * 사용자 정보 수정
+     * @param userAccount 로그인 시 받은 회원 계정
      * @param userModifyRequest 사용자 조회 response
      */
-    void modifyUser(UserModifyRequest userModifyRequest);
+    void modifyUser(String userAccount, UserModifyRequest userModifyRequest);
 
 }

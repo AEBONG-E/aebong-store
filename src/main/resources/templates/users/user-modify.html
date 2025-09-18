@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title>회원 정보 수정</title>
+
+    <script src="/js/user.js" defer></script>
+
+    <!-- individual CSS -->
+    <th:block layout:fragment="css">
+        <link th:href="@{/css/sidebars.css}" rel="stylesheet">
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/sidebars/">
+
+        <style>
+
+            body {
+            }
+
+            .fieldError {
+                color: #f00;
+            }
+
+        </style>
+    </th:block>
+    <!-- individual CSS -->
+
+</head>
+
+<div layout:fragment="content">
+    <div class="container-fluid">
+        <div class="row min-vh-100 d-flex align-items-center justify-content-center">
+            <div class="bg-white" style="min-height: 80vh;">
+                <div class="container d-flex justify-content-center">
+                    <div class="d-flex justify-content-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="col-md-7 col-lg-6">
+                                <br>
+                                <h4 class="mb-3">회원 정보 수정</h4>
+                                <div>
+                                    <form id="form" class="needs-validation" action="/api/v1/api/v1/users/" method="post">
+                                        <input type="hidden" class="form-control" id="userId" name="userId" value="">
+                                        <input type="hidden" class="form-control" id="userDetailId" name="userDetailId" value="">
+                                        <input type="hidden" class="form-control" id="mobileNumber" name="mobileNumber" value="">
+
+                                        <div class="row g-3">
+                                            <div class="row-sm-6">
+                                                <label th:for="userAccount" class="form-label">아이디(이메일)</label>
+                                                <input type="email" class="form-control" id="userAccount" name="userAccount" value="" readonly>
+                                            </div>
+
+                                            <div class="row-sm-6">
+                                                <label th:for="userPassword" class="form-label">비밀번호</label>
+                                                <input type="password" id="userPassword" class="form-control" name="userPassword"
+                                                       placeholder="비밀번호는 8~14 자리로 입력해주세요." required>
+                                                <p class="fieldError" th:if="${passwordError}" th:text="${passwordError}"></p>
+                                            </div>
+
+                                            <div class="row-sm-6">
+                                                <label for="passwordCheck" class="form-label">비밀번호 확인</label>
+                                                <input type="password" class="form-control" id="passwordCheck"
+                                                       placeholder="똑같은 비밀번호를 입력해주세요." required>
+                                                <p id="passwordMatchMessage"></p>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <!-- 성(lastName) -->
+                                                <div class="col-sm-6">
+                                                    <label th:for="lastName" class="form-label">성</label>
+                                                    <input type="text" class="form-control" id="lastName" name="lastName" value="" required>
+                                                    <p class="fieldError" th:if="${lastNameError}" th:text="${lastNameError}"></p>
+                                                </div>
+
+                                                <!-- 이름(firstName) -->
+                                                <div class="col-sm-6">
+                                                    <label th:for="firstName" class="form-label">이름</label>
+                                                    <input type="text" class="form-control" id="firstName" name="firstName" value="" required>
+                                                    <p class="fieldError" th:if="${firstNameError}" th:text="${firstNameError}"></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row-sm-6">
+                                                <label th:for="birthDate" class="form-label">생년월일</label>
+                                                <input type="text" class="form-control" id="birthDate" name="birthDate" value="" required>
+                                                <p class="fieldError" th:if="${birthError}" th:text="${birthError}"></p>
+                                            </div>
+
+                                            <div class="form-radio">
+                                                <p class="mb-3">성별</p>
+                                                <input type="radio" class="form-radio-input" id="genderM" name="gender" value="MALE">
+                                                <label th:for="gender" class="form-check-label"> &nbsp;남자</label>
+                                                <input type="radio" class="form-radio-input" id="genderF" name="gender" value="FEMALE">
+                                                <label th:for="gender" class="form-check-label"> &nbsp;여자</label>
+                                            </div>
+
+                                            <div class="row-sm-6">
+                                                <label th:for="phone" class="form-label">휴대폰번호</label>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <input type="tel" class="form-control" name="phone1" value="" maxlength="4" required>
+                                                        <p id="phone1Error" class="fieldError"></p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <input type="tel" class="form-control" name="phone2" value="" maxlength="4" required>
+                                                        <p id="phone2Error" class="fieldError"></p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <input type="tel" class="form-control" name="phone3" value="" maxlength="4" required>
+                                                        <p id="phone3Error" class="fieldError"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row-sm-6">
+                                                <label th:for="nickName" class="form-label">닉네임</label>
+                                                <input type="text" class="form-control" id="nickName" name="nickName" value="" required>
+                                                <p class="fieldError" th:if="${nickNameError}" th:text="${nickNameError}"></p>
+                                                <!-- Ajax 로 닉네임 중복 검사 -->
+                                                <span class="nickNameCheck"></span>
+                                            </div>
+
+                                            <div class="row-sm-6">
+                                                <label th:for="zipcode" class="form-label">우편번호</label>
+                                                <input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="우편번호 검색">
+                                                <!--                                    <input type="button" class="btn btn-secondary btn-sm" value="우편번호 검색"-->
+                                                <!--                                           onclick="execDaumPostcode();">-->
+                                                <label th:for="address1" class="form-label"></label>
+                                                <input type="text" class="form-control" id="address1" name="address1" placeholder="주소를 입력해주세요."
+                                                       required>
+                                                <p id="address1Error" class="fieldError"></p>
+                                                <input type="text" class="form-control" id="address2" name="address2"
+                                                       placeholder="상세 주소를 입력해주세요." required>
+                                                <p id="address2Error" class="fieldError"></p>
+                                            </div>
+
+                                            <div class="d-flex justify-content-between">
+                                                <button id="btnForm" class="w-50 btn btn-dark btn-lg" type="button">
+                                                    정보수정
+                                                </button>
+                                                <button id="deleteBtn" class="w-50 btn btn-white btn-lg" type="button">
+                                                    회원탈퇴
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <br>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/users/user-modify.js}"></script>
+    <!-- kakao 도로명 주소 api -->
+    <script src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
+</th:block>
+
+</html>

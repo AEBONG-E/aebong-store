@@ -25,4 +25,10 @@ public class UserViewController {
         return "users/user-get";
     }
 
+    @GetMapping("/modify")
+    public String getModifyForm(@RequestParam String userAccount, Model model) {
+        model.addAttribute("userAccount", userAccount);
+        return "users/user-modify";
+    }
+
 }

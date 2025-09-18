@@ -1,6 +1,7 @@
 package com.aebong.store.controller.api;
 
 import com.aebong.store.common.api.ApiResponse;
+import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.controller.res.UserGetResponse;
 import com.aebong.store.service.user.UserService;
@@ -25,6 +26,12 @@ public class UserController {
     @GetMapping("/{userAccount}")
     public ResponseEntity<ApiResponse<UserGetResponse>> getUser(@PathVariable String userAccount) {
         return new ResponseEntity<>(ApiResponse.success(UserGetResponse.to(userService.getUser(userAccount))), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{userAccount}")
+    public ResponseEntity<ApiResponse<Void>> modifyUser(@PathVariable String userAccount, @RequestBody UserModifyRequest modifyRequest) {
+        userService.modifyUser(userAccount, modifyRequest);
+        return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
 }
