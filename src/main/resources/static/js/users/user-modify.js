@@ -186,8 +186,6 @@ $(document).ready(function () {
             success: function (response) {
                 console.log('ajax response:', response);
                 serverCode = response;
-
-                // TODO: 서버 응답 데이터(response.data)로 환영 메시지이or 안내 페이지 표시 가능
                 alert("정보수정 완료되었습니다!");
 
                 // user get view redirect
@@ -226,18 +224,53 @@ $(document).ready(function () {
 
     // ------------------- user modify form submit -------------------
 
+    // ------------------- delete user api call -------------------
+    $("#deleteBtn").click(function (e) {
+
+        e.preventDefault(); // 폼 기본 전송 막기
+
+        const formObj = document.formObj;
+        let serverCode = "";
+
+        if (userAccount) {
+            $.ajax({
+                url: "/api/v1/users/" + encodeURIComponent(userAccount),
+                type: "DELETE",
+                contentType: "application/json; charset=utf-8",   // JSON 전송 명시
+                success: function (response) {
+                    if (response.code === "SUCCESS") {
+                        // TODO: 서버 응답 데이터(response.data)로 삭제 안내 메시지 또는 페이지 표시 가능
+                        alert("정상적으로 회원 탈퇴되었습니다.");
+                    }
+
+                    // main view redirect
+                    window.location.href = "/";
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // 오류 처리
+                    console.error("AJAX Error:", textStatus, errorThrown);
+
+                    try {
+                        // 서버가 JSON 형태로 내려준 경우
+                        const errorResponse = JSON.parse(jqXHR.responseText);
+
+                        // 서버 응답 구조가 { code, message, data } 형태라면
+                        if (errorResponse && errorResponse.message) {
+                            alert(errorResponse.message);
+                        } else {
+                            alert("알 수 없는 오류가 발생했습니다.");
+                        }
+                    } catch (e) {
+                        // JSON 파싱 실패한 경우 (서버가 plain text 내려줬을 때 등)
+                        alert(jqXHR.responseText || "서버 오류가 발생했습니다.");
+                    }
+                }
+            });
+        }
+    });
+
+    // ------------------- delete user api call -------------------
+
 
 });
-
-// // -------------------- delete api call --------------------
-// const formObj = document.querySelector('form');
-// document.querySelector("#deleteBtn").addEventListener('click', function (e) {
-//     e.preventDefault();
-//     e.stopPropagation();
-//
-//     formObj.action = `/kittop/user/delete`;
-//     formObj.method = 'post';
-//     formObj.submit();
-//
-// }, false);
-// // -------------------- delete api call --------------------
