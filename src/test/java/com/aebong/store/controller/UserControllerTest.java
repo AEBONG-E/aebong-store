@@ -317,6 +317,72 @@ class UserControllerTest {
 
     }
 
+    @Test
+    void 사용자삭제_실패() throws Exception {
+
+        // given
+        String requestUserAccount = "test@gmail.com";
+
+        doThrow(new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessageKr()))
+                .when(userService).deleteUser(any(String.class));
+
+        // when & then
+        mockMvc.perform(delete("/api/v1/users/{userAccount}", requestUserAccount)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND_USER"))
+                .andExpect(jsonPath("$.message").value("사용자를 찾을 수 없습니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andDo(document("user-delete-fail",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답메시지").optional(),
+                                        subsectionWithPath("data").type(JsonFieldType.OBJECT).description("사용자 데이터 객체").optional()
+                                ),
+                                requestBody(),
+                                responseBody()
+                ));
+
+
+    }
+
+    @Test
+    void 사용자삭제_성공() throws Exception {
+
+        // given
+        String requestUserAccount = "test@gmail.com";
+
+        doNothing().when(userService).deleteUser(any(String.class));
+
+        // when & then
+        mockMvc.perform(delete("/api/v1/users/{userAccount}", requestUserAccount)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("user-delete",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                pathParameters(
+                                        parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
+                                ),
+                                responseFields(
+                                        fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
+                                        fieldWithPath("message").type(JsonFieldType.STRING).description("응답메시지").optional(),
+                                        subsectionWithPath("data").type(JsonFieldType.OBJECT).description("사용자 데이터 객체").optional()
+                                ),
+                                requestBody(),
+                                responseBody()
+                ));
+
+
+    }
+
     private UserRegisterRequest createUserRegisterInfo() {
         return UserRegisterRequest.builder()
 //                .userType(UserType.REGULAR_MEMBER)

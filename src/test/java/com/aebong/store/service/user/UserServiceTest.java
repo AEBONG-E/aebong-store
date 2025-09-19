@@ -2,6 +2,7 @@ package com.aebong.store.service.user;
 
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.enums.user.Gender;
+import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.exceptions.UserApplicationException;
 import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
@@ -217,6 +218,61 @@ class UserServiceTest {
 
     }
 
+    @Test
+    void 사용자삭제_실패_등록된_사용자를_찾을수없는_케이스() {
+
+        // given
+        UserRegisterRequest request = createUserRegisterInfo();
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(request);
+        UserEntity user = registerInfo.toUserEntity();
+        UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
+
+        given(userRepository.save(user)).willReturn(user);
+        given(userDetailRepository.save(userDetail)).willReturn(userDetail);
+
+        String requestUserAccount = "test@gmail.com";
+        given(userRepository.findByUserAccount(requestUserAccount)).willReturn(Optional.empty());
+
+        // when
+        assertThatThrownBy(() -> service.deleteUser(requestUserAccount))
+                .isInstanceOf(UserApplicationException.class)
+                .hasMessage(CustomErrorType.NOT_FOUND_USER.getMessage());
+
+        // then
+        then(userRepository).should(times(1)).findByUserAccount(requestUserAccount);
+        then(userDetailRepository).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void 사용자삭제_정상_케이스() {
+
+        // given
+        UserRegisterRequest request = createUserRegisterInfo();
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(request);
+        UserEntity user = registerInfo.toUserEntity();
+        UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
+
+        given(userRepository.save(user)).willReturn(user);
+        given(userDetailRepository.save(userDetail)).willReturn(userDetail);
+
+        String requestUserAccount = "aebong@gmail.com";
+        given(userRepository.findByUserAccount(requestUserAccount)).willReturn(Optional.of(user));
+        given(userDetailRepository.findByUser(user)).willReturn(Optional.of(userDetail));
+
+        // when
+        service.deleteUser(requestUserAccount);
+
+        // then
+        then(userRepository).should(times(1)).findByUserAccount(requestUserAccount);
+        then(userDetailRepository).should(times(1)).findByUser(user);
+
+        // check dirty checking
+        assertThat(user.getUserStatus()).isEqualTo(UserStatus.WITHDRAWAL);
+        assertThat(user.getIsDeleted()).isEqualTo(Boolean.TRUE);
+        assertThat(userDetail.getWithdrawalDatetime()).isNotNull();
+        assertThat(userDetail.getIsDeleted()).isEqualTo(Boolean.TRUE);
+
+    }
 
     private UserRegisterRequest createUserRegisterInfo() {
         return UserRegisterRequest.builder()
