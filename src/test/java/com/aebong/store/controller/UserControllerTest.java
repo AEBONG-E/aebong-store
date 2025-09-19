@@ -7,6 +7,7 @@ import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.common.exceptions.UserApplicationException;
 import com.aebong.store.controller.api.UserController;
+import com.aebong.store.controller.req.UserLoginRequest;
 import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.controller.res.UserGetResponse;
@@ -133,27 +134,29 @@ class UserControllerTest {
     }
 
     @Test
-    void 사용자조회_실패() throws Exception {
+    void 로그인_실패() throws Exception {
 
         // given
-        String requestUserAccount = "test@gmail.com";
+        UserLoginRequest userLoginInfo = createUserLoginInfo();
 
         doThrow(new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessageKr()))
-                .when(userService).getUser(any(String.class));
+                .when(userService).loginUser(any(UserLoginRequest.class));
 
         // when & then
-        mockMvc.perform(get("/api/v1/users/{userAccount}", requestUserAccount)
-                                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/v1/users/sign-in")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(userLoginInfo)))
                 .andDo(print())
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("NOT_FOUND_USER"))
                 .andExpect(jsonPath("$.message").value("사용자를 찾을 수 없습니다."))
                 .andExpect(jsonPath("$.data").doesNotExist())
-                .andDo(document("user-get-fail",
+                .andDo(document("user-login-fail",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
+                        requestFields(
+                                fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
+                                fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호")
                         ),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
@@ -168,26 +171,28 @@ class UserControllerTest {
     }
 
     @Test
-    void 사용자조회_성공() throws Exception {
+    void 로그인_성공() throws Exception {
 
         // given
-        String requestUserAccount = "aebong@gmail.com";
+        UserLoginRequest userLoginInfo = createUserLoginInfo();
 
         UserGetInfo userGetInfo = createUserGetInfo();
         UserGetResponse response = UserGetResponse.to(userGetInfo);
 
-        given(userService.getUser(requestUserAccount)).willReturn(userGetInfo);
+        given(userService.loginUser(userLoginInfo)).willReturn(userGetInfo);
 
         // when & then
-        mockMvc.perform(get("/api/v1/users/{userAccount}", requestUserAccount)
-                                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/api/v1/users/sign-in")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(userLoginInfo)))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("user-get",
+                .andDo(document("user-login",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("userAccount").description("조회할 사용자계정(이메일)")
+                        requestFields(
+                                fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
+                                fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호")
                         ),
                         responseFields(
                                 fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
@@ -455,6 +460,13 @@ class UserControllerTest {
                 .address1("테스트시 테스트구 테스트로 2")
                 .address2("테스트")
                 .zipcode("00001")
+                .build();
+    }
+
+    private UserLoginRequest createUserLoginInfo() {
+        return UserLoginRequest.builder()
+                .userAccount("aebong@gmail.com")
+                .userPassword("nonencodepassword")
                 .build();
     }
 
