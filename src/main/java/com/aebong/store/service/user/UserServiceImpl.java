@@ -74,6 +74,12 @@ public class UserServiceImpl implements UserService {
         UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
 
+        // valid password
+        // todo: 비밀번호 복호화 검증 등 작업 필요
+        if (Objects.isNull(loginRequest.getUserPassword()) || !user.validatePassword(loginRequest.getUserPassword())) {
+            throw new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage());
+        }
+
         return UserGetInfo.to(user, userDetail);
 
     }
@@ -137,3 +143,4 @@ public class UserServiceImpl implements UserService {
     }
 
 }
+

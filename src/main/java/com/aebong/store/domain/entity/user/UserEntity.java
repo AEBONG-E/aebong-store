@@ -150,4 +150,8 @@ public class UserEntity extends AuditingEntity {
         setDelete();
     }
 
+    public boolean validatePassword(String password) {
+        return this.userPassword.equals(password);
+    }
+
 }
