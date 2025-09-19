@@ -115,6 +115,8 @@ public class UserServiceImpl implements UserService {
         UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
 
+        userDetail.delete();
+        user.delete();
     }
 
     private boolean validateUserAccountIsExists(String userAccount) {
