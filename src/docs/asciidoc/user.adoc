@@ -21,14 +21,14 @@ include::{snippets}/user-register/http-response.adoc[]
 include::{snippets}/user-register/response-fields.adoc[]
 include::{snippets}/user-register/response-body.adoc[]
 
-=== 사용자조회_실패
+=== 로그인_실패
 include::{snippets}/user-login-fail/http-request.adoc[]
 include::{snippets}/user-login-fail/request-body.adoc[]
 include::{snippets}/user-login-fail/http-response.adoc[]
 include::{snippets}/user-login-fail/response-fields.adoc[]
 include::{snippets}/user-login-fail/response-body.adoc[]
 
-=== 사용자조회_성공
+=== 로그인_성공
 include::{snippets}/user-login/http-request.adoc[]
 include::{snippets}/user-login/request-body.adoc[]
 include::{snippets}/user-login/http-response.adoc[]
