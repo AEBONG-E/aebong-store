@@ -3,42 +3,32 @@
 $(document).ready(function () {
 
     // loginBtn query parameter parsing
-    const params = new URLSearchParams(window.location.search);
-    const userAccount = params.get("userAccount");
+    // const params = new URLSearchParams(window.location.search);
+    // const userAccount = params.get("userAccount");
 
-    // -------------------- get user api call --------------------
+    // -------------------- get user info from sessionStorage --------------------
 
-    if (userAccount) {
-        $.ajax({
-            url: "/api/v1/users/" + encodeURIComponent(userAccount),
-            type: "GET",
-            success: function (response) {
-                if (response.code === "SUCCESS") {
-                    const info = response.data;
-                    $("#userId").val(info.userId);                  // hidden
-                    $("#userDetailId").val(info.userDetailId);      // hidden
-                    $("#userAccount").val(info.userAccount);
-                    $("#lastName").val(info.lastName);
-                    $("#firstName").val(info.firstName);
-                    $("#birthDate").val(info.birthDate);
-                    $("#gender").val(info.gender);
-                    $("#mobileNumber").val(info.mobileNumber);      // hidden
-                    $("#nickName").val(info.nickName);
-                    $("#address1").val(info.address1);
-                    $("#address2").val(info.address2);
-                    $("#zipcode").val(info.zipcode);
+    const info = JSON.parse(sessionStorage.getItem("userInfo"));
 
-                    checkGender(info.gender);
-                    mobileNumberSubstring(info.mobileNumber);
-                }
-            },
-            error: function () {
-                alert("사용자 정보를 불러오는 중 오류가 발생했습니다.");
-            }
-        });
+    if (info) {
+        $("#userId").val(info.userId);                  // hidden
+        $("#userDetailId").val(info.userDetailId);      // hidden
+        $("#userAccount").val(info.userAccount);
+        $("#lastName").val(info.lastName);
+        $("#firstName").val(info.firstName);
+        $("#birthDate").val(info.birthDate);
+        $("#gender").val(info.gender);
+        $("#mobileNumber").val(info.mobileNumber);      // hidden
+        $("#nickName").val(info.nickName);
+        $("#address1").val(info.address1);
+        $("#address2").val(info.address2);
+        $("#zipcode").val(info.zipcode);
+
+        checkGender(info.gender);
+        mobileNumberSubstring(info.mobileNumber);
     }
 
-    // -------------------- get user api call --------------------
+    // -------------------- get user info from sessionStorage --------------------
 
     // -------------------- check password match --------------------
     $("#passwordCheck, #userPassword").on("keyup", function () {
@@ -232,9 +222,9 @@ $(document).ready(function () {
         const formObj = document.formObj;
         let serverCode = "";
 
-        if (userAccount) {
+        if (info) {
             $.ajax({
-                url: "/api/v1/users/" + encodeURIComponent(userAccount),
+                url: "/api/v1/users/" + encodeURIComponent(info.userAccount),
                 type: "DELETE",
                 contentType: "application/json; charset=utf-8",   // JSON 전송 명시
                 success: function (response) {
