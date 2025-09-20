@@ -1,6 +1,7 @@
 package com.aebong.store.controller.api;
 
 import com.aebong.store.common.api.ApiResponse;
+import com.aebong.store.controller.req.UserLoginRequest;
 import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.controller.res.UserGetResponse;
@@ -23,9 +24,9 @@ public class UserController {
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
-    @GetMapping("/{userAccount}")
-    public ResponseEntity<ApiResponse<UserGetResponse>> getUser(@PathVariable String userAccount) {
-        return new ResponseEntity<>(ApiResponse.success(UserGetResponse.to(userService.getUser(userAccount))), HttpStatus.OK);
+    @PostMapping("/sign-in")
+    public ResponseEntity<ApiResponse<UserGetResponse>> loginUser(@RequestBody UserLoginRequest loginRequest) {
+        return new ResponseEntity<>(ApiResponse.success(UserGetResponse.to(userService.loginUser(loginRequest))), HttpStatus.OK);
     }
 
     @PatchMapping("/{userAccount}")

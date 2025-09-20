@@ -2,6 +2,7 @@ package com.aebong.store.service.user;
 
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.exceptions.UserApplicationException;
+import com.aebong.store.controller.req.UserLoginRequest;
 import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
@@ -59,17 +60,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserGetInfo getUser(String userAccount) {
+    public UserGetInfo loginUser(UserLoginRequest loginRequest) {
 
-        if (Objects.isNull(userAccount))
-            throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "userAccount is not null");
+        if (Objects.isNull(loginRequest))
+            throw new UserApplicationException(CustomErrorType.INTERNAL_SERVER_ERROR, "login request is null");
+
+        // todo: social account login
 
         // find user entity, userDetail entity
-        UserEntity user = userRepository.findByUserAccount(userAccount).orElseThrow(
+        UserEntity user = userRepository.findByUserAccount(loginRequest.getUserAccount()).orElseThrow(
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
 
         UserDetailEntity userDetail = userDetailRepository.findByUser(user).orElseThrow(
                 () -> new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage()));
+
+        // valid password
+        // todo: 비밀번호 복호화 검증 등 작업 필요
+        if (Objects.isNull(loginRequest.getUserPassword()) || !user.validatePassword(loginRequest.getUserPassword())) {
+            throw new UserApplicationException(CustomErrorType.NOT_FOUND_USER, CustomErrorType.NOT_FOUND_USER.getMessage());
+        }
 
         return UserGetInfo.to(user, userDetail);
 
@@ -134,3 +143,4 @@ public class UserServiceImpl implements UserService {
     }
 
 }
+

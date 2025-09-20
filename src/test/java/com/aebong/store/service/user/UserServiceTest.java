@@ -4,6 +4,7 @@ import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.exceptions.UserApplicationException;
+import com.aebong.store.controller.req.UserLoginRequest;
 import com.aebong.store.controller.req.UserModifyRequest;
 import com.aebong.store.controller.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
@@ -100,7 +101,7 @@ class UserServiceTest {
     }
 
     @Test
-    void 사용자조회_실패_등록된_사용자를_찾을수없는_케이스() {
+    void 로그인_실패_등록된_사용자를_찾을수없는_케이스() {
 
         // given
         UserRegisterRequest request = createUserRegisterInfo();
@@ -111,21 +112,21 @@ class UserServiceTest {
         given(userRepository.save(user)).willReturn(user);
         given(userDetailRepository.save(userDetail)).willReturn(userDetail);
 
-        String requestUserAccount = "test@gmail.com";
-        given(userRepository.findByUserAccount(requestUserAccount)).willReturn(Optional.empty());
+        UserLoginRequest userLoginInfo = createUserLoginInfo();
+        given(userRepository.findByUserAccount(userLoginInfo.getUserAccount())).willReturn(Optional.empty());
 
         // when
-        assertThatThrownBy(() -> service.getUser(requestUserAccount))
+        assertThatThrownBy(() -> service.loginUser(userLoginInfo))
                                         .isInstanceOf(UserApplicationException.class)
                                         .hasMessage(CustomErrorType.NOT_FOUND_USER.getMessage());
 
         // then
-        then(userRepository).should(times(1)).findByUserAccount(requestUserAccount);
+        then(userRepository).should(times(1)).findByUserAccount(userLoginInfo.getUserAccount());
         then(userDetailRepository).shouldHaveNoInteractions();
     }
 
     @Test
-    void 사용자조회_정상_케이스() {
+    void 로그인_실패_비밀번호_불일치_케이스() {
 
         // given
         UserRegisterRequest request = createUserRegisterInfo();
@@ -133,19 +134,52 @@ class UserServiceTest {
         UserEntity user = registerInfo.toUserEntity();
         UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
 
-        String requestUserAccount = "aebong@gmail.com";
+        given(userRepository.save(user)).willReturn(user);
+        given(userDetailRepository.save(userDetail)).willReturn(userDetail);
 
-        given(userRepository.save(any())).willReturn(UserEntity.class);
-        given(userDetailRepository.save(any())).willReturn(UserDetailEntity.class);
-        given(userRepository.findByUserAccount(requestUserAccount)).willReturn(Optional.of(user));
+        UserLoginRequest userLoginInfo = UserLoginRequest.builder()
+                .userAccount("aebong@gmail.com")
+                .userPassword("missmatchpassword")
+                .build();
+
+        given(userRepository.findByUserAccount(userLoginInfo.getUserAccount())).willReturn(Optional.of(user));
         given(userDetailRepository.findByUser(user)).willReturn(Optional.of(userDetail));
 
         // when
-        UserGetInfo readInfo = service.getUser(requestUserAccount);
+        assertThatThrownBy(() -> service.loginUser(userLoginInfo))
+                .isInstanceOf(UserApplicationException.class)
+                .hasMessage(CustomErrorType.NOT_FOUND_USER.getMessage());
+
+        // then
+        then(userRepository).should(times(1)).findByUserAccount(userLoginInfo.getUserAccount());
+        then(userDetailRepository).should(times(1)).findByUser(user);
+
+        assertThat(userLoginInfo.getUserPassword()).isNotEqualTo(user.getUserPassword());
+    }
+
+    @Test
+    void 로그인_정상_케이스() {
+
+        // given
+        UserRegisterRequest request = createUserRegisterInfo();
+        UserRegisterInfo registerInfo = UserRegisterInfo.to(request);
+        UserEntity user = registerInfo.toUserEntity();
+        UserDetailEntity userDetail = registerInfo.toUserDetailEntity(user);
+
+        UserLoginRequest userLoginInfo = createUserLoginInfo();
+
+        given(userRepository.save(any())).willReturn(UserEntity.class);
+        given(userDetailRepository.save(any())).willReturn(UserDetailEntity.class);
+        given(userRepository.findByUserAccount(userLoginInfo.getUserAccount())).willReturn(Optional.of(user));
+        given(userDetailRepository.findByUser(user)).willReturn(Optional.of(userDetail));
+
+        // when
+        UserGetInfo readInfo = service.loginUser(userLoginInfo);
 
         // then
         assertThat(readInfo).isNotNull();
-        assertThat(readInfo.getUserAccount()).isEqualTo(requestUserAccount);
+        assertThat(readInfo.getUserAccount()).isEqualTo(userLoginInfo.getUserAccount());
+        assertThat(readInfo.getUserPassword()).isEqualTo(userLoginInfo.getUserPassword());
 
         assertThat(readInfo)
                 .hasFieldOrPropertyWithValue("userType", user.getUserType())
@@ -160,7 +194,7 @@ class UserServiceTest {
                 .hasFieldOrPropertyWithValue("nickName", userDetail.getNickName())
                 .hasFieldOrPropertyWithValue("address", userDetail.getAddress());
 
-        then(userRepository).should().findByUserAccount(requestUserAccount);
+        then(userRepository).should().findByUserAccount(userLoginInfo.getUserAccount());
         then(userDetailRepository).should().findByUser(user);
     }
 
@@ -305,6 +339,13 @@ class UserServiceTest {
                 .address1("테스트시 테스트구 테스트로 2")
                 .address2("테스트")
                 .zipcode("00001")
+                .build();
+    }
+
+    private UserLoginRequest createUserLoginInfo() {
+        return UserLoginRequest.builder()
+                .userAccount("aebong@gmail.com")
+                .userPassword("nonencodepassword")
                 .build();
     }
 
