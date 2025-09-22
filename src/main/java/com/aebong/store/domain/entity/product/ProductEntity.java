@@ -32,6 +32,10 @@ public class ProductEntity extends AuditingEntity {
     @Column(name = "product_name", nullable = false, length = 150)
     private String productName;
 
+    @Comment("상품금액")
+    @Column(name = "amount", nullable = false)
+    private Long amount;
+
     @Comment("상품브랜드")
     @Column(name = "brand", nullable = false, length = 100)
     private String brand;
@@ -65,9 +69,16 @@ public class ProductEntity extends AuditingEntity {
     }
 
     @Builder
-    private ProductEntity(String productCode, String productName, String brand, ProductType productType, List<ProductCategoryEntity> productCategories, List<ProductTagEntity> productTags) {
+    private ProductEntity(String productCode,
+                          String productName,
+                          Long amount,
+                          String brand,
+                          ProductType productType,
+                          List<ProductCategoryEntity> productCategories,
+                          List<ProductTagEntity> productTags) {
         this.productCode = productCode;
         this.productName = productName;
+        this.amount = amount;
         this.brand = brand;
         this.productType = productType;
         this.productCategories = productCategories;

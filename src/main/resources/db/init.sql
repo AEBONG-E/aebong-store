@@ -221,6 +221,7 @@ CREATE TABLE `product`
     `product_id`        BIGINT AUTO_INCREMENT COMMENT '상품순번 PK',
     `product_code`      VARCHAR(20)                        NOT NULL COMMENT '상품코드',
     `product_name`      VARCHAR(150)                       NOT NULL COMMENT '상품명',
+    `amount`            BIGINT                             NOT NULL COMMENT '상품금액',
     `brand`             VARCHAR(100)                       NOT NULL COMMENT '상품브랜드',
     `product_type`      VARCHAR(100)                       NOT NULL COMMENT '상품유형',
     `delete_yn`         VARCHAR(1)                         NOT NULL,
