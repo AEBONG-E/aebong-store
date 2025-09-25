@@ -46,13 +46,16 @@ public class ProductEntity extends AuditingEntity {
     private ProductType productType;
 
     @OneToMany(mappedBy = "product")
+    private List<PriceEntity> prices = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<ImageEntity> images = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
     private List<ProductCategoryEntity> productCategories = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
     private List<ProductTagEntity> productTags = new ArrayList<>();
-
-    @OneToMany(mappedBy = "product")
-    private List<ImageEntity> images = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
