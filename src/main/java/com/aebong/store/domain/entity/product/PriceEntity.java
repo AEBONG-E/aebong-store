@@ -10,6 +10,7 @@ import org.hibernate.annotations.Comment;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -55,6 +56,19 @@ public class PriceEntity extends BaseEntity {
     @Comment("할인(율 or 금액)")
     @Column(name = "discount", nullable = false)
     private Long discount;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PriceEntity that = (PriceEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
     public PriceEntity(ProductEntity product,
                        LocalDate applyStartDate,

@@ -4,5 +4,6 @@ import lombok.Getter;
 
 @Getter
 public enum ImageType {
-    FILE, URL
+    FILE,
+    URL
 }

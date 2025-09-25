@@ -19,6 +19,7 @@ public enum CustomErrorType {
     INVALID_IMAGE_FORMAT    (HttpStatus.CONFLICT,              "invalid image format.",   "허용되지 않는 이미지 형식입니다."),
 
     /** common */
+    BAD_REQUEST             (HttpStatus.BAD_REQUEST,           "is an invalid request.",  "잘못된 요청입니다."),
     INTERNAL_SERVER_ERROR   (HttpStatus.INTERNAL_SERVER_ERROR, "internal server error.",  "서버 내부 오류입니다.")
     ;
 

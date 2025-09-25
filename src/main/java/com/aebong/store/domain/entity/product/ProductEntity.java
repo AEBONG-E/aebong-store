@@ -28,18 +28,6 @@ public class ProductEntity extends AuditingEntity {
     @Column(name = "product_code", nullable = false, length = 20)
     private String productCode;
 
-    @Comment("상품명")
-    @Column(name = "product_name", nullable = false, length = 150)
-    private String productName;
-
-    @Comment("상품금액")
-    @Column(name = "amount", nullable = false)
-    private Long amount;
-
-    @Comment("상품브랜드")
-    @Column(name = "brand", nullable = false, length = 100)
-    private String brand;
-
     @Comment("상품유형")
     @Enumerated(EnumType.STRING)
     @Column(name = "product_type", nullable = false, length = 100)
@@ -57,6 +45,9 @@ public class ProductEntity extends AuditingEntity {
     @OneToMany(mappedBy = "product")
     private List<ProductTagEntity> productTags = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProductDetailEntity productDetail;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,16 +64,10 @@ public class ProductEntity extends AuditingEntity {
 
     @Builder
     private ProductEntity(String productCode,
-                          String productName,
-                          Long amount,
-                          String brand,
                           ProductType productType,
                           List<ProductCategoryEntity> productCategories,
                           List<ProductTagEntity> productTags) {
         this.productCode = productCode;
-        this.productName = productName;
-        this.amount = amount;
-        this.brand = brand;
         this.productType = productType;
         this.productCategories = productCategories;
         this.productTags = productTags;

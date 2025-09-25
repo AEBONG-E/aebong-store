@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -53,6 +54,19 @@ public class ProductDetailEntity extends BaseEntity {
     @Comment("출시 일시")
     @Column(name = "release_datetime", nullable = false)
     private LocalDateTime releaseDatetime;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductDetailEntity that = (ProductDetailEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
     @Builder
     public ProductDetailEntity(ProductEntity product,
