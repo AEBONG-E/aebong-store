@@ -4,15 +4,15 @@ import com.aebong.store.common.enums.product.ContentType;
 import com.aebong.store.common.enums.product.DiscountType;
 import com.aebong.store.common.enums.product.ImageType;
 import com.aebong.store.common.enums.product.ProductType;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.*;
 
-@Data
+@Getter
+@ToString
 @NoArgsConstructor
 public class ProductRegisterInfo {
 
@@ -32,15 +32,23 @@ public class ProductRegisterInfo {
     private DiscountType discountType;
     private BigDecimal discountAmount;
     private Long discount;
-    private String adminImageFileName;
-    private String originalImageFileName;
-    private String imageFileName;
-    private String imageFileUrl;
-    private ImageType imageType;
-    private ContentType contentType;
-    private Integer width;
-    private Integer height;
-    private Integer fileSize;
+    private List<ImageRegisterInfo> imageList = new ArrayList<>();
+
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ImageRegisterInfo {
+        private String adminImageFileName;
+        private String originalImageFileName;
+        private String imageFileName;
+        private String imageFileUrl;
+        private ImageType imageType;
+        private ContentType contentType;
+        private Integer width;
+        private Integer height;
+        private Integer fileSize;
+    }
 
     @Builder
     public ProductRegisterInfo(String productCode,
@@ -59,15 +67,7 @@ public class ProductRegisterInfo {
                                DiscountType discountType,
                                BigDecimal discountAmount,
                                Long discount,
-                               String adminImageFileName,
-                               String originalImageFileName,
-                               String imageFileName,
-                               String imageFileUrl,
-                               ImageType imageType,
-                               ContentType contentType,
-                               Integer width,
-                               Integer height,
-                               Integer fileSize) {
+                               List<ImageRegisterInfo> imageList) {
         this.productCode = productCode;
         this.productType = productType;
         this.productName = productName;
@@ -84,15 +84,51 @@ public class ProductRegisterInfo {
         this.discountType = discountType;
         this.discountAmount = discountAmount;
         this.discount = discount;
-        this.adminImageFileName = adminImageFileName;
-        this.originalImageFileName = originalImageFileName;
-        this.imageFileName = imageFileName;
-        this.imageFileUrl = imageFileUrl;
-        this.imageType = imageType;
-        this.contentType = contentType;
-        this.width = width;
-        this.height = height;
-        this.fileSize = fileSize;
+        this.imageList = imageList;
+    }
+
+    public static ProductRegisterInfo to(ProductRegisterRequest registerRequest) {
+        if (registerRequest == null) return null;
+        return ProductRegisterInfo.builder()
+                .productCode(registerRequest.getProductCode())
+                .productType(registerRequest.getProductType())
+                .productName(registerRequest.getProductName())
+                .productEnglishName(registerRequest.getProductEnglishName())
+                .productShortName(registerRequest.getProductShortName())
+                .basicDescription(registerRequest.getBasicDescription())
+                .detailDescription(registerRequest.getDetailDescription())
+                .manufacturerCountry(registerRequest.getManufacturerCountry())
+                .releaseDatetime(registerRequest.getReleaseDatetime())
+                .applyStartDate(registerRequest.getPrice().getApplyStartDate())
+                .applyEndDate(registerRequest.getPrice().getApplyEndDate())
+                .salesAmount(registerRequest.getPrice().getSalesAmount())
+                .purchaseAmount(registerRequest.getPrice().getPurchaseAmount())
+                .discountType(registerRequest.getPrice().getDiscountType())
+                .discountAmount(registerRequest.getPrice().getDiscountAmount())
+                .discount(registerRequest.getPrice().getDiscount())
+                .imageList(
+                        Optional.ofNullable(registerRequest.getImageList())
+                                .orElse(Collections.emptyList())
+                                .stream()
+                                .map(ProductRegisterInfo::toImage)
+                                .toList()
+                )
+                .build();
+    }
+
+    public static ImageRegisterInfo toImage(ProductRegisterRequest.ImageRegisterRequest registerRequest) {
+        if (Objects.isNull(registerRequest)) return null;
+        return ImageRegisterInfo.builder()
+                .adminImageFileName(registerRequest.getAdminImageFileName())
+                .originalImageFileName(registerRequest.getOriginalImageFileName())
+                .imageFileName(registerRequest.getImageFileName())
+                .imageFileUrl(registerRequest.getImageFileUrl())
+                .imageType(registerRequest.getImageType())
+                .contentType(registerRequest.getContentType())
+                .width(registerRequest.getWidth())
+                .height(registerRequest.getHeight())
+                .fileSize(registerRequest.getFileSize())
+                .build();
     }
 
 }

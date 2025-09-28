@@ -2,8 +2,10 @@ package com.aebong.store.domain.entity.product;
 
 import com.aebong.store.common.enums.product.DiscountType;
 import com.aebong.store.domain.entity.BaseEntity;
+import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -70,6 +72,7 @@ public class PriceEntity extends BaseEntity {
         return Objects.hashCode(id);
     }
 
+    @Builder
     public PriceEntity(ProductEntity product,
                        LocalDate applyStartDate,
                        LocalDate applyEndDate,
@@ -87,4 +90,19 @@ public class PriceEntity extends BaseEntity {
         this.discountAmount = discountAmount;
         this.discount = discount;
     }
+
+    public static PriceEntity create(ProductEntity product, ProductRegisterInfo registerInfo) {
+        if (Objects.isNull(product) || Objects.isNull(registerInfo)) return null;
+        return PriceEntity.builder()
+                .product(product)
+                .applyStartDate(registerInfo.getApplyStartDate())
+                .applyEndDate(registerInfo.getApplyEndDate())
+                .salesAmount(registerInfo.getSalesAmount())
+                .purchaseAmount(registerInfo.getPurchaseAmount())
+                .discountType(registerInfo.getDiscountType())
+                .discountAmount(registerInfo.getDiscountAmount())
+                .discount(registerInfo.getDiscount())
+                .build();
+    }
+
 }

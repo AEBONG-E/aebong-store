@@ -1,6 +1,7 @@
 package com.aebong.store.domain.entity.product;
 
 import com.aebong.store.domain.entity.BaseEntity;
+import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -85,6 +86,20 @@ public class ProductDetailEntity extends BaseEntity {
         this.detailDescription = detailDescription;
         this.manufacturerCountry = manufacturerCountry;
         this.releaseDatetime = releaseDatetime;
+    }
+
+    public static ProductDetailEntity create(ProductEntity product, ProductRegisterInfo registerInfo) {
+        if (Objects.isNull(product)|| Objects.isNull(registerInfo)) return null;
+        return ProductDetailEntity.builder()
+                .product(product)
+                .productName(registerInfo.getProductName())
+                .productEnglishName(registerInfo.getProductEnglishName())
+                .productShortName(registerInfo.getProductShortName())
+                .basicDescription(registerInfo.getBasicDescription())
+                .detailDescription(registerInfo.getDetailDescription())
+                .manufacturerCountry(registerInfo.getManufacturerCountry())
+                .releaseDatetime(registerInfo.getReleaseDatetime())
+                .build();
     }
 
 }
