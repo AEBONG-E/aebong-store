@@ -2,14 +2,22 @@ package com.aebong.store.service.product;
 
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.exceptions.ProductApplicationException;
+import com.aebong.store.domain.entity.product.ImageEntity;
+import com.aebong.store.domain.entity.product.PriceEntity;
+import com.aebong.store.domain.entity.product.ProductDetailEntity;
+import com.aebong.store.domain.entity.product.ProductEntity;
+import com.aebong.store.domain.repository.product.ImageRepository;
+import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
+import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -19,6 +27,8 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final ProductDetailRepository productDetailRepository;
+    private final ImageRepository imageRepository;
+    private final PriceRepository priceRepository;
 
     @Override
     public void registerProduct(ProductRegisterRequest registerRequest) {
@@ -53,6 +63,20 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // todo: check valid image format
+
+        // request -> dto mapping
+        ProductRegisterInfo registerInfo = ProductRegisterInfo.to(registerRequest);
+
+        // entity save
+        ProductEntity product = ProductEntity.create(registerInfo);
+        ProductDetailEntity productDetail = ProductDetailEntity.create(product, registerInfo);
+        PriceEntity price = PriceEntity.create(product, registerInfo);
+        List<ImageEntity> imageList = ImageEntity.create(product, registerInfo);
+
+        productRepository.save(Objects.requireNonNull(product));
+        productDetailRepository.save(Objects.requireNonNull(productDetail));
+        priceRepository.save(Objects.requireNonNull(price));
+        imageRepository.saveAll(Objects.requireNonNull(imageList));
 
     }
 
