@@ -84,7 +84,16 @@ public class ImageEntity extends AuditingEntity {
     }
 
     @Builder
-    private ImageEntity(ProductEntity product, String adminImageFileName, String originalImageFileName, String imageFileName, String imageFileUrl, ImageType imageType, ContentType contentType, Integer width, Integer height, Integer fileSize) {
+    private ImageEntity(ProductEntity product,
+                        String adminImageFileName,
+                        String originalImageFileName,
+                        String imageFileName,
+                        String imageFileUrl,
+                        ImageType imageType,
+                        ContentType contentType,
+                        Integer width,
+                        Integer height,
+                        Integer fileSize) {
         this.product = product;
         this.adminImageFileName = adminImageFileName;
         this.originalImageFileName = originalImageFileName;
