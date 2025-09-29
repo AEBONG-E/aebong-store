@@ -16,7 +16,6 @@ import com.aebong.store.domain.repository.product.ProductRepository;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -197,6 +196,7 @@ class ProductServiceTest {
                 ProductRegisterRequest.ImageRegisterRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0001.png")
                         .originalImageFileName("TEST_001A_BLACK.png")
+                        .imageFileName("TEST_001A_BLACK.png")
                         .imageFileUrl("/static/images/image_1/TEST_001A_BLACK.png")
                         .imageType(ImageType.FILE)
                         .contentType(ContentType.IMAGE)
@@ -207,6 +207,7 @@ class ProductServiceTest {
                 ProductRegisterRequest.ImageRegisterRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0002.png")
                         .originalImageFileName("TEST_002A_BLACK.png")
+                        .imageFileName("TEST_002A_BLACK.png")
                         .imageFileUrl("/static/images/image_1/TEST_002A_BLACK.png")
                         .imageType(ImageType.FILE)
                         .contentType(ContentType.IMAGE)
@@ -217,6 +218,7 @@ class ProductServiceTest {
                 ProductRegisterRequest.ImageRegisterRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0003.png")
                         .originalImageFileName("TEST_003A_BLACK.png")
+                        .imageFileName("TEST_003A_BLACK.png")
                         .imageFileUrl("/static/images/image_1/TEST_003A_BLACK.png")
                         .imageType(ImageType.FILE)
                         .contentType(ContentType.IMAGE)
@@ -261,6 +263,7 @@ class ProductServiceTest {
                 ProductRegisterRequest.ImageRegisterRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0001.png")
                         .originalImageFileName("TEST_001A_BLACK.png")
+                        .imageFileName("TEST_001A_BLACK.png")
                         .imageFileUrl("/static/images/image_1/TEST_001A_BLACK.png")
                         .imageType(ImageType.FILE)
                         .contentType(ContentType.IMAGE)
@@ -271,6 +274,7 @@ class ProductServiceTest {
                 ProductRegisterRequest.ImageRegisterRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0002.png")
                         .originalImageFileName("TEST_002A_BLACK.png")
+                        .imageFileName("TEST_002A_BLACK.png")
                         .imageFileUrl("/static/images/image_1/TEST_002A_BLACK.png")
                         .imageType(ImageType.FILE)
                         .contentType(ContentType.IMAGE)
@@ -281,6 +285,7 @@ class ProductServiceTest {
                 ProductRegisterRequest.ImageRegisterRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0003.png")
                         .originalImageFileName("TEST_003A_BLACK.png")
+                        .imageFileName("TEST_003A_BLACK.png")
                         .imageFileUrl("/static/images/image_1/TEST_003A_BLACK.png")
                         .imageType(ImageType.FILE)
                         .contentType(ContentType.IMAGE)

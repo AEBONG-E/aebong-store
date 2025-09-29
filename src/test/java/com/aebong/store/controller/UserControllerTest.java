@@ -66,29 +66,29 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.message").value("존재하는 사용자입니다."))
                 .andExpect(jsonPath("$.data").doesNotExist())
                 .andDo(document("user-register-fail",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                requestFields(
-                                        fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
-                                        fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호"),
-                                        fieldWithPath("lastName").type(JsonFieldType.STRING).description("성"),
-                                        fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
-                                        fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일"),
-                                        fieldWithPath("gender").type(JsonFieldType.STRING).description("성별 (예: MALE, FEMALE, NON_BINARY, OTHER"),
-                                        fieldWithPath("mobileNumber").type(JsonFieldType.STRING).description("휴대폰번호"),
-                                        fieldWithPath("nickName").type(JsonFieldType.STRING).description("별칭(닉네임)"),
-                                        fieldWithPath("telNumber").type(JsonFieldType.STRING).description("전화번호").optional(),
-                                        fieldWithPath("address1").type(JsonFieldType.STRING).description("주소(도로명주소|지번주소)"),
-                                        fieldWithPath("address2").type(JsonFieldType.STRING).description("상세주소").optional(),
-                                        fieldWithPath("zipcode").type(JsonFieldType.STRING).description("우편번호")
-                                ),
-                                responseFields(
-                                        fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
-                                        fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지"),
-                                        subsectionWithPath("data").type(JsonFieldType.OBJECT).description("error 발생시 null").optional()
-                                ),
-                                requestBody(),
-                                responseBody()
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("userAccount").type(JsonFieldType.STRING).description("사용자계정(이메일)"),
+                                fieldWithPath("userPassword").type(JsonFieldType.STRING).description("비밀번호"),
+                                fieldWithPath("lastName").type(JsonFieldType.STRING).description("성"),
+                                fieldWithPath("firstName").type(JsonFieldType.STRING).description("이름"),
+                                fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일"),
+                                fieldWithPath("gender").type(JsonFieldType.STRING).description("성별 (예: MALE, FEMALE, NON_BINARY, OTHER"),
+                                fieldWithPath("mobileNumber").type(JsonFieldType.STRING).description("휴대폰번호"),
+                                fieldWithPath("nickName").type(JsonFieldType.STRING).description("별칭(닉네임)"),
+                                fieldWithPath("telNumber").type(JsonFieldType.STRING).description("전화번호").optional(),
+                                fieldWithPath("address1").type(JsonFieldType.STRING).description("주소(도로명주소|지번주소)"),
+                                fieldWithPath("address2").type(JsonFieldType.STRING).description("상세주소").optional(),
+                                fieldWithPath("zipcode").type(JsonFieldType.STRING).description("우편번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지"),
+                                subsectionWithPath("data").type(JsonFieldType.OBJECT).description("error 발생시 null").optional()
+                        ),
+                        requestBody(),
+                        responseBody()
                 ));
     }
 
