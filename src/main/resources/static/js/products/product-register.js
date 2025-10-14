@@ -38,15 +38,15 @@ $(document).ready(function () {
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
                     const imageMeta = {
-                        adminImageFileName: "admin-" + Date.now() + "-" + file.name, // 임시 생성 규칙
+                        adminImageFileName: "admin-" + Date.now() + "-" + file.name, // 임시 생성 규칙 todo: 추후 규칙 지정 필요
                         originalImageFileName: file.name,
                         imageFileName: file.name,
-                        imageFileUrl: "/upload/temp/" + file.name, // 임시 URL
-                        imageType: "MAIN", // 기본 타입 지정 (추후 UI 에서 선택 가능)
-                        contentType: file.type,
-                        width: null,
-                        height: null,
-                        fileSize: file.size
+                        imageFileUrl: "/upload/temp/" + file.name, // 임시 URL todo: 추후 실제 업로드 경로 지정 필요
+                        imageType: "URL",       // todo: 기본 타입 지정 (추후 UI 에서 선택 가능)
+                        contentType: 'IMAGE',   // todo: 기본 타입 지정 (추후 UI 에서 선택 가능)
+                        width: 0,       // todo: 추후 파일 실제 데이터 가져와야함
+                        height: 0,      // todo: 추후 파일 실제 데이터 가져와야함
+                        fileSize: 0     // todo: 추후 파일 실제 데이터 가져와야함
                     };
                     requestData.imageList.push(imageMeta);
                 }
