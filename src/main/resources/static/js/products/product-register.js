@@ -83,4 +83,4 @@ $(document).ready(function () {
 
     // ------------------- product register form submit -------------------
 
-}
+});
