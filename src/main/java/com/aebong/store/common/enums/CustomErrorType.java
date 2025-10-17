@@ -17,6 +17,7 @@ public enum CustomErrorType {
     IS_EXIST_PRODUCT_CODE   (HttpStatus.CONFLICT,              "is exist product code.",  "존재하는 상품 코드입니다."),
     INVALID_AMOUNT          (HttpStatus.CONFLICT,              "invalid amount.",         "유효하지 않은 금액입니다."),
     INVALID_IMAGE_FORMAT    (HttpStatus.CONFLICT,              "invalid image format.",   "허용되지 않는 이미지 형식입니다."),
+    NOT_FOUND_PRODUCT       (HttpStatus.CONFLICT,              "not found product.",      "상품을 찾을 수 없습니다."),
 
     /** common */
     BAD_REQUEST             (HttpStatus.BAD_REQUEST,           "is an invalid request.",  "잘못된 요청입니다."),

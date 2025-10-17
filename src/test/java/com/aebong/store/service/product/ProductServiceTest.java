@@ -1,5 +1,6 @@
 package com.aebong.store.service.product;
 
+import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.enums.product.ContentType;
 import com.aebong.store.common.enums.product.DiscountType;
 import com.aebong.store.common.enums.product.ImageType;
@@ -160,6 +161,31 @@ class ProductServiceTest {
         assertThat(price.getSalesAmount()).isEqualByComparingTo(BigDecimal.valueOf(75000.0));
         assertThat(imageList).hasSize(3);
         assertThat(imageList.get(0).getOriginalImageFileName()).isEqualTo("TEST_001A_BLACK.png");
+
+    }
+
+    @Test
+    void 상품조회_실패_상품순번_불일치_케이스() {
+
+        // given
+        ProductRegisterRequest registerRequest = createProductRegisterInfo();
+        ProductRegisterInfo registerInfo = ProductRegisterInfo.to(registerRequest);
+        ProductEntity product = ProductEntity.create(registerInfo);
+        ProductDetailEntity productDetail = ProductDetailEntity.create(product, registerInfo);
+        List<ImageEntity> imageList = ImageEntity.create(product, registerInfo);
+
+        Long productId = 1L;
+
+        given(productRepository.save(product)).willReturn(product);
+        given(productDetailRepository.save(productDetail)).willReturn(productDetail);
+
+        // when
+        assertThatThrownBy(() -> service.getProduct(productId))
+                .isInstanceOf(ProductApplicationException.class)
+                .hasMessage(CustomErrorType.NOT_FOUND_PRODUCT.getMessage());
+
+        // then
+
 
     }
 
