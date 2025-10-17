@@ -2,6 +2,7 @@ package com.aebong.store.domain.entity.product;
 
 import com.aebong.store.common.enums.product.ProductType;
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,18 +29,16 @@ public class ProductEntity extends AuditingEntity {
     @Column(name = "product_code", nullable = false, length = 20)
     private String productCode;
 
-    @Comment("상품명")
-    @Column(name = "product_name", nullable = false, length = 150)
-    private String productName;
-
-    @Comment("상품브랜드")
-    @Column(name = "brand", nullable = false, length = 100)
-    private String brand;
-
     @Comment("상품유형")
     @Enumerated(EnumType.STRING)
     @Column(name = "product_type", nullable = false, length = 100)
     private ProductType productType;
+
+    @OneToMany(mappedBy = "product")
+    private List<PriceEntity> prices = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product")
+    private List<ImageEntity> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "product")
     private List<ProductCategoryEntity> productCategories = new ArrayList<>();
@@ -47,8 +46,8 @@ public class ProductEntity extends AuditingEntity {
     @OneToMany(mappedBy = "product")
     private List<ProductTagEntity> productTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
-    private List<ImageEntity> images = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProductDetailEntity productDetail;
 
     @Override
     public boolean equals(Object o) {
@@ -65,13 +64,22 @@ public class ProductEntity extends AuditingEntity {
     }
 
     @Builder
-    private ProductEntity(String productCode, String productName, String brand, ProductType productType, List<ProductCategoryEntity> productCategories, List<ProductTagEntity> productTags) {
+    private ProductEntity(String productCode,
+                          ProductType productType,
+                          List<ProductCategoryEntity> productCategories,
+                          List<ProductTagEntity> productTags) {
         this.productCode = productCode;
-        this.productName = productName;
-        this.brand = brand;
         this.productType = productType;
         this.productCategories = productCategories;
         this.productTags = productTags;
+    }
+
+    public static ProductEntity create(ProductRegisterInfo registerInfo) {
+        if (Objects.isNull(registerInfo)) return null;
+        return ProductEntity.builder()
+                .productCode(registerInfo.getProductCode())
+                .productType(registerInfo.getProductType())
+                .build();
     }
 
 }

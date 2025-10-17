@@ -1,6 +1,7 @@
 package com.aebong.store.common.api;
 
 import com.aebong.store.common.enums.CustomErrorType;
+import com.aebong.store.common.exceptions.ProductApplicationException;
 import com.aebong.store.common.exceptions.UserApplicationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserApplicationException.class)
     public ResponseEntity<?> handleException(UserApplicationException e) {
         log.error(">>>>> [UserApplicationException] ERROR: {}", e.getMessage());
+        return ResponseEntity
+                .status(e.getErrorType().getStatus())
+                .body(ApiResponse.error(e.getErrorType().name(), e.getErrorType().getMessageKr()));
+    }
+
+    @ExceptionHandler(ProductApplicationException.class)
+    public ResponseEntity<?> handleException(ProductApplicationException e) {
+        log.error(">>>>> [ProductApplicationException] ERROR: {}", e.getMessage());
         return ResponseEntity
                 .status(e.getErrorType().getStatus())
                 .body(ApiResponse.error(e.getErrorType().name(), e.getErrorType().getMessageKr()));
