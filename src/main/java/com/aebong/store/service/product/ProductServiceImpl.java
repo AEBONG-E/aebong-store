@@ -10,6 +10,8 @@ import com.aebong.store.domain.repository.product.ImageRepository;
 import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
+import com.aebong.store.service.product.dto.ProductGetInfo;
+import com.aebong.store.service.product.dto.ProductGetRequest;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +80,16 @@ public class ProductServiceImpl implements ProductService {
         priceRepository.save(Objects.requireNonNull(price));
         imageRepository.saveAll(Objects.requireNonNull(imageList));
 
+    }
+
+    @Override
+    public ProductGetInfo getProduct(ProductGetRequest getRequest) {
+        return null;
+    }
+
+    @Override
+    public List<ProductGetInfo> getProducts(ProductGetRequest getRequest) {
+        return List.of();
     }
 
     private boolean validateProductCodeIsExists(String productCode) {
