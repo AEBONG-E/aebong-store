@@ -11,7 +11,6 @@ import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
 import com.aebong.store.service.product.dto.ProductGetInfo;
-import com.aebong.store.service.product.dto.ProductGetRequest;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
@@ -83,12 +82,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductGetInfo getProduct(ProductGetRequest getRequest) {
+    public ProductGetInfo getProduct(Long productId) {
         return null;
     }
 
     @Override
-    public List<ProductGetInfo> getProducts(ProductGetRequest getRequest) {
+    public List<ProductGetInfo> getProducts() {
         return List.of();
     }
 
