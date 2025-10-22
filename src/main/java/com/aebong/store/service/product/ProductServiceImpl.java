@@ -15,6 +15,8 @@ import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -83,12 +85,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductGetInfo getProduct(Long productId) {
-        return null;
+
+        // check bad request
+        if (Objects.isNull(productId)) {
+            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productId must not be null");
+        }
+
+        return productRepository.findByproductId(productId).orElseThrow(
+                () -> new ProductApplicationException(CustomErrorType.NOT_FOUND_PRODUCT, CustomErrorType.NOT_FOUND_PRODUCT.getMessage()));
     }
 
     @Override
-    public List<ProductGetInfo> getProducts() {
-        return List.of();
+    public Page<ProductGetInfo> getProducts(Pageable pageable) {
+        return productRepository.findAllProducts(pageable);
     }
 
     private boolean validateProductCodeIsExists(String productCode) {
