@@ -14,18 +14,24 @@ import com.aebong.store.domain.repository.product.ImageRepository;
 import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
+import com.aebong.store.service.product.dto.ProductGetInfo;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.BDDMockito.*;
 
@@ -168,16 +174,11 @@ class ProductServiceTest {
     void 상품조회_실패_상품순번_불일치_케이스() {
 
         // given
-        ProductRegisterRequest registerRequest = createProductRegisterInfo();
-        ProductRegisterInfo registerInfo = ProductRegisterInfo.to(registerRequest);
-        ProductEntity product = ProductEntity.create(registerInfo);
-        ProductDetailEntity productDetail = ProductDetailEntity.create(product, registerInfo);
-        List<ImageEntity> imageList = ImageEntity.create(product, registerInfo);
+        ProductGetInfo productGetInfo = createProductGetInfo();
 
         Long productId = 1L;
 
-        given(productRepository.save(product)).willReturn(product);
-        given(productDetailRepository.save(productDetail)).willReturn(productDetail);
+        given(productRepository.findByproductId(productId)).willReturn(Optional.empty());
 
         // when
         assertThatThrownBy(() -> service.getProduct(productId))
@@ -185,7 +186,49 @@ class ProductServiceTest {
                 .hasMessage(CustomErrorType.NOT_FOUND_PRODUCT.getMessage());
 
         // then
+        then(productRepository).should(times(1)).findByproductId(productId);
+        assertThat(productId).isNotEqualTo(productGetInfo.getProductId());
 
+    }
+
+    @Test
+    void 상품상세조회_정상_케이스() {
+
+        // given
+        List<ProductGetInfo> productGetInfoList = List.of(createProductGetInfo(), createProductGetInfo2());
+        Pageable pageable = PageRequest.of(0,20);
+        Page<ProductGetInfo> productGetInfos = new PageImpl<>(productGetInfoList, pageable, productGetInfoList.size());
+
+        given(productRepository.findAllProducts(pageable)).willReturn(productGetInfos);
+
+        // when
+        Page<ProductGetInfo> products = service.getProducts(pageable);
+
+        // then
+        then(productRepository).should().findAllProducts(pageable);
+
+        assertThat(products).isNotEmpty();
+
+    }
+
+    @Test
+    void 상품목록조회_정상_케이스() {
+
+        // given
+        ProductGetInfo productGetInfo = createProductGetInfo();
+
+        Long productId = 1L;
+
+        given(productRepository.findByproductId(productId)).willReturn(Optional.empty());
+
+        // when
+        assertThatThrownBy(() -> service.getProduct(productId))
+                .isInstanceOf(ProductApplicationException.class)
+                .hasMessage(CustomErrorType.NOT_FOUND_PRODUCT.getMessage());
+
+        // then
+        then(productRepository).should(times(1)).findByproductId(productId);
+        assertThat(productId).isNotEqualTo(productGetInfo.getProductId());
 
     }
 
@@ -313,6 +356,156 @@ class ProductServiceTest {
                         .originalImageFileName("TEST_003A_BLACK.png")
                         .imageFileName("TEST_003A_BLACK.png")
                         .imageFileUrl("/static/images/image_1/TEST_003A_BLACK.png")
+                        .imageType(ImageType.FILE)
+                        .contentType(ContentType.IMAGE)
+                        .width(500)
+                        .height(500)
+                        .fileSize(1048576)
+                        .build()
+        );
+
+    }
+
+    private ProductGetInfo createProductGetInfo() {
+        return ProductGetInfo.builder()
+                .productId(0L)
+                .productDetailId(0L)
+                .productCode("0000000000")
+                .productType(ProductType.STANDARD)
+                .productName("TEST_001A_블랙")
+                .productEnglishName("TEST_001A_BLACK")
+                .productShortName("TEST_001A")
+                .basicDescription("TEST_001A_블랙 상품입니다.")
+                .detailDescription("테스트 상품입니다. 테스트 상품입니다. 테스트 상품입니다.")
+                .manufacturerCountry("Republic of Korea")
+                .releaseDatetime(LocalDateTime.now())
+                .priceList(createPriceGetInfo())
+                .imageList(createImageGetInfo())
+                .build();
+    }
+
+    private List<ProductGetInfo.PriceListGetInfo> createPriceGetInfo() {
+        return List.of(
+                ProductGetInfo.PriceListGetInfo.builder()
+                        .priceId(0L)
+                        .applyStartDate(LocalDate.now())
+                        .applyEndDate(LocalDate.of(9999, 12, 31))
+                        .salesAmount(BigDecimal.valueOf(75000.0))
+                        .purchaseAmount(BigDecimal.valueOf(70000.0))
+                        .discountType(DiscountType.NONE)
+                        .discountAmount(BigDecimal.ZERO)
+                        .discount(0L)
+                        .build()
+        );
+    }
+
+    private List<ProductGetInfo.ImageListGetInfo> createImageGetInfo() {
+        return List.of(
+                ProductGetInfo.ImageListGetInfo.builder()
+                        .imageId(0L)
+                        .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0001.png")
+                        .originalImageFileName("TEST_001A_BLACK.png")
+                        .imageFileName("TEST_001A_BLACK.png")
+                        .imageFileUrl("/static/images/image_1/TEST_001A_BLACK.png")
+                        .imageType(ImageType.FILE)
+                        .contentType(ContentType.IMAGE)
+                        .width(500)
+                        .height(500)
+                        .fileSize(1048576)
+                        .build(),
+                ProductGetInfo.ImageListGetInfo.builder()
+                        .imageId(1L)
+                        .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0002.png")
+                        .originalImageFileName("TEST_002A_BLACK.png")
+                        .imageFileName("TEST_002A_BLACK.png")
+                        .imageFileUrl("/static/images/image_1/TEST_002A_BLACK.png")
+                        .imageType(ImageType.FILE)
+                        .contentType(ContentType.IMAGE)
+                        .width(500)
+                        .height(500)
+                        .fileSize(1048576)
+                        .build(),
+                ProductGetInfo.ImageListGetInfo.builder()
+                        .imageId(2L)
+                        .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0003.png")
+                        .originalImageFileName("TEST_003A_BLACK.png")
+                        .imageFileName("TEST_003A_BLACK.png")
+                        .imageFileUrl("/static/images/image_1/TEST_003A_BLACK.png")
+                        .imageType(ImageType.FILE)
+                        .contentType(ContentType.IMAGE)
+                        .width(500)
+                        .height(500)
+                        .fileSize(1048576)
+                        .build()
+        );
+
+    }
+
+    private ProductGetInfo createProductGetInfo2() {
+        return ProductGetInfo.builder()
+                .productId(1L)
+                .productDetailId(1L)
+                .productCode("0000000001")
+                .productType(ProductType.STANDARD)
+                .productName("TEST_001A_화이트")
+                .productEnglishName("TEST_001A_WHITE")
+                .productShortName("TEST_001A")
+                .basicDescription("TEST_001A_화이트 상품입니다.")
+                .detailDescription("테스트 상품입니다. 테스트 상품입니다. 테스트 상품입니다.")
+                .manufacturerCountry("Republic of Korea")
+                .releaseDatetime(LocalDateTime.now())
+                .priceList(createPriceGetInfo())
+                .imageList(createImageGetInfo())
+                .build();
+    }
+
+    private List<ProductGetInfo.PriceListGetInfo> createPriceGetInfo2() {
+        return List.of(
+                ProductGetInfo.PriceListGetInfo.builder()
+                        .priceId(1L)
+                        .applyStartDate(LocalDate.now())
+                        .applyEndDate(LocalDate.of(9999, 12, 31))
+                        .salesAmount(BigDecimal.valueOf(75000.0))
+                        .purchaseAmount(BigDecimal.valueOf(70000.0))
+                        .discountType(DiscountType.NONE)
+                        .discountAmount(BigDecimal.ZERO)
+                        .discount(0L)
+                        .build()
+        );
+    }
+
+    private List<ProductGetInfo.ImageListGetInfo> createImageGetInfo2() {
+        return List.of(
+                ProductGetInfo.ImageListGetInfo.builder()
+                        .imageId(3L)
+                        .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0004.png")
+                        .originalImageFileName("TEST_001A_BLACK.png")
+                        .imageFileName("TEST_001A_BLACK.png")
+                        .imageFileUrl("/static/images/image_1/TEST_001A_WHITE.png")
+                        .imageType(ImageType.FILE)
+                        .contentType(ContentType.IMAGE)
+                        .width(500)
+                        .height(500)
+                        .fileSize(1048576)
+                        .build(),
+                ProductGetInfo.ImageListGetInfo.builder()
+                        .imageId(4L)
+                        .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0005.png")
+                        .originalImageFileName("TEST_002A_BLACK.png")
+                        .imageFileName("TEST_002A_BLACK.png")
+                        .imageFileUrl("/static/images/image_1/TEST_002A_WHITE.png")
+                        .imageType(ImageType.FILE)
+                        .contentType(ContentType.IMAGE)
+                        .width(500)
+                        .height(500)
+                        .fileSize(1048576)
+                        .build(),
+                ProductGetInfo.ImageListGetInfo.builder()
+                        .imageId(5L)
+                        .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0006.png")
+                        .originalImageFileName("TEST_003A_BLACK.png")
+                        .imageFileName("TEST_003A_BLACK.png")
+                        .imageFileUrl("/static/images/image_1/TEST_003A_WHITE.png")
                         .imageType(ImageType.FILE)
                         .contentType(ContentType.IMAGE)
                         .width(500)
