@@ -37,4 +37,24 @@ include::{snippets}/product-register/http-response.adoc[]
 include::{snippets}/product-register/response-fields.adoc[]
 include::{snippets}/product-register/response-body.adoc[]
 
+=== 상품상세조회_실패
+include::{snippets}/product-get-fail/http-request.adoc[]
+include::{snippets}/product-get-fail/http-response.adoc[]
+include::{snippets}/product-get-fail/response-fields.adoc[]
+include::{snippets}/product-get-fail/response-body.adoc[]
+
+=== 상품상세조회_성공
+include::{snippets}/product-get/http-request.adoc[]
+include::{snippets}/product-get/request-body.adoc[]
+include::{snippets}/product-get/http-response.adoc[]
+include::{snippets}/product-get/response-fields.adoc[]
+include::{snippets}/product-get/response-body.adoc[]
+
+=== 상품목록조회_성공
+include::{snippets}/products-get/http-request.adoc[]
+include::{snippets}/products-get/request-body.adoc[]
+include::{snippets}/products-get/http-response.adoc[]
+include::{snippets}/products-get/response-fields.adoc[]
+include::{snippets}/products-get/response-body.adoc[]
+
 

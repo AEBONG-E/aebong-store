@@ -171,14 +171,14 @@ class ProductServiceTest {
     }
 
     @Test
-    void 상품조회_실패_상품순번_불일치_케이스() {
+    void 상품상세조회_실패_상품순번_불일치_케이스() {
 
         // given
         ProductGetInfo productGetInfo = createProductGetInfo();
 
         Long productId = 1L;
 
-        given(productRepository.findByproductId(productId)).willReturn(Optional.empty());
+        given(productRepository.findByProductId(productId)).willReturn(Optional.empty());
 
         // when
         assertThatThrownBy(() -> service.getProduct(productId))
@@ -186,13 +186,34 @@ class ProductServiceTest {
                 .hasMessage(CustomErrorType.NOT_FOUND_PRODUCT.getMessage());
 
         // then
-        then(productRepository).should(times(1)).findByproductId(productId);
+        then(productRepository).should(times(1)).findByProductId(productId);
         assertThat(productId).isNotEqualTo(productGetInfo.getProductId());
 
     }
 
     @Test
     void 상품상세조회_정상_케이스() {
+
+        // given
+        ProductGetInfo productGetInfo = createProductGetInfo();
+
+        Long productId = 1L;
+
+        given(productRepository.findByProductId(productId)).willReturn(Optional.empty());
+
+        // when
+        assertThatThrownBy(() -> service.getProduct(productId))
+                .isInstanceOf(ProductApplicationException.class)
+                .hasMessage(CustomErrorType.NOT_FOUND_PRODUCT.getMessage());
+
+        // then
+        then(productRepository).should(times(1)).findByProductId(productId);
+        assertThat(productId).isNotEqualTo(productGetInfo.getProductId());
+
+    }
+
+    @Test
+    void 상품목록조회_정상_케이스() {
 
         // given
         List<ProductGetInfo> productGetInfoList = List.of(createProductGetInfo(), createProductGetInfo2());
@@ -211,26 +232,6 @@ class ProductServiceTest {
 
     }
 
-    @Test
-    void 상품목록조회_정상_케이스() {
-
-        // given
-        ProductGetInfo productGetInfo = createProductGetInfo();
-
-        Long productId = 1L;
-
-        given(productRepository.findByproductId(productId)).willReturn(Optional.empty());
-
-        // when
-        assertThatThrownBy(() -> service.getProduct(productId))
-                .isInstanceOf(ProductApplicationException.class)
-                .hasMessage(CustomErrorType.NOT_FOUND_PRODUCT.getMessage());
-
-        // then
-        then(productRepository).should(times(1)).findByproductId(productId);
-        assertThat(productId).isNotEqualTo(productGetInfo.getProductId());
-
-    }
 
     private ProductRegisterRequest createProductRegisterInfo() {
         return ProductRegisterRequest.builder()
@@ -454,8 +455,8 @@ class ProductServiceTest {
                 .detailDescription("테스트 상품입니다. 테스트 상품입니다. 테스트 상품입니다.")
                 .manufacturerCountry("Republic of Korea")
                 .releaseDatetime(LocalDateTime.now())
-                .priceList(createPriceGetInfo())
-                .imageList(createImageGetInfo())
+                .priceList(createPriceGetInfo2())
+                .imageList(createImageGetInfo2())
                 .build();
     }
 

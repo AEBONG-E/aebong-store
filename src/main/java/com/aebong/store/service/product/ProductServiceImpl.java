@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
     private final ImageRepository imageRepository;
     private final PriceRepository priceRepository;
 
+    @Transactional
     @Override
     public void registerProduct(ProductRegisterRequest registerRequest) {
 
@@ -91,8 +93,11 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productId must not be null");
         }
 
-        return productRepository.findByproductId(productId).orElseThrow(
+        ProductEntity product = productRepository.findByProductId(productId).orElseThrow(
                 () -> new ProductApplicationException(CustomErrorType.NOT_FOUND_PRODUCT, CustomErrorType.NOT_FOUND_PRODUCT.getMessage()));
+
+        return ProductGetInfo.to(product);
+
     }
 
     @Override

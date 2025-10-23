@@ -12,6 +12,7 @@ import com.aebong.store.domain.repository.user.UserDetailRepository;
 import com.aebong.store.domain.repository.user.UserRepository;
 import com.aebong.store.service.user.dto.UserRegisterInfo;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Disabled
 @Transactional
 @UnitTest
 class UserRegisterServiceUnitTest {

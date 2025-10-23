@@ -46,7 +46,7 @@ public class ProductEntity extends AuditingEntity {
     @OneToMany(mappedBy = "product")
     private List<ProductTagEntity> productTags = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ProductDetailEntity productDetail;
 
     @Override
