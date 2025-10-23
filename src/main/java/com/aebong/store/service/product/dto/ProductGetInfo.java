@@ -4,6 +4,9 @@ import com.aebong.store.common.enums.product.ContentType;
 import com.aebong.store.common.enums.product.DiscountType;
 import com.aebong.store.common.enums.product.ImageType;
 import com.aebong.store.common.enums.product.ProductType;
+import com.aebong.store.domain.entity.product.ImageEntity;
+import com.aebong.store.domain.entity.product.PriceEntity;
+import com.aebong.store.domain.entity.product.ProductEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -92,6 +95,72 @@ public class ProductGetInfo {
         this.releaseDatetime = releaseDatetime;
         this.priceList= priceList;
         this.imageList = imageList;
+    }
+
+    public static ProductGetInfo to(ProductEntity product) {
+        if (product == null) return null;
+
+        return ProductGetInfo.builder()
+                .productId(product.getId())
+                .productDetailId(product.getProductDetail().getId())
+                .productCode(product.getProductCode())
+                .productType(product.getProductType())
+                .productName(product.getProductDetail().getProductName())
+                .productEnglishName(product.getProductDetail().getProductEnglishName())
+                .productShortName(product.getProductDetail().getProductShortName())
+                .basicDescription(product.getProductDetail().getBasicDescription())
+                .detailDescription(product.getProductDetail().getDetailDescription())
+                .manufacturerCountry(product.getProductDetail().getManufacturerCountry())
+                .releaseDatetime(product.getProductDetail().getReleaseDatetime())
+                .priceList(toPriceList(product))
+                .imageList(toImageList(product))
+                .build();
+    }
+
+    private static List<ProductGetInfo.PriceListGetInfo> toPriceList(ProductEntity product) {
+        if (product == null || product.getPrices().isEmpty()) return null;
+
+        List<ProductGetInfo.PriceListGetInfo> priceList = new ArrayList<>();
+
+        for (PriceEntity price : product.getPrices()) {
+            if (price == null) return null;
+            PriceListGetInfo priceInfo = PriceListGetInfo.builder()
+                    .priceId(price.getId())
+                    .applyStartDate(price.getApplyStartDate())
+                    .applyEndDate(price.getApplyEndDate())
+                    .salesAmount(price.getSalesAmount())
+                    .purchaseAmount(price.getPurchaseAmount())
+                    .discountType(price.getDiscountType())
+                    .discountAmount(price.getDiscountAmount())
+                    .discount(price.getDiscount())
+                    .build();
+            priceList.add(priceInfo);
+        }
+        return priceList;
+    }
+
+    private static List<ProductGetInfo.ImageListGetInfo> toImageList(ProductEntity product) {
+        if (product == null || product.getImages().isEmpty()) return null;
+
+        List<ProductGetInfo.ImageListGetInfo> imageList = new ArrayList<>();
+
+        for (ImageEntity image : product.getImages()) {
+            if (image == null) return null;
+            ImageListGetInfo imageInfo = ImageListGetInfo.builder()
+                    .imageId(image.getId())
+                    .adminImageFileName(image.getAdminImageFileName())
+                    .originalImageFileName(image.getOriginalImageFileName())
+                    .imageFileName(image.getImageFileName())
+                    .imageFileUrl(image.getImageFileUrl())
+                    .imageType(image.getImageType())
+                    .contentType(image.getContentType())
+                    .width(image.getWidth())
+                    .height(image.getHeight())
+                    .fileSize(image.getFileSize())
+                    .build();
+            imageList.add(imageInfo);
+        }
+        return imageList;
     }
 
 }
