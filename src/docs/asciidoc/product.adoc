@@ -1,0 +1,40 @@
+= Aebong Store API 문서
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 상품 API
+
+=== 상품등록_실패_중복상품코드
+include::{snippets}/product-register-fail/http-request.adoc[]
+include::{snippets}/product-register-fail/request-fields.adoc[]
+include::{snippets}/product-register-fail/request-body.adoc[]
+include::{snippets}/product-register-fail/http-response.adoc[]
+include::{snippets}/product-register-fail/response-fields.adoc[]
+include::{snippets}/product-register-fail/response-body.adoc[]
+
+=== 상품등록_실패_중복상품명
+include::{snippets}/product-register-fail-2/http-request.adoc[]
+include::{snippets}/product-register-fail-2/request-fields.adoc[]
+include::{snippets}/product-register-fail-2/request-body.adoc[]
+include::{snippets}/product-register-fail-2/http-response.adoc[]
+include::{snippets}/product-register-fail-2/response-fields.adoc[]
+include::{snippets}/product-register-fail-2/response-body.adoc[]
+
+=== 상품등록_실패_유효하지않은금액
+include::{snippets}/product-register-fail-3/http-request.adoc[]
+include::{snippets}/product-register-fail-3/request-fields.adoc[]
+include::{snippets}/product-register-fail-3/request-body.adoc[]
+include::{snippets}/product-register-fail-3/http-response.adoc[]
+include::{snippets}/product-register-fail-3/response-fields.adoc[]
+include::{snippets}/product-register-fail-3/response-body.adoc[]
+
+=== 상품등록_성공
+include::{snippets}/product-register/http-request.adoc[]
+include::{snippets}/product-register/request-fields.adoc[]
+include::{snippets}/product-register/request-body.adoc[]
+include::{snippets}/product-register/http-response.adoc[]
+include::{snippets}/product-register/response-fields.adoc[]
+include::{snippets}/product-register/response-body.adoc[]
+
+

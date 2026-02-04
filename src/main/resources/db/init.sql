@@ -27,7 +27,7 @@ CREATE TABLE `users`
     `modified_datetime`                 DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT users_uk_user_account UNIQUE (user_account),
     PRIMARY KEY (`user_id`)
-) ENGINE = InnoDB COMMENT '회원 관리 테이블';
+) ENGINE=InnoDB COMMENT '회원 관리 테이블';
 
 CREATE TABLE `user_detail`
 (
@@ -68,7 +68,7 @@ CREATE TABLE `user_detail`
     CONSTRAINT user_detail_uk_rrn UNIQUE (rrn),
     PRIMARY KEY (`user_detail_id`),
     CONSTRAINT `fk_user_detail_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB COMMENT ='회원 상세 정보 관리 테이블';
+) ENGINE=InnoDB COMMENT ='회원 상세 정보 관리 테이블';
 
 CREATE TABLE `user_connecting_information`
 (
@@ -86,7 +86,7 @@ CREATE TABLE `user_connecting_information`
     `modified_user_id`               BIGINT              NULL,
     `modified_datetime`              DATETIME            NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_connecting_information_id`)
-) ENGINE = InnoDB COMMENT ='회원 실명 인증 관리 테이블';
+) ENGINE=InnoDB COMMENT ='회원 실명 인증 관리 테이블';
 
 CREATE TABLE `user_social_account`
 (
@@ -101,7 +101,7 @@ CREATE TABLE `user_social_account`
     `modified_datetime`      DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_social_account_id`),
     CONSTRAINT `fk_user_social_account_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB COMMENT ='회원 소셜 계정 관리 테이블';
+) ENGINE=InnoDB COMMENT ='회원 소셜 계정 관리 테이블';
 
 CREATE TABLE `user_delivery_addresses`
 (
@@ -127,7 +127,7 @@ CREATE TABLE `user_delivery_addresses`
     `modified_datetime` DATETIME                               NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_delivery_addresses_id`),
     CONSTRAINT `fk_user_delivery_addresses_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE = InnoDB COMMENT ='회원 배송지 정보 관리 테이블';
+) ENGINE=InnoDB COMMENT ='회원 배송지 정보 관리 테이블';
 
 CREATE TABLE `user_refund_bank_account`
 (
@@ -147,7 +147,7 @@ CREATE TABLE `user_refund_bank_account`
     `modified_datetime`           DATETIME                              NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_refund_bank_account_id`),
     CONSTRAINT `fk_user_refund_bank_account_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE = InnoDB COMMENT ='회원 환불계좌 관리 테이블';
+) ENGINE=InnoDB COMMENT ='회원 환불계좌 관리 테이블';
 
 CREATE TABLE `user_refund_bank_account_history`
 (
@@ -175,7 +175,7 @@ CREATE TABLE `user_refund_bank_account_history`
         REFERENCES `user_refund_bank_account` (`user_refund_bank_account_id`),
     CONSTRAINT `fk_user_refund_bank_account_history_user_id` FOREIGN KEY (`user_id`)
         REFERENCES `users` (`user_id`)
-) ENGINE = InnoDB COMMENT ='회원 환불계좌 이력 관리 테이블';
+) ENGINE=InnoDB COMMENT ='회원 환불계좌 이력 관리 테이블';
 
 CREATE TABLE `user_information_change_history`
 (
@@ -194,7 +194,7 @@ CREATE TABLE `user_information_change_history`
     `modified_user_id`                   BIGINT     NULL,
     `modified_datetime`                  DATETIME   NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`user_information_change_history_id`)
-) ENGINE = InnoDB COMMENT ='회원 정보 변경 이력 관리 테이블';
+) ENGINE=InnoDB COMMENT ='회원 정보 변경 이력 관리 테이블';
 
 CREATE TABLE `withdrawal_user`
 (
@@ -210,7 +210,7 @@ CREATE TABLE `withdrawal_user`
     `modified_datetime`   DATETIME                               NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`withdrawal_user_id`),
     CONSTRAINT `fk_withdrawal_user_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE = InnoDB COMMENT ='탈퇴 회원 정보 관리 테이블';
+) ENGINE=InnoDB COMMENT ='탈퇴 회원 정보 관리 테이블';
 
 -- ===========================================================================================================
 -- 상품
@@ -218,33 +218,76 @@ CREATE TABLE `withdrawal_user`
 
 CREATE TABLE `product`
 (
-    `product_id`        BIGINT AUTO_INCREMENT COMMENT '상품순번 PK',
-    `product_code`      VARCHAR(20)                        NOT NULL COMMENT '상품코드',
-    `product_name`      VARCHAR(150)                       NOT NULL COMMENT '상품명',
-    `brand`             VARCHAR(100)                       NOT NULL COMMENT '상품브랜드',
-    `product_type`      VARCHAR(100)                       NOT NULL COMMENT '상품유형',
-    `delete_yn`         VARCHAR(1)                         NOT NULL,
-    `created_user_id`   BIGINT                             NOT NULL,
-    `created_datetime`  DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    `modified_user_id`  BIGINT                             NULL,
-    `modified_datetime` DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
+    `product_id`                BIGINT AUTO_INCREMENT              NOT NULL COMMENT '상품순번 PK',
+    `product_code`              VARCHAR(20)                        NOT NULL COMMENT '상품코드',
+    `product_type`              VARCHAR(100)                       NOT NULL COMMENT '상품유형',
+    `delete_yn`                 VARCHAR(1)                         NOT NULL,
+    `created_user_id`           BIGINT                             NOT NULL,
+    `created_datetime`          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    `modified_user_id`          BIGINT                             NULL,
+    `modified_datetime`         DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
+    `version`                   BIGINT                             NOT NULL,
     PRIMARY KEY (`product_id`)
-) ENGINE = InnoDB COMMENT '상품 관리 테이블';
+) ENGINE=InnoDB COMMENT '상품 관리 테이블';
+
+CREATE TABLE `product_detail`
+(
+    `product_detail_id`         BIGINT AUTO_INCREMENT              NOT NULL COMMENT '상품상세순번 PK',
+    `product_id`                BIGINT                             NOT NULL COMMENT '상품순번',
+    `product_name`              VARCHAR(150)                       NOT NULL COMMENT '상품명',
+    `product_english_name`      VARCHAR(200)                           NULL COMMENT '상품 영문 명',
+    `product_short_name`        VARCHAR(100)                           NULL COMMENT '상품 짧은 이름',
+    `basic_description`         VARCHAR(300)                           NULL COMMENT '상품 기본 설명 (300자 이내)',
+    `detail_description`        TEXT                                   NULL COMMENT '상품 상세설명',
+    `manufacturer_country`      VARCHAR(20)                            NULL COMMENT '제조국',
+    `release_datetime`          DATETIME                           NOT NULL COMMENT '출시 일시',
+    `delete_yn`                 VARCHAR(1)                         NOT NULL,
+    `created_user_id`           BIGINT                             NOT NULL,
+    `created_datetime`          DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    `modified_user_id`          BIGINT                             NULL,
+    `modified_datetime`         DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
+    `version`                   BIGINT                             NOT NULL,
+    CONSTRAINT PRIMARY KEY (product_detail_id),
+    CONSTRAINT uk_product_detail_1 UNIQUE (product_id),
+    CONSTRAINT fk_product_detail_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ENGINE=InnoDB COMMENT='상품상세 관리 테이블';
+
+CREATE TABLE `price`
+(
+    `price_id`                 BIGINT AUTO_INCREMENT              NOT NULL  COMMENT '상품가격순번 PK',
+    `product_id`               BIGINT                             NOT NULL  COMMENT '상품순번',
+    `apply_start_date`         DATE                               NOT NULL  COMMENT '적용시작일자(YYYYMMDD)',
+    `apply_end_date`           DATE                               NOT NULL  COMMENT '적용종료일자(YYYYMMDD)',
+    `sales_amount`             DECIMAL(19,2)                      NOT NULL  COMMENT '상품 판매금액',
+    `purchase_amount`          DECIMAL(19,2)                      NOT NULL  COMMENT '상품 매입금액',
+    `discount_type`            VARCHAR(20)                        NOT NULL  COMMENT '할인유형',
+    `discount_amount`          DECIMAL(19,2)                      NOT NULL  COMMENT '할인율 적용가',
+    `discount`                 BIGINT                             NOT NULL  COMMENT '할인(율 or 금액)',
+    `delete_yn`                VARCHAR(1)                         NOT NULL,
+    `created_user_id`          BIGINT                             NOT NULL,
+    `created_datetime`         DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    `modified_user_id`         BIGINT                             NULL,
+    `modified_datetime`        DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
+    `version`                  BIGINT                             NOT NULL,
+    CONSTRAINT PRIMARY KEY (price_id),
+    CONSTRAINT uk_price_1 UNIQUE (product_id),
+    CONSTRAINT fk_price_1 FOREIGN KEY (product_id) REFERENCES product (product_id)
+) ENGINE=InnoDB COMMENT='상품가격 관리 테이블';
 
 CREATE TABLE `category`
 (
-    `category_id`       BIGINT AUTO_INCREMENT COMMENT '카테고리 순번 PK',
-    `upper_category_id` BIGINT   DEFAULT NULL COMMENT '상위 카테고리 순번',
-    `category_type`     VARCHAR(20)                        NOT NULL COMMENT '카테고리 유형',
-    `category_code`     VARCHAR(20)                        NOT NULL COMMENT '카테고리 코드',
-    `category_name`     VARCHAR(50)                        NOT NULL COMMENT '카테고리 명',
-    `delete_yn`         VARCHAR(1)                         NOT NULL,
-    `created_user_id`   BIGINT                             NOT NULL,
-    `created_datetime`  DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    `modified_user_id`  BIGINT                             NULL,
-    `modified_datetime` DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
+    `category_id`              BIGINT AUTO_INCREMENT                       COMMENT '카테고리 순번 PK',
+    `upper_category_id`        BIGINT                         DEFAULT NULL COMMENT '상위 카테고리 순번',
+    `category_type`            VARCHAR(20)                        NOT NULL COMMENT '카테고리 유형',
+    `category_code`            VARCHAR(20)                        NOT NULL COMMENT '카테고리 코드',
+    `category_name`            VARCHAR(50)                        NOT NULL COMMENT '카테고리 명',
+    `delete_yn`                VARCHAR(1)                         NOT NULL,
+    `created_user_id`          BIGINT                             NOT NULL,
+    `created_datetime`         DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    `modified_user_id`         BIGINT                             NULL,
+    `modified_datetime`        DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`category_id`)
-) ENGINE = InnoDB COMMENT '카테고리 관리 테이블';
+) ENGINE=InnoDB COMMENT '카테고리 관리 테이블';
 
 CREATE TABLE `tag`
 (
@@ -257,7 +300,7 @@ CREATE TABLE `tag`
     `modified_user_id`  BIGINT      NULL,
     `modified_datetime` DATETIME    NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`tag_id`)
-) ENGINE = InnoDB COMMENT ='태그 정보 관리 테이블';
+) ENGINE=InnoDB COMMENT ='태그 정보 관리 테이블';
 
 CREATE TABLE `product_category`
 (
@@ -274,7 +317,7 @@ CREATE TABLE `product_category`
     `modified_user_id`           BIGINT     NULL,
     `modified_datetime`          DATETIME   NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`product_category_id`)
-) ENGINE = InnoDB COMMENT ='상품 카테고리 관리 테이블';
+) ENGINE=InnoDB COMMENT ='상품 카테고리 관리 테이블';
 
 CREATE TABLE `product_tag`
 (
@@ -288,7 +331,7 @@ CREATE TABLE `product_tag`
     `modified_user_id`  BIGINT     NULL,
     `modified_datetime` DATETIME   NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`product_tag_id`)
-) ENGINE = InnoDB COMMENT ='상품 태그 관리 테이블';
+) ENGINE=InnoDB COMMENT ='상품 태그 관리 테이블';
 
 CREATE TABLE `image`
 (
@@ -310,7 +353,7 @@ CREATE TABLE `image`
     `modified_user_id`         BIGINT                             NULL,
     `modified_datetime`        DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`image_id`)
-) ENGINE = InnoDB COMMENT ='상품 이미지';
+) ENGINE=InnoDB COMMENT ='상품 이미지';
 
 -- ===========================================================================================================
 -- 주문
@@ -331,7 +374,7 @@ CREATE TABLE `cart`
     `modified_user_id`  BIGINT      NULL,
     `modified_datetime` DATETIME    NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`cart_id`)
-) ENGINE = InnoDB COMMENT ='장바구니 관리 테이블';
+) ENGINE=InnoDB COMMENT ='장바구니 관리 테이블';
 
 CREATE TABLE `sales_order`
 (
@@ -351,7 +394,7 @@ CREATE TABLE `sales_order`
     `modified_user_id`     BIGINT                             NULL,
     `modified_datetime`    DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`sales_order_id`)
-) ENGINE = InnoDB COMMENT '주문 관리 테이블';
+) ENGINE=InnoDB COMMENT '주문 관리 테이블';
 
 CREATE TABLE `sales_order_history`
 (
@@ -370,7 +413,7 @@ CREATE TABLE `sales_order_history`
     `modified_user_id`       BIGINT                                   NULL,
     `modified_datetime`      DATETIME                                 NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`sales_order_history_id`)
-) ENGINE = InnoDB COMMENT ='주문 결제 이력 관리 테이블';
+) ENGINE=InnoDB COMMENT ='주문 결제 이력 관리 테이블';
 
 CREATE TABLE `return_order`
 (
@@ -393,7 +436,7 @@ CREATE TABLE `return_order`
     `modified_user_id`                 BIGINT                             NULL,
     `modified_datetime`                DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`return_order_id`)
-) ENGINE = InnoDB COMMENT '반품 관리 테이블';
+) ENGINE=InnoDB COMMENT '반품 관리 테이블';
 
 CREATE TABLE `return_order_history`
 (
@@ -425,7 +468,7 @@ CREATE TABLE `return_order_history`
     `quantity_before`                  BIGINT         DEFAULT NULL COMMENT '이전 수량',
     `quantity_after`                   BIGINT         DEFAULT NULL COMMENT '이후 수량',
     PRIMARY KEY (`return_order_history_id`)
-) ENGINE = InnoDB COMMENT ='반품 이력 관리 테이블';
+) ENGINE=InnoDB COMMENT ='반품 이력 관리 테이블';
 
 CREATE TABLE `refund`
 (
@@ -445,7 +488,7 @@ CREATE TABLE `refund`
     `modified_user_id`    BIGINT                                 NULL,
     `modified_datetime`   DATETIME                               NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`refund_id`)
-) ENGINE = InnoDB COMMENT '환불 관리 테이블';
+) ENGINE=InnoDB COMMENT '환불 관리 테이블';
 
 CREATE TABLE `refund_history`
 (
@@ -466,7 +509,7 @@ CREATE TABLE `refund_history`
     `modified_user_id`    BIGINT                                     NULL,
     `modified_datetime`   DATETIME                                   NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`refund_history_id`)
-) ENGINE = InnoDB COMMENT '환불이력 관리 테이블';
+) ENGINE=InnoDB COMMENT '환불이력 관리 테이블';
 
 -- ===========================================================================================================
 -- 결제
@@ -496,7 +539,7 @@ CREATE TABLE `payment`
     `modified_user_id`  BIGINT                                NULL,
     `modified_datetime` DATETIME                              NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`payment_id`)
-) ENGINE = InnoDB COMMENT '결제 관리 테이블';
+) ENGINE=InnoDB COMMENT '결제 관리 테이블';
 
 CREATE TABLE `payment_history`
 (
@@ -511,7 +554,7 @@ CREATE TABLE `payment_history`
     `modified_user_id`     BIGINT                             NULL,
     `modified_datetime`    DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`payment_history_id`)
-) ENGINE = InnoDB COMMENT '결제이력 관리 테이블';
+) ENGINE=InnoDB COMMENT '결제이력 관리 테이블';
 
 CREATE TABLE `payment_cancel`
 (
@@ -534,7 +577,7 @@ CREATE TABLE `payment_cancel`
     `modified_datetime`           DATETIME                                NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`payment_cancel_id`),
     CONSTRAINT `fk_payment_cancel_payment_id` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`payment_id`) ON DELETE CASCADE
-) ENGINE = InnoDB COMMENT ='결제취소 관리 테이블';
+) ENGINE=InnoDB COMMENT ='결제취소 관리 테이블';
 
 CREATE TABLE `refund_accounts`
 (
@@ -552,7 +595,7 @@ CREATE TABLE `refund_accounts`
     `modified_user_id`            BIGINT                                 NULL,
     `modified_datetime`           DATETIME                               NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`refund_accounts_id`)
-) ENGINE = InnoDB COMMENT ='환불 계좌정보 관리 테이블';
+) ENGINE=InnoDB COMMENT ='환불 계좌정보 관리 테이블';
 
 -- ===========================================================================================================
 -- 정산
@@ -577,7 +620,7 @@ CREATE TABLE `order_close`
     `modified_user_id`    BIGINT                                NULL,
     `modified_datetime`   DATETIME                              NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`order_close_id`)
-) ENGINE = InnoDB COMMENT ='주문 마감 관리 테이블';
+) ENGINE=InnoDB COMMENT ='주문 마감 관리 테이블';
 
 CREATE TABLE `settle_base_daily`
 (
@@ -592,7 +635,7 @@ CREATE TABLE `settle_base_daily`
     `modified_user_id`     BIGINT                             NULL,
     `modified_datetime`    DATETIME                           NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`settle_base_daily_id`)
-) ENGINE = InnoDB COMMENT ='일정산 기초정보 관리 테이블';
+) ENGINE=InnoDB COMMENT ='일정산 기초정보 관리 테이블';
 
 
 
