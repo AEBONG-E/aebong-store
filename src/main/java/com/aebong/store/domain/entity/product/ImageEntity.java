@@ -3,6 +3,7 @@ package com.aebong.store.domain.entity.product;
 import com.aebong.store.common.enums.product.ContentType;
 import com.aebong.store.common.enums.product.ImageType;
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -81,7 +84,16 @@ public class ImageEntity extends AuditingEntity {
     }
 
     @Builder
-    private ImageEntity(ProductEntity product, String adminImageFileName, String originalImageFileName, String imageFileName, String imageFileUrl, ImageType imageType, ContentType contentType, Integer width, Integer height, Integer fileSize) {
+    private ImageEntity(ProductEntity product,
+                        String adminImageFileName,
+                        String originalImageFileName,
+                        String imageFileName,
+                        String imageFileUrl,
+                        ImageType imageType,
+                        ContentType contentType,
+                        Integer width,
+                        Integer height,
+                        Integer fileSize) {
         this.product = product;
         this.adminImageFileName = adminImageFileName;
         this.originalImageFileName = originalImageFileName;
@@ -92,6 +104,25 @@ public class ImageEntity extends AuditingEntity {
         this.width = width;
         this.height = height;
         this.fileSize = fileSize;
+    }
+
+    public static List<ImageEntity> create(ProductEntity product, ProductRegisterInfo registerInfo) {
+        if (Objects.isNull(product) || Objects.isNull(registerInfo)) return Collections.emptyList();
+
+        return registerInfo.getImageList().stream()
+                .map(image -> ImageEntity.builder()
+                        .product(product)
+                        .adminImageFileName(image.getAdminImageFileName())
+                        .originalImageFileName(image.getOriginalImageFileName())
+                        .imageFileName(image.getImageFileName())
+                        .imageFileUrl(image.getImageFileUrl())
+                        .imageType(image.getImageType())
+                        .contentType(image.getContentType())
+                        .width(image.getWidth())
+                        .height(image.getHeight())
+                        .fileSize(image.getFileSize())
+                        .build())
+                .toList();
     }
 
 }
