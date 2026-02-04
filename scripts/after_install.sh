@@ -1,4 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 APP_DIR="/home/ubuntu/app"
-chmod +x "$APP_DIR"/scripts/*.sh
+if [ -d "$APP_DIR/scripts" ]; then
+  chmod +x "$APP_DIR"/scripts/*.sh || true
+fi
