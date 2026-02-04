@@ -3,7 +3,7 @@ name: Deploy DEV
 on:
   push:
     branches:
-      - develop
+      - dev
 
 env:
   S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
