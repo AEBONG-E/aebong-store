@@ -10,11 +10,15 @@ import com.aebong.store.domain.repository.product.ImageRepository;
 import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
+import com.aebong.store.service.product.dto.ProductGetInfo;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -30,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
     private final ImageRepository imageRepository;
     private final PriceRepository priceRepository;
 
+    @Transactional
     @Override
     public void registerProduct(ProductRegisterRequest registerRequest) {
 
@@ -78,6 +83,26 @@ public class ProductServiceImpl implements ProductService {
         priceRepository.save(Objects.requireNonNull(price));
         imageRepository.saveAll(Objects.requireNonNull(imageList));
 
+    }
+
+    @Override
+    public ProductGetInfo getProduct(Long productId) {
+
+        // check bad request
+        if (Objects.isNull(productId)) {
+            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productId must not be null");
+        }
+
+        ProductEntity product = productRepository.findByProductId(productId).orElseThrow(
+                () -> new ProductApplicationException(CustomErrorType.NOT_FOUND_PRODUCT, CustomErrorType.NOT_FOUND_PRODUCT.getMessage()));
+
+        return ProductGetInfo.to(product);
+
+    }
+
+    @Override
+    public Page<ProductGetInfo> getProducts(Pageable pageable) {
+        return productRepository.findAllProducts(pageable);
     }
 
     private boolean validateProductCodeIsExists(String productCode) {
