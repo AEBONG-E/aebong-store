@@ -8,6 +8,13 @@ PROFILE="prod"
 if [ -f "$PROFILE_FILE" ]; then
   PROFILE=$(cat "$PROFILE_FILE")
 fi
-JAR_PATH=$(ls "$APP_DIR"/*.jar | head -n 1)
+
+# Prefer the Spring Boot executable jar, not the *-plain.jar
+JAR_PATH=$(ls -t "$APP_DIR"/*.jar | grep -v -- "-plain\.jar$" | head -n 1)
+if [ -z "$JAR_PATH" ]; then
+  echo "No executable jar found in $APP_DIR" > "$LOG_FILE"
+  exit 1
+fi
+
 nohup java -jar "$JAR_PATH" --spring.profiles.active="$PROFILE" > "$LOG_FILE" 2>&1 &
 echo $! > "$PID_FILE"

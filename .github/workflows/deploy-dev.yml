@@ -50,7 +50,12 @@ jobs:
       - name: Create deploy bundle
         run: |
           mkdir -p deploy
-          cp build/libs/*.jar deploy/
+          BOOT_JAR=$(ls build/libs/*.jar | grep -v -- "-plain\.jar$" | head -n 1)
+          if [ -z "$BOOT_JAR" ]; then
+            echo "No executable jar found in build/libs"
+            exit 1
+          fi
+          cp "$BOOT_JAR" deploy/
           cp -r scripts appspec.yml deploy/
           echo "${{ env.DEPLOY_ENV }}" > deploy/profile
           cd deploy && zip -r ../deploy.zip .
