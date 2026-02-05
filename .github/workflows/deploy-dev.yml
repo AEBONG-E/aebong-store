@@ -33,6 +33,7 @@ jobs:
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
           echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
 
       - name: Replace database values in YAML
         run: |
@@ -40,6 +41,7 @@ jobs:
           sed -i "s|\${DB_PORT}|${DB_PORT}|g" ${{ env.RESOURCE_PATH }}
           sed -i "s|\${DB_USERNAME}|${DB_USERNAME}|g" ${{ env.RESOURCE_PATH }}
           sed -i "s|\${DB_PASSWORD}|${DB_PASSWORD}|g" ${{ env.RESOURCE_PATH }}
+          sed -i "s|\${DB_NAME}|${DB_NAME}|g" ${{ env.RESOURCE_PATH }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew

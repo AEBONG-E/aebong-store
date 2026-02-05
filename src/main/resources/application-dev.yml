@@ -16,8 +16,8 @@ spring:
         format_sql: true
 
   datasource:
-#    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/aebong_store
-    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/aebong_store
+#    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}
+    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -36,4 +36,3 @@ spring:
         prepStmtCacheSize: 200            # Prepared Statement 캐시 크기 설정. 최대 200개의 쿼리를 캐싱함
         prepStmtCacheSqlLimit: 2048       # Prepared Statement 캐시에 저장될 SQL 문 최대 길이 (바이트 단위)
         useServerPrepStmts: true          # 서버 측 Prepared Statement 사용 여부 (MySQL에서 지원하는 경우 성능 최적화 가능)
-
