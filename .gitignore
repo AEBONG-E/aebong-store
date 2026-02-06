@@ -264,3 +264,6 @@ gradle-app.setting
 /.idea/sqldialects.xml
 /.idea/vcs.xml
 /.idea/compiler.xml
+
+### Eclipse ###
+bin/
