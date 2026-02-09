@@ -35,10 +35,12 @@ public class CategoryEntity extends AuditingEntity {
     private CategoryType categoryType;
 
     @Comment("카테고리 코드")
+    @Enumerated(EnumType.STRING)
     @Column(name = "category_code", nullable = false, length = 20)
     private CategoryType categoryCode;
 
     @Comment("카테고리명")
+    @Enumerated(EnumType.STRING)
     @Column(name = "category_name", nullable = false, length = 50)
     private CategoryType categoryName;
 

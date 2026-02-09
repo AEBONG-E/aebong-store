@@ -1,5 +1,6 @@
 package com.aebong.store.domain.entity.product;
 
+import com.aebong.store.common.util.BooleanToYnConverter;
 import com.aebong.store.domain.entity.AuditingEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -32,6 +33,7 @@ public class ProductCategoryEntity extends AuditingEntity {
     private CategoryEntity category;
 
     @Comment("대표 카테고리 여부")
+    @Convert(converter = BooleanToYnConverter.class)
     @Column(name = "main_category_yn", nullable = false)
     private Boolean isMainCategory = Boolean.FALSE;
 

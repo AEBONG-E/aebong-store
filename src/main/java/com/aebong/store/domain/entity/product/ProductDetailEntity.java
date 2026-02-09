@@ -1,6 +1,6 @@
 package com.aebong.store.domain.entity.product;
 
-import com.aebong.store.domain.entity.BaseEntity;
+import com.aebong.store.domain.entity.AuditingEntity;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,7 +16,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product_detail")
 @Entity
-public class ProductDetailEntity extends BaseEntity {
+public class ProductDetailEntity extends AuditingEntity {
 
     @Comment("상품상세순번 PK")
     @Column(name = "product_detail_id", nullable = false)
@@ -45,7 +45,7 @@ public class ProductDetailEntity extends BaseEntity {
     private String basicDescription;
 
     @Comment("상품 상세설명")
-    @Column(name = "detail_description", columnDefinition = "TEXT")
+    @Lob @Column(name = "detail_description", length = 10000)
     private String detailDescription;
 
     @Comment("제조국")

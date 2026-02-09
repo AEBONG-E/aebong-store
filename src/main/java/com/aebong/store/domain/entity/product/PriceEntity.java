@@ -1,7 +1,7 @@
 package com.aebong.store.domain.entity.product;
 
 import com.aebong.store.common.enums.product.DiscountType;
-import com.aebong.store.domain.entity.BaseEntity;
+import com.aebong.store.domain.entity.AuditingEntity;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "price")
 @Entity
-public class PriceEntity extends BaseEntity {
+public class PriceEntity extends AuditingEntity {
 
     @Comment("상품가격순번 PK")
     @Column(name = "price_id", nullable = false)
