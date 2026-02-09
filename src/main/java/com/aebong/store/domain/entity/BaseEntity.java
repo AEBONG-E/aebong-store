@@ -1,15 +1,11 @@
 package com.aebong.store.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PrePersist;
+import com.aebong.store.common.util.BooleanToYnConverter;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
-import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -25,6 +21,7 @@ public abstract class BaseEntity {
 
     @Comment("삭제여부")
     @Column(name = "delete_yn", nullable = false)
+    @Convert(converter = BooleanToYnConverter.class)
     @Builder.Default
     private Boolean isDeleted = Boolean.FALSE;
 

@@ -44,7 +44,7 @@ public class ImageEntity extends AuditingEntity {
     private String imageFileName;
 
     @Comment("이미지파일 url")
-    @Lob @Column(name = "image_file_url", nullable = false)
+    @Lob @Column(name = "image_file_url", nullable = false, length = 1000)
     private String imageFileUrl;
 
     @Comment("이미지유형")

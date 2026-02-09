@@ -1,5 +1,6 @@
 package com.aebong.store.domain.entity.user;
 
+import com.aebong.store.common.util.BooleanToYnConverter;
 import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.AuditingEntity;
 import jakarta.persistence.*;
@@ -55,10 +56,12 @@ public class UserDeliveryAddressEntity extends AuditingEntity {
     private String deliveryMessage;
 
     @Comment("기본배송지 여부")
+    @Convert(converter = BooleanToYnConverter.class)
     @Column(name = "default_yn")
     private Boolean isDefault = Boolean.FALSE;
 
     @Comment("기본배송지 여부")
+    @Convert(converter = BooleanToYnConverter.class)
     @Column(name = "address_valid_yn")
     private Boolean isAddressValid;
 

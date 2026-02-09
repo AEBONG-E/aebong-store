@@ -3,6 +3,7 @@ package com.aebong.store.domain.entity.user;
 import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
+import com.aebong.store.common.util.BooleanToYnConverter;
 import com.aebong.store.domain.entity.AuditingEntity;
 import com.aebong.store.service.user.dto.UserModifyInfo;
 import jakarta.persistence.*;
@@ -30,6 +31,7 @@ public class UserEntity extends AuditingEntity {
     private Long id;
 
     @Comment("회원유형")
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false, length = 20)
     private UserType userType;
 
@@ -38,6 +40,7 @@ public class UserEntity extends AuditingEntity {
     private String userAccount;
 
     @Comment("회원계정 유형")
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_account_type", nullable = false, length = 20)
     private UserAccountType userAccountType;
 
@@ -51,6 +54,7 @@ public class UserEntity extends AuditingEntity {
     private UserStatus userStatus;
 
     @Comment("비밀번호 초기화 필요 여부")
+    @Convert(converter = BooleanToYnConverter.class)
     @Column(name = "password_init_yn", nullable = false)
     private Boolean passwordInitYn;
 
@@ -94,9 +98,6 @@ public class UserEntity extends AuditingEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserInformationChangeHistoryEntity> userInformationChangeHistories = new ArrayList<>();
-
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserDetailEntity userDetail;
 
     @Override
     public boolean equals(Object o) {

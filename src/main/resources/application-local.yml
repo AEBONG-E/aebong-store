@@ -1,0 +1,38 @@
+
+spring:
+  config:
+    activate:
+      on-profile: local  # profile: local, dev
+
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate.dialect.storage_engine: innodb
+      show-sql: true
+      hibernate:
+        format_sql: true
+
+  datasource:
+#    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}
+    url: jdbc:mysql://${DB_ENDPOINT}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 3000            # (밀리초) 커넥션 풀에서 커넥션을 가져오기 위한 최대 대기 시간 (기본값: 30000ms)
+      max-lifetime: 58000                 # (밀리초) 커넥션의 최대 생명 주기. 이 시간이 지나면 커넥션이 제거되고 새 커넥션이 생성됨 (기본값: 1800000ms)
+      maximum-pool-size: 10               # 최대 커넥션 풀 크기. 동시에 사용할 수 있는 커넥션 개수의 최대값 (기본값: 10)
+      auto-commit: false                  # 데이터베이스 트랜잭션의 자동 커밋 여부 (기본값: true)
+      data-source-properties:
+        connectTimeout: 30000             # (밀리초) 데이터베이스 연결을 위한 타임아웃 설정 (기본값: 10000ms)
+        socketTimeout: 60000              # (밀리초) 소켓 통신 타임아웃 설정. 지정된 시간 내 응답이 없으면 소켓이 닫힘
+        useUnicode: true                  # 유니코드 설정 활성화 (MySQL의 문자 인코딩을 올바르게 처리하기 위해 사용)
+        characterEncoding: utf-8          # 데이터베이스에서 사용할 문자 인코딩 설정
+        rewriteBatchedStatements: true    # 배치 처리 성능 최적화. 여러 개의 INSERT/UPDATE 문을 하나의 요청으로 최적화하여 성능 향상
+        cachePrepStmts: true              # Prepared Statement 캐싱 활성화. 동일한 SQL 문 실행 시 성능 향상
+        prepStmtCacheSize: 200            # Prepared Statement 캐시 크기 설정. 최대 200개의 쿼리를 캐싱함
+        prepStmtCacheSqlLimit: 2048       # Prepared Statement 캐시에 저장될 SQL 문 최대 길이 (바이트 단위)
+        useServerPrepStmts: true          # 서버 측 Prepared Statement 사용 여부 (MySQL에서 지원하는 경우 성능 최적화 가능)
