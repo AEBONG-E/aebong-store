@@ -31,8 +31,11 @@ public class ProductController {
     }
 
     @PostMapping("/paging")
-    public ResponseEntity<ApiResponse<Page<ProductGetInfo>>> getProducts() {
-        Pageable pageable = PageRequest.of(0,20);
+    public ResponseEntity<ApiResponse<Page<ProductGetInfo>>> getProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(ApiResponse.success(productService.getProducts(pageable)), HttpStatus.OK);
     }
 

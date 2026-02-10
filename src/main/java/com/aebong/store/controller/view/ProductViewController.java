@@ -32,4 +32,9 @@ public class ProductViewController {
         return "products/product-get";
     }
 
+    @GetMapping("/list")
+    public String getProducts(Model model) {
+        return "products/product-list";
+    }
+
 }
