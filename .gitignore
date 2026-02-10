@@ -267,3 +267,4 @@ gradle-app.setting
 
 ### Eclipse ###
 bin/
+/AGENTS.md
