@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout-admin}">
+<head>
+    <meta charset="UTF-8">
+    <title>상품 목록</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <th:block layout:fragment="css">
+        <style>
+            .form-title {
+                margin-bottom: 1.5rem;
+                font-size: 1.5rem;
+                font-weight: 700;
+            }
+
+            .product-table thead th {
+                background-color: #f8f9fa;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+
+            .product-table tbody td {
+                vertical-align: middle;
+            }
+
+            .product-code {
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                font-size: 0.875rem;
+            }
+
+            .table-empty {
+                color: #6c757d;
+                text-align: center;
+                padding: 2rem 0;
+            }
+
+            .clickable {
+                cursor: pointer;
+            }
+
+            .page-size-select {
+                width: auto;
+                min-width: 110px;
+            }
+
+            .pagination-wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 1rem;
+                border-top: 1px solid #ececec;
+                background-color: #fff;
+            }
+
+            .pagination {
+                margin: 0;
+            }
+
+            .pagination .page-item.active .page-link {
+                background-color: #000000;
+                border-color: #000000;
+                color: #ffffff;
+            }
+
+        </style>
+    </th:block>
+</head>
+
+<div layout:fragment="content">
+    <div class="container-fluid px-5 py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="form-title mb-0">상품 목록</h2>
+            <a th:href="@{/products/register}" class="btn btn-dark">상품 등록</a>
+        </div>
+
+        <div class="alert alert-danger d-none" id="errorBox"></div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white fw-semibold d-flex justify-content-between align-items-center">
+                <span>조회 결과 (<span id="totalCount">0</span>건)</span>
+                <button type="button" class="btn btn-sm btn-light" id="btnReload">새로고침</button>
+            </div>
+            <div class="card-body bg-white p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 product-table">
+                        <thead>
+                        <tr>
+                            <th class="text-center" style="width: 70px;">No</th>
+                            <th style="width: 160px;">상품코드</th>
+                            <th>상품명</th>
+                            <th style="width: 130px;">상품유형</th>
+                            <th style="width: 180px;">제조국</th>
+                            <th style="width: 180px;">출시일시</th>
+                            <th class="text-end" style="width: 130px;">판매가</th>
+                            <th class="text-center" style="width: 120px;">상세</th>
+                        </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                        <tr>
+                            <td colspan="8" class="table-empty">데이터를 불러오는 중입니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="pagination-wrap">
+                <div class="d-flex align-items-center gap-2">
+                    <label for="pageSize" class="form-label mb-0 text-muted">페이지 크기</label>
+                    <select id="pageSize" class="form-select form-select-sm page-size-select">
+                        <option value="20" selected>20개</option>
+                        <option value="50">50개</option>
+                        <option value="100">100개</option>
+                    </select>
+                </div>
+                <nav aria-label="상품 목록 페이징">
+                    <ul class="pagination" id="pagination"></ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/products/product-list.js}"></script>
+</th:block>
+</html>
