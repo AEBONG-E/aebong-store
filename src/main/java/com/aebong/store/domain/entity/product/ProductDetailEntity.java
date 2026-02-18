@@ -1,6 +1,7 @@
 package com.aebong.store.domain.entity.product;
 
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.product.dto.ProductModifyInfo;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -100,6 +101,17 @@ public class ProductDetailEntity extends AuditingEntity {
                 .manufacturerCountry(registerInfo.getManufacturerCountry())
                 .releaseDatetime(registerInfo.getReleaseDatetime())
                 .build();
+    }
+
+    public void modify(ProductModifyInfo modifyInfo) {
+        if (Objects.isNull(modifyInfo)) return;
+        this.productName = modifyInfo.getProductName();
+        this.productEnglishName = modifyInfo.getProductEnglishName();
+        this.productShortName = modifyInfo.getProductShortName();
+        this.basicDescription = modifyInfo.getBasicDescription();
+        this.detailDescription = modifyInfo.getDetailDescription();
+        this.manufacturerCountry = modifyInfo.getManufacturerCountry();
+        this.releaseDatetime = modifyInfo.getReleaseDatetime();
     }
 
 }

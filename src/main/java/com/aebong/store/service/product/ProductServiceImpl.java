@@ -11,8 +11,12 @@ import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
 import com.aebong.store.service.product.dto.ProductGetInfo;
+import com.aebong.store.service.product.dto.ProductModifyInfo;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
-import com.aebong.store.service.product.dto.ProductRegisterRequest;
+import com.aebong.store.service.product.validator.ProductValidator;
+import com.aebong.store.controller.req.ProductRegisterRequest;
+import com.aebong.store.controller.req.ProductModifyRequest;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +24,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,39 +36,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductDetailRepository productDetailRepository;
     private final ImageRepository imageRepository;
     private final PriceRepository priceRepository;
+    private final ProductValidator productValidator;
 
     @Transactional
     @Override
     public void registerProduct(ProductRegisterRequest registerRequest) {
 
-        // check bad request
-        if (Objects.isNull(registerRequest) || Objects.isNull(registerRequest.getPrice()) || registerRequest.getImageList().isEmpty()) {
-            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "registerInfo must not be null");
-        }
-
-        // check if product code exists
-        if (validateProductCodeIsExists(registerRequest.getProductCode())) {
-            throw new ProductApplicationException(CustomErrorType.IS_EXIST_PRODUCT_CODE,
-                    String.format("%s already exists productCode", registerRequest.getProductCode()));
-        }
-
-        // check if product name exists
-        if (validateProductNameIsExists(registerRequest.getProductName())) {
-            throw new ProductApplicationException(CustomErrorType.IS_EXIST_PRODUCT_NAME,
-                    String.format("%s already exists productName", registerRequest.getProductName()));
-        }
-
-        // check valid price
-        if (validateAmountIsInvalid(registerRequest.getPrice().getSalesAmount())) {
-            throw new ProductApplicationException(CustomErrorType.INVALID_AMOUNT,
-                    String.format("%s this amount is invalid", registerRequest.getPrice().getSalesAmount()));
-        } else if (validateAmountIsInvalid(registerRequest.getPrice().getPurchaseAmount())) {
-            throw new ProductApplicationException(CustomErrorType.INVALID_AMOUNT,
-                    String.format("%s this amount is invalid", registerRequest.getPrice().getPurchaseAmount()));
-        } else if (validateAmountIsInvalid(registerRequest.getPrice().getDiscountAmount())) {
-            throw new ProductApplicationException(CustomErrorType.INVALID_AMOUNT,
-                    String.format("%s this amount is invalid", registerRequest.getPrice().getDiscountAmount()));
-        }
+        // check valid
+        productValidator.validateForRegister(registerRequest);
+        validateDuplicateForRegister(registerRequest);
 
         // todo: check valid image format
 
@@ -93,10 +72,7 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productId must not be null");
         }
 
-        ProductEntity product = productRepository.findByProductId(productId).orElseThrow(
-                () -> new ProductApplicationException(CustomErrorType.NOT_FOUND_PRODUCT, CustomErrorType.NOT_FOUND_PRODUCT.getMessage()));
-
-        return ProductGetInfo.to(product);
+        return ProductGetInfo.to(findByProductId(productId));
 
     }
 
@@ -105,25 +81,69 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAllProducts(pageable);
     }
 
-    private boolean validateProductCodeIsExists(String productCode) {
-        if (Objects.isNull(productCode)) {
-            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productCode is null");
-        }
-        return productRepository.existsByProductCode(productCode);
+    @Transactional
+    @Override
+    public void modifyProduct(Long productId, ProductModifyRequest modifyRequest) {
+
+        // check valid
+        ProductEntity product = findByProductId(productId);
+        productValidator.validateForModify(modifyRequest);
+        validateDuplicateForModify(product, modifyRequest);
+
+        // request -> dto mapping
+        ProductModifyInfo modifyInfo = ProductModifyInfo.to(modifyRequest);
+
+        ProductDetailEntity productDetail = product.getProductDetail();
+        PriceEntity price = product.getPrices().stream()
+                .filter(p -> p.getId().equals(modifyInfo.getPrice().getPriceId()))
+                .findFirst()
+                .orElseThrow(EntityNotFoundException::new);
+        List<ImageEntity> images = product.getImages();
+
+        // todo: check valid image format
+
+        // entity save
+        product.modify(modifyInfo);
+        productDetail.modify(modifyInfo);
+        price.modify(modifyInfo);
+        images.forEach(p -> p.modify(modifyInfo));
+
+        imageRepository.saveAll(Objects.requireNonNull(images));
+        priceRepository.save(Objects.requireNonNull(price));
+        productDetailRepository.save(productDetail);
+        productRepository.save(product);
+
     }
 
-    private boolean validateProductNameIsExists(String productName) {
-        if (Objects.isNull(productName)) {
-            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productName is null");
-        }
-        return productDetailRepository.existsByProductName(productName);
+    private ProductEntity findByProductId(Long productId) {
+        return productRepository.findByProductId(productId).orElseThrow(
+                () -> new ProductApplicationException(CustomErrorType.NOT_FOUND_PRODUCT, CustomErrorType.NOT_FOUND_PRODUCT.getMessage()));
     }
 
-    private boolean validateAmountIsInvalid(BigDecimal amount) {
-        if (Objects.isNull(amount)) {
-            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "amount is null");
+    private void validateDuplicateForRegister(ProductRegisterRequest registerRequest) {
+        if (productRepository.existsByProductCode(registerRequest.getProductCode())) {
+            throw new ProductApplicationException(CustomErrorType.IS_EXIST_PRODUCT_CODE,
+                    String.format("%s already exists productCode", registerRequest.getProductCode()));
         }
-        return amount.compareTo(BigDecimal.ZERO) < 0;
+
+        if (productDetailRepository.existsByProductName(registerRequest.getProductName())) {
+            throw new ProductApplicationException(CustomErrorType.IS_EXIST_PRODUCT_NAME,
+                    String.format("%s already exists productName", registerRequest.getProductName()));
+        }
+    }
+
+    private void validateDuplicateForModify(ProductEntity product, ProductModifyRequest modifyRequest) {
+        if (!Objects.equals(product.getProductCode(), modifyRequest.getProductCode())
+                && productRepository.existsByProductCode(modifyRequest.getProductCode())) {
+            throw new ProductApplicationException(CustomErrorType.IS_EXIST_PRODUCT_CODE,
+                    String.format("%s already exists productCode", modifyRequest.getProductCode()));
+        }
+
+        if (!Objects.equals(product.getProductDetail().getProductName(), modifyRequest.getProductName())
+                && productDetailRepository.existsByProductName(modifyRequest.getProductName())) {
+            throw new ProductApplicationException(CustomErrorType.IS_EXIST_PRODUCT_NAME,
+                    String.format("%s already exists productName", modifyRequest.getProductName()));
+        }
     }
 
 }

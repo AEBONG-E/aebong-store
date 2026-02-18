@@ -1,24 +1,18 @@
 package com.aebong.store.service.product.dto;
 
-import com.aebong.store.common.enums.product.ContentType;
-import com.aebong.store.common.enums.product.DiscountType;
-import com.aebong.store.common.enums.product.ImageType;
 import com.aebong.store.common.enums.product.ProductType;
+import com.aebong.store.controller.res.ProductImageResponse;
+import com.aebong.store.controller.res.ProductPriceResponse;
 import com.aebong.store.domain.entity.product.ImageEntity;
 import com.aebong.store.domain.entity.product.PriceEntity;
 import com.aebong.store.domain.entity.product.ProductEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class ProductGetInfo {
 
@@ -33,40 +27,8 @@ public class ProductGetInfo {
     private String detailDescription;
     private String manufacturerCountry;
     private LocalDateTime releaseDatetime;
-    private List<ProductGetInfo.PriceListGetInfo> priceList = new ArrayList<>();
-    private List<ProductGetInfo.ImageListGetInfo> imageList = new ArrayList<>();
-
-    @Builder
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PriceListGetInfo {
-        private Long priceId;
-        private LocalDate applyStartDate;
-        private LocalDate applyEndDate;
-        private BigDecimal salesAmount;
-        private BigDecimal purchaseAmount;
-        private DiscountType discountType;
-        private BigDecimal discountAmount;
-        private Long discount;
-    }
-
-    @Builder
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class ImageListGetInfo {
-        private Long imageId;
-        private String adminImageFileName;
-        private String originalImageFileName;
-        private String imageFileName;
-        private String imageFileUrl;
-        private ImageType imageType;
-        private ContentType contentType;
-        private Integer width;
-        private Integer height;
-        private Integer fileSize;
-    }
+    private List<ProductPriceResponse> priceList = new ArrayList<>();
+    private List<ProductImageResponse> imageList = new ArrayList<>();
 
     @Builder
     public ProductGetInfo(Long productId,
@@ -80,8 +42,8 @@ public class ProductGetInfo {
                           String detailDescription,
                           String manufacturerCountry,
                           LocalDateTime releaseDatetime,
-                          List<ProductGetInfo.PriceListGetInfo> priceList,
-                          List<ProductGetInfo.ImageListGetInfo> imageList) {
+                          List<ProductPriceResponse> priceList,
+                          List<ProductImageResponse> imageList) {
         this.productId = productId;
         this.productDetailId = productDetailId;
         this.productCode = productCode;
@@ -117,14 +79,14 @@ public class ProductGetInfo {
                 .build();
     }
 
-    private static List<ProductGetInfo.PriceListGetInfo> toPriceList(ProductEntity product) {
+    private static List<ProductPriceResponse> toPriceList(ProductEntity product) {
         if (product == null || product.getPrices().isEmpty()) return null;
 
-        List<ProductGetInfo.PriceListGetInfo> priceList = new ArrayList<>();
+        List<ProductPriceResponse> priceList = new ArrayList<>();
 
         for (PriceEntity price : product.getPrices()) {
             if (price == null) return null;
-            PriceListGetInfo priceInfo = PriceListGetInfo.builder()
+            ProductPriceResponse priceInfo = ProductPriceResponse.builder()
                     .priceId(price.getId())
                     .applyStartDate(price.getApplyStartDate())
                     .applyEndDate(price.getApplyEndDate())
@@ -139,14 +101,14 @@ public class ProductGetInfo {
         return priceList;
     }
 
-    private static List<ProductGetInfo.ImageListGetInfo> toImageList(ProductEntity product) {
+    private static List<ProductImageResponse> toImageList(ProductEntity product) {
         if (product == null || product.getImages().isEmpty()) return null;
 
-        List<ProductGetInfo.ImageListGetInfo> imageList = new ArrayList<>();
+        List<ProductImageResponse> imageList = new ArrayList<>();
 
         for (ImageEntity image : product.getImages()) {
             if (image == null) return null;
-            ImageListGetInfo imageInfo = ImageListGetInfo.builder()
+            ProductImageResponse imageInfo = ProductImageResponse.builder()
                     .imageId(image.getId())
                     .adminImageFileName(image.getAdminImageFileName())
                     .originalImageFileName(image.getOriginalImageFileName())

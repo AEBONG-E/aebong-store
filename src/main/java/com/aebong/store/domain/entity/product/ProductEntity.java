@@ -2,6 +2,7 @@ package com.aebong.store.domain.entity.product;
 
 import com.aebong.store.common.enums.product.ProductType;
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.product.dto.ProductModifyInfo;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -80,6 +81,12 @@ public class ProductEntity extends AuditingEntity {
                 .productCode(registerInfo.getProductCode())
                 .productType(registerInfo.getProductType())
                 .build();
+    }
+
+    public void modify(ProductModifyInfo modifyInfo) {
+        if (Objects.isNull(modifyInfo)) return;
+        this.productCode = modifyInfo.getProductCode();
+        this.productType = modifyInfo.getProductType();
     }
 
 }

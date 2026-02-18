@@ -3,6 +3,7 @@ package com.aebong.store.domain.entity.product;
 import com.aebong.store.common.enums.product.ContentType;
 import com.aebong.store.common.enums.product.ImageType;
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.product.dto.ProductModifyInfo;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -123,6 +124,26 @@ public class ImageEntity extends AuditingEntity {
                         .fileSize(image.getFileSize())
                         .build())
                 .toList();
+    }
+
+    public void modify(ProductModifyInfo modifyInfo) {
+        if (Objects.isNull(modifyInfo) || Objects.isNull(modifyInfo.getImageList()) || modifyInfo.getImageList().isEmpty()) return;
+
+        modifyInfo.getImageList().stream()
+                .filter(Objects::nonNull)
+                .filter(imageInfo -> Objects.equals(imageInfo.getImageId(), this.id))
+                .findFirst()
+                .ifPresent(imageInfo -> {
+                    this.adminImageFileName = imageInfo.getAdminImageFileName();
+                    this.originalImageFileName = imageInfo.getOriginalImageFileName();
+                    this.imageFileName = imageInfo.getImageFileName();
+                    this.imageFileUrl = imageInfo.getImageFileUrl();
+                    this.imageType = imageInfo.getImageType();
+                    this.contentType = imageInfo.getContentType();
+                    this.width = imageInfo.getWidth();
+                    this.height = imageInfo.getHeight();
+                    this.fileSize = imageInfo.getFileSize();
+                });
     }
 
 }
