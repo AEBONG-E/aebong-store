@@ -1,11 +1,10 @@
 package com.aebong.store.service.product;
 
 import com.aebong.store.service.product.dto.ProductGetInfo;
-import com.aebong.store.service.product.dto.ProductRegisterRequest;
+import com.aebong.store.controller.req.ProductRegisterRequest;
+import com.aebong.store.controller.req.ProductModifyRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface ProductService {
 
@@ -28,5 +27,11 @@ public interface ProductService {
      * @return Page<ProductGetInfo>
      */
     Page<ProductGetInfo> getProducts(Pageable pageable);
+
+    /**
+     * 상품 수정
+     * @param modifyRequest 상품 수정 정보(api 통해 request 로 부터 받아올 매개변수)
+     */
+    void modifyProduct(Long productId, ProductModifyRequest modifyRequest);
 
 }

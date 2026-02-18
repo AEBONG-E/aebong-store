@@ -7,13 +7,16 @@ import com.aebong.store.common.enums.product.ImageType;
 import com.aebong.store.common.enums.product.ProductType;
 import com.aebong.store.common.exceptions.ProductApplicationException;
 import com.aebong.store.controller.api.ProductController;
+import com.aebong.store.controller.req.ProductImageRequest;
+import com.aebong.store.controller.req.ProductPriceRequest;
+import com.aebong.store.controller.req.ProductRegisterRequest;
+import com.aebong.store.controller.res.ProductImageResponse;
+import com.aebong.store.controller.res.ProductPriceResponse;
 import com.aebong.store.domain.entity.product.ImageEntity;
 import com.aebong.store.domain.entity.product.ProductDetailEntity;
 import com.aebong.store.domain.entity.product.ProductEntity;
 import com.aebong.store.service.product.ProductService;
-import com.aebong.store.service.product.dto.ProductGetInfo;
-import com.aebong.store.service.product.dto.ProductRegisterInfo;
-import com.aebong.store.service.product.dto.ProductRegisterRequest;
+import com.aebong.store.service.product.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +96,7 @@ class ProductControllerTest {
                                 fieldWithPath("manufacturerCountry").type(JsonFieldType.STRING).description("제조국"),
                                 fieldWithPath("releaseDatetime").type(JsonFieldType.STRING).description("출시일시"),
                                 fieldWithPath("price").type(JsonFieldType.OBJECT).description("가격"),
+                                fieldWithPath("price.priceId").type(JsonFieldType.NUMBER).description("가격순번").optional(),
                                 fieldWithPath("price.applyStartDate").type(JsonFieldType.STRING).description("적용 시작일자"),
                                 fieldWithPath("price.applyEndDate").type(JsonFieldType.STRING).description("적용 종료일자"),
                                 fieldWithPath("price.salesAmount").type(JsonFieldType.NUMBER).description("상품 판매금액"),
@@ -101,6 +105,7 @@ class ProductControllerTest {
                                 fieldWithPath("price.discountAmount").type(JsonFieldType.NUMBER).description("할인율 적용가"),
                                 fieldWithPath("price.discount").type(JsonFieldType.NUMBER).description("할인율"),
                                 fieldWithPath("imageList").type(JsonFieldType.ARRAY).description("이미지 리스트"),
+                                fieldWithPath("imageList[].imageId").type(JsonFieldType.NUMBER).description("이미지 순번").optional(),
                                 fieldWithPath("imageList[].adminImageFileName").type(JsonFieldType.STRING).description("이미지파일 관리이름"),
                                 fieldWithPath("imageList[].originalImageFileName").type(JsonFieldType.STRING).description("이미지파일 원본이름"),
                                 fieldWithPath("imageList[].imageFileName").type(JsonFieldType.STRING).description("이미지파일 이름"),
@@ -157,6 +162,7 @@ class ProductControllerTest {
                                 fieldWithPath("manufacturerCountry").type(JsonFieldType.STRING).description("제조국"),
                                 fieldWithPath("releaseDatetime").type(JsonFieldType.STRING).description("출시일시"),
                                 fieldWithPath("price").type(JsonFieldType.OBJECT).description("가격"),
+                                fieldWithPath("price.priceId").type(JsonFieldType.NUMBER).description("가격순번").optional(),
                                 fieldWithPath("price.applyStartDate").type(JsonFieldType.STRING).description("적용 시작일자"),
                                 fieldWithPath("price.applyEndDate").type(JsonFieldType.STRING).description("적용 종료일자"),
                                 fieldWithPath("price.salesAmount").type(JsonFieldType.NUMBER).description("상품 판매금액"),
@@ -165,6 +171,7 @@ class ProductControllerTest {
                                 fieldWithPath("price.discountAmount").type(JsonFieldType.NUMBER).description("할인율 적용가"),
                                 fieldWithPath("price.discount").type(JsonFieldType.NUMBER).description("할인율"),
                                 fieldWithPath("imageList").type(JsonFieldType.ARRAY).description("이미지 리스트"),
+                                fieldWithPath("imageList[].imageId").type(JsonFieldType.NUMBER).description("이미지 순번").optional(),
                                 fieldWithPath("imageList[].adminImageFileName").type(JsonFieldType.STRING).description("이미지파일 관리이름"),
                                 fieldWithPath("imageList[].originalImageFileName").type(JsonFieldType.STRING).description("이미지파일 원본이름"),
                                 fieldWithPath("imageList[].imageFileName").type(JsonFieldType.STRING).description("이미지파일 이름"),
@@ -221,6 +228,7 @@ class ProductControllerTest {
                                 fieldWithPath("manufacturerCountry").type(JsonFieldType.STRING).description("제조국"),
                                 fieldWithPath("releaseDatetime").type(JsonFieldType.STRING).description("출시일시"),
                                 fieldWithPath("price").type(JsonFieldType.OBJECT).description("가격"),
+                                fieldWithPath("price.priceId").type(JsonFieldType.NUMBER).description("가격순번").optional(),
                                 fieldWithPath("price.applyStartDate").type(JsonFieldType.STRING).description("적용 시작일자"),
                                 fieldWithPath("price.applyEndDate").type(JsonFieldType.STRING).description("적용 종료일자"),
                                 fieldWithPath("price.salesAmount").type(JsonFieldType.NUMBER).description("상품 판매금액"),
@@ -229,6 +237,7 @@ class ProductControllerTest {
                                 fieldWithPath("price.discountAmount").type(JsonFieldType.NUMBER).description("할인율 적용가"),
                                 fieldWithPath("price.discount").type(JsonFieldType.NUMBER).description("할인율"),
                                 fieldWithPath("imageList").type(JsonFieldType.ARRAY).description("이미지 리스트"),
+                                fieldWithPath("imageList[].imageId").type(JsonFieldType.NUMBER).description("이미지 순번").optional(),
                                 fieldWithPath("imageList[].adminImageFileName").type(JsonFieldType.STRING).description("이미지파일 관리이름"),
                                 fieldWithPath("imageList[].originalImageFileName").type(JsonFieldType.STRING).description("이미지파일 원본이름"),
                                 fieldWithPath("imageList[].imageFileName").type(JsonFieldType.STRING).description("이미지파일 이름"),
@@ -281,6 +290,7 @@ class ProductControllerTest {
                                 fieldWithPath("manufacturerCountry").type(JsonFieldType.STRING).description("제조국"),
                                 fieldWithPath("releaseDatetime").type(JsonFieldType.STRING).description("출시일시"),
                                 fieldWithPath("price").type(JsonFieldType.OBJECT).description("가격"),
+                                fieldWithPath("price.priceId").type(JsonFieldType.NUMBER).description("가격순번").optional(),
                                 fieldWithPath("price.applyStartDate").type(JsonFieldType.STRING).description("적용 시작일자"),
                                 fieldWithPath("price.applyEndDate").type(JsonFieldType.STRING).description("적용 종료일자"),
                                 fieldWithPath("price.salesAmount").type(JsonFieldType.NUMBER).description("상품 판매금액"),
@@ -289,6 +299,7 @@ class ProductControllerTest {
                                 fieldWithPath("price.discountAmount").type(JsonFieldType.NUMBER).description("할인율 적용가"),
                                 fieldWithPath("price.discount").type(JsonFieldType.NUMBER).description("할인율"),
                                 fieldWithPath("imageList").type(JsonFieldType.ARRAY).description("이미지 리스트"),
+                                fieldWithPath("imageList[].imageId").type(JsonFieldType.NUMBER).description("이미지 순번").optional(),
                                 fieldWithPath("imageList[].adminImageFileName").type(JsonFieldType.STRING).description("이미지파일 관리이름"),
                                 fieldWithPath("imageList[].originalImageFileName").type(JsonFieldType.STRING).description("이미지파일 원본이름"),
                                 fieldWithPath("imageList[].imageFileName").type(JsonFieldType.STRING).description("이미지파일 이름"),
@@ -502,8 +513,8 @@ class ProductControllerTest {
                 .build();
     }
 
-    private ProductRegisterRequest.PriceRegisterRequest createPriceRegisterInfo() {
-        return ProductRegisterRequest.PriceRegisterRequest.builder()
+    private ProductPriceRequest createPriceRegisterInfo() {
+        return ProductPriceRequest.builder()
                 .applyStartDate(LocalDate.now())
                 .applyEndDate(LocalDate.of(9999, 12, 31))
                 .salesAmount(BigDecimal.valueOf(75000.0))
@@ -514,9 +525,9 @@ class ProductControllerTest {
                 .build();
     }
 
-    private List<ProductRegisterRequest.ImageRegisterRequest> createImageRegisterInfo() {
+    private List<ProductImageRequest> createImageRegisterInfo() {
         return List.of(
-                ProductRegisterRequest.ImageRegisterRequest.builder()
+                ProductImageRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0001.png")
                         .originalImageFileName("TEST_001A_BLACK.png")
                         .imageFileName("TEST_001A_BLACK.png")
@@ -527,7 +538,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductRegisterRequest.ImageRegisterRequest.builder()
+                ProductImageRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0002.png")
                         .originalImageFileName("TEST_002A_BLACK.png")
                         .imageFileName("TEST_002A_BLACK.png")
@@ -538,7 +549,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductRegisterRequest.ImageRegisterRequest.builder()
+                ProductImageRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0003.png")
                         .originalImageFileName("TEST_003A_BLACK.png")
                         .imageFileName("TEST_003A_BLACK.png")
@@ -569,8 +580,8 @@ class ProductControllerTest {
                 .build();
     }
 
-    private ProductRegisterRequest.PriceRegisterRequest createInvalidPriceRegisterInfo() {
-        return ProductRegisterRequest.PriceRegisterRequest.builder()
+    private ProductPriceRequest createInvalidPriceRegisterInfo() {
+        return ProductPriceRequest.builder()
                 .applyStartDate(LocalDate.now())
                 .applyEndDate(LocalDate.of(9999, 12, 31))
                 .salesAmount(BigDecimal.valueOf(-1))
@@ -581,9 +592,9 @@ class ProductControllerTest {
                 .build();
     }
 
-    private List<ProductRegisterRequest.ImageRegisterRequest> createInvalidImageRegisterInfo() {
+    private List<ProductImageRequest> createInvalidImageRegisterInfo() {
         return List.of(
-                ProductRegisterRequest.ImageRegisterRequest.builder()
+                ProductImageRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0001.png")
                         .originalImageFileName("TEST_001A_BLACK.png")
                         .imageFileName("TEST_001A_BLACK.png")
@@ -594,7 +605,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductRegisterRequest.ImageRegisterRequest.builder()
+                ProductImageRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0002.png")
                         .originalImageFileName("TEST_002A_BLACK.png")
                         .imageFileName("TEST_002A_BLACK.png")
@@ -605,7 +616,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductRegisterRequest.ImageRegisterRequest.builder()
+                ProductImageRequest.builder()
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0003.png")
                         .originalImageFileName("TEST_003A_BLACK.png")
                         .imageFileName("TEST_003A_BLACK.png")
@@ -638,9 +649,9 @@ class ProductControllerTest {
                 .build();
     }
 
-    private List<ProductGetInfo.PriceListGetInfo> createPriceGetInfo() {
+    private List<ProductPriceResponse> createPriceGetInfo() {
         return List.of(
-                ProductGetInfo.PriceListGetInfo.builder()
+                ProductPriceResponse.builder()
                         .priceId(0L)
                         .applyStartDate(LocalDate.now())
                         .applyEndDate(LocalDate.of(9999, 12, 31))
@@ -653,9 +664,9 @@ class ProductControllerTest {
         );
     }
 
-    private List<ProductGetInfo.ImageListGetInfo> createImageGetInfo() {
+    private List<ProductImageResponse> createImageGetInfo() {
         return List.of(
-                ProductGetInfo.ImageListGetInfo.builder()
+                ProductImageResponse.builder()
                         .imageId(0L)
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0001.png")
                         .originalImageFileName("TEST_001A_BLACK.png")
@@ -667,7 +678,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductGetInfo.ImageListGetInfo.builder()
+                ProductImageResponse.builder()
                         .imageId(1L)
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0002.png")
                         .originalImageFileName("TEST_002A_BLACK.png")
@@ -679,7 +690,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductGetInfo.ImageListGetInfo.builder()
+                ProductImageResponse.builder()
                         .imageId(2L)
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0003.png")
                         .originalImageFileName("TEST_003A_BLACK.png")
@@ -713,9 +724,9 @@ class ProductControllerTest {
                 .build();
     }
 
-    private List<ProductGetInfo.PriceListGetInfo> createPriceGetInfo2() {
+    private List<ProductPriceResponse> createPriceGetInfo2() {
         return List.of(
-                ProductGetInfo.PriceListGetInfo.builder()
+                ProductPriceResponse.builder()
                         .priceId(1L)
                         .applyStartDate(LocalDate.now())
                         .applyEndDate(LocalDate.of(9999, 12, 31))
@@ -728,9 +739,9 @@ class ProductControllerTest {
         );
     }
 
-    private List<ProductGetInfo.ImageListGetInfo> createImageGetInfo2() {
+    private List<ProductImageResponse> createImageGetInfo2() {
         return List.of(
-                ProductGetInfo.ImageListGetInfo.builder()
+                ProductImageResponse.builder()
                         .imageId(3L)
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0004.png")
                         .originalImageFileName("TEST_001A_BLACK.png")
@@ -742,7 +753,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductGetInfo.ImageListGetInfo.builder()
+                ProductImageResponse.builder()
                         .imageId(4L)
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0005.png")
                         .originalImageFileName("TEST_002A_BLACK.png")
@@ -754,7 +765,7 @@ class ProductControllerTest {
                         .height(500)
                         .fileSize(1048576)
                         .build(),
-                ProductGetInfo.ImageListGetInfo.builder()
+                ProductImageResponse.builder()
                         .imageId(5L)
                         .adminImageFileName("TEST_0123_4567_89ab_cdef_0000_0000_0000_0006.png")
                         .originalImageFileName("TEST_003A_BLACK.png")

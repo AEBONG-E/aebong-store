@@ -1,6 +1,6 @@
 package com.aebong.store.controller.view;
 
-import com.aebong.store.service.product.dto.ProductRegisterRequest;
+import com.aebong.store.controller.req.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
