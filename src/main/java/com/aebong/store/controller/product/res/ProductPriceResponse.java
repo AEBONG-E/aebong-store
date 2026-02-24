@@ -1,4 +1,4 @@
-package com.aebong.store.controller.res;
+package com.aebong.store.controller.product.res;
 
 import com.aebong.store.common.enums.product.DiscountType;
 import lombok.*;

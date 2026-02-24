@@ -2,8 +2,8 @@ package com.aebong.store.service.product.dto;
 
 import com.aebong.store.common.enums.product.DiscountType;
 import com.aebong.store.common.enums.product.ProductType;
-import com.aebong.store.controller.req.ProductRegisterRequest;
-import com.aebong.store.controller.res.ProductImageResponse;
+import com.aebong.store.controller.product.req.ProductRegisterRequest;
+import com.aebong.store.controller.product.res.ProductImageResponse;
 import com.aebong.store.service.product.mapper.ProductImageMapper;
 import lombok.*;
 

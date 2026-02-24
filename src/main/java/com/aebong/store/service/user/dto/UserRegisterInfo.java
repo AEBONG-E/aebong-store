@@ -4,7 +4,7 @@ import com.aebong.store.common.enums.user.Gender;
 import com.aebong.store.common.enums.user.UserAccountType;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
-import com.aebong.store.controller.req.UserRegisterRequest;
+import com.aebong.store.controller.user.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.Address;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;

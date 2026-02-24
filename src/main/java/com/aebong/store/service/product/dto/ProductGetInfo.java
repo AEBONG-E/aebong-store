@@ -1,8 +1,8 @@
 package com.aebong.store.service.product.dto;
 
 import com.aebong.store.common.enums.product.ProductType;
-import com.aebong.store.controller.res.ProductImageResponse;
-import com.aebong.store.controller.res.ProductPriceResponse;
+import com.aebong.store.controller.product.res.ProductImageResponse;
+import com.aebong.store.controller.product.res.ProductPriceResponse;
 import com.aebong.store.domain.entity.product.ImageEntity;
 import com.aebong.store.domain.entity.product.PriceEntity;
 import com.aebong.store.domain.entity.product.ProductEntity;

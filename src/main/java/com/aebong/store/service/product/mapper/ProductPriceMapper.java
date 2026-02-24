@@ -1,7 +1,7 @@
 package com.aebong.store.service.product.mapper;
 
-import com.aebong.store.controller.req.ProductPriceRequest;
-import com.aebong.store.controller.res.ProductPriceResponse;
+import com.aebong.store.controller.product.req.ProductPriceRequest;
+import com.aebong.store.controller.product.res.ProductPriceResponse;
 
 import java.util.Collections;
 import java.util.List;

@@ -2,9 +2,9 @@ package com.aebong.store.service.user;
 
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.exceptions.UserApplicationException;
-import com.aebong.store.controller.req.UserLoginRequest;
-import com.aebong.store.controller.req.UserModifyRequest;
-import com.aebong.store.controller.req.UserRegisterRequest;
+import com.aebong.store.controller.user.req.UserLoginRequest;
+import com.aebong.store.controller.user.req.UserModifyRequest;
+import com.aebong.store.controller.user.req.UserRegisterRequest;
 import com.aebong.store.domain.entity.user.UserDetailEntity;
 import com.aebong.store.domain.entity.user.UserEntity;
 import com.aebong.store.domain.repository.user.UserDetailRepository;

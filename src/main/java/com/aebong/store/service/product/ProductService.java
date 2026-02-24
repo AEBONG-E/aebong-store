@@ -1,8 +1,8 @@
 package com.aebong.store.service.product;
 
 import com.aebong.store.service.product.dto.ProductGetInfo;
-import com.aebong.store.controller.req.ProductRegisterRequest;
-import com.aebong.store.controller.req.ProductModifyRequest;
+import com.aebong.store.controller.product.req.ProductRegisterRequest;
+import com.aebong.store.controller.product.req.ProductModifyRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

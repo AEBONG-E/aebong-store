@@ -1,9 +1,9 @@
-package com.aebong.store.controller.api;
+package com.aebong.store.controller.product.api;
 
 import com.aebong.store.common.api.ApiResponse;
 import com.aebong.store.service.product.ProductService;
 import com.aebong.store.service.product.dto.ProductGetInfo;
-import com.aebong.store.controller.req.ProductRegisterRequest;
+import com.aebong.store.controller.product.req.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

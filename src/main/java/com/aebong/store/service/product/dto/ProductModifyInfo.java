@@ -1,9 +1,9 @@
 package com.aebong.store.service.product.dto;
 
 import com.aebong.store.common.enums.product.ProductType;
-import com.aebong.store.controller.req.ProductModifyRequest;
-import com.aebong.store.controller.res.ProductImageResponse;
-import com.aebong.store.controller.res.ProductPriceResponse;
+import com.aebong.store.controller.product.req.ProductModifyRequest;
+import com.aebong.store.controller.product.res.ProductImageResponse;
+import com.aebong.store.controller.product.res.ProductPriceResponse;
 import com.aebong.store.service.product.mapper.ProductImageMapper;
 import com.aebong.store.service.product.mapper.ProductPriceMapper;
 import lombok.*;

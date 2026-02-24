@@ -1,8 +1,7 @@
 package com.aebong.store.service.user.dto;
 
 import com.aebong.store.common.enums.user.Gender;
-import com.aebong.store.controller.req.UserModifyRequest;
-import com.aebong.store.controller.req.UserRegisterRequest;
+import com.aebong.store.controller.user.req.UserModifyRequest;
 import com.aebong.store.domain.entity.Address;
 import lombok.Builder;
 import lombok.Getter;

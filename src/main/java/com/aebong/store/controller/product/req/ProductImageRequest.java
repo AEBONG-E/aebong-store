@@ -1,4 +1,4 @@
-package com.aebong.store.controller.req;
+package com.aebong.store.controller.product.req;
 
 import com.aebong.store.common.enums.product.ContentType;
 import com.aebong.store.common.enums.product.ImageType;

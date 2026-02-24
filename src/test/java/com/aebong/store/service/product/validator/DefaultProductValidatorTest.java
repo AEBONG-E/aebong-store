@@ -6,10 +6,10 @@ import com.aebong.store.common.enums.product.DiscountType;
 import com.aebong.store.common.enums.product.ImageType;
 import com.aebong.store.common.enums.product.ProductType;
 import com.aebong.store.common.exceptions.ProductApplicationException;
-import com.aebong.store.controller.req.ProductImageRequest;
-import com.aebong.store.controller.req.ProductModifyRequest;
-import com.aebong.store.controller.req.ProductPriceRequest;
-import com.aebong.store.controller.req.ProductRegisterRequest;
+import com.aebong.store.controller.product.req.ProductImageRequest;
+import com.aebong.store.controller.product.req.ProductModifyRequest;
+import com.aebong.store.controller.product.req.ProductPriceRequest;
+import com.aebong.store.controller.product.req.ProductRegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

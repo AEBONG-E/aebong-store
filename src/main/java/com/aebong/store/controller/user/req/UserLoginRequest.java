@@ -1,4 +1,4 @@
-package com.aebong.store.controller.req;
+package com.aebong.store.controller.user.req;
 
 import lombok.Builder;
 import lombok.Data;

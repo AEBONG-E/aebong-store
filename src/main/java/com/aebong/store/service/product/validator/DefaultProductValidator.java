@@ -2,8 +2,8 @@ package com.aebong.store.service.product.validator;
 
 import com.aebong.store.common.enums.CustomErrorType;
 import com.aebong.store.common.exceptions.ProductApplicationException;
-import com.aebong.store.controller.req.ProductModifyRequest;
-import com.aebong.store.controller.req.ProductRegisterRequest;
+import com.aebong.store.controller.product.req.ProductModifyRequest;
+import com.aebong.store.controller.product.req.ProductRegisterRequest;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;

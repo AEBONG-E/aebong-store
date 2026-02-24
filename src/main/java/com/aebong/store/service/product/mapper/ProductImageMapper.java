@@ -1,7 +1,7 @@
 package com.aebong.store.service.product.mapper;
 
-import com.aebong.store.controller.req.ProductImageRequest;
-import com.aebong.store.controller.res.ProductImageResponse;
+import com.aebong.store.controller.product.req.ProductImageRequest;
+import com.aebong.store.controller.product.res.ProductImageResponse;
 
 import java.util.Collections;
 import java.util.List;
