@@ -1,6 +1,7 @@
 package com.aebong.store.domain.entity.user;
 
 import com.aebong.store.common.enums.user.UserAccountType;
+import com.aebong.store.common.enums.user.UserRole;
 import com.aebong.store.common.enums.user.UserStatus;
 import com.aebong.store.common.enums.user.UserType;
 import com.aebong.store.common.util.BooleanToYnConverter;
@@ -52,6 +53,11 @@ public class UserEntity extends AuditingEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false, length = 20)
     private UserStatus userStatus;
+
+    @Comment("회원권한")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", nullable = false, length = 20)
+    private UserRole userRole;
 
     @Comment("비밀번호 초기화 필요 여부")
     @Convert(converter = BooleanToYnConverter.class)
@@ -119,6 +125,7 @@ public class UserEntity extends AuditingEntity {
                        UserAccountType userAccountType,
                        String userPassword,
                        UserStatus userStatus,
+                       UserRole userRole,
                        Boolean passwordInitYn,
                        int failPasswordCount,
                        LocalDateTime accountLockedDatetime,
@@ -132,6 +139,7 @@ public class UserEntity extends AuditingEntity {
         this.userAccountType = userAccountType;
         this.userPassword = userPassword;
         this.userStatus = userStatus;
+        this.userRole = Objects.isNull(userRole) ? UserRole.CUSTOMER : userRole;
         this.passwordInitYn = Objects.isNull(passwordInitYn) ? Boolean.FALSE : passwordInitYn;
         this.failPasswordCount = Objects.isNull(failPasswordCount) ? 0 : failPasswordCount;
         this.accountLockedDatetime = accountLockedDatetime;

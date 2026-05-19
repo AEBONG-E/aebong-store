@@ -44,12 +44,24 @@ dependencies {
 
 	implementation 'org.apache.commons:commons-lang3:3.18.0'
 
+	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// JWT (JJWT 0.12.x)
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+	// WebFlux (Toss Payments WebClient)
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:3.0.2'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 ext {

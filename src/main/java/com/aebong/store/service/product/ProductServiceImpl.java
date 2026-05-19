@@ -11,6 +11,7 @@ import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
 import com.aebong.store.service.product.dto.ProductGetInfo;
+import com.aebong.store.service.product.dto.ProductModifyRequest;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
@@ -103,6 +104,38 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductGetInfo> getProducts(Pageable pageable) {
         return productRepository.findAllProducts(pageable);
+    }
+
+    @Transactional
+    @Override
+    public void modifyProduct(Long productId, ProductModifyRequest modifyRequest) {
+        if (Objects.isNull(productId)) {
+            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productId must not be null");
+        }
+        if (Objects.isNull(modifyRequest)) {
+            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "modifyRequest must not be null");
+        }
+
+        ProductEntity product = productRepository.findByProductId(productId).orElseThrow(
+                () -> new ProductApplicationException(CustomErrorType.NOT_FOUND_PRODUCT, CustomErrorType.NOT_FOUND_PRODUCT.getMessage()));
+
+        product.modify(modifyRequest);
+        if (product.getProductDetail() != null) {
+            product.getProductDetail().modify(modifyRequest);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void deleteProduct(Long productId) {
+        if (Objects.isNull(productId)) {
+            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "productId must not be null");
+        }
+
+        ProductEntity product = productRepository.findByProductId(productId).orElseThrow(
+                () -> new ProductApplicationException(CustomErrorType.NOT_FOUND_PRODUCT, CustomErrorType.NOT_FOUND_PRODUCT.getMessage()));
+
+        product.softDelete();
     }
 
     private boolean validateProductCodeIsExists(String productCode) {

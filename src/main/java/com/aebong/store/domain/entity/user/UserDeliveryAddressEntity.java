@@ -93,4 +93,30 @@ public class UserDeliveryAddressEntity extends AuditingEntity {
         this.isAddressValid = isAddressValid;
     }
 
+    public void update(String addressName,
+                       String firstName,
+                       String lastName,
+                       String mobileNumber,
+                       String telNumber,
+                       Address address,
+                       String deliveryMessage,
+                       Boolean isAddressValid) {
+        this.addressName = addressName;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobileNumber = mobileNumber;
+        this.telNumber = telNumber;
+        this.address = address;
+        this.deliveryMessage = deliveryMessage;
+        this.isAddressValid = isAddressValid;
+    }
+
+    public void setDefaultAddress() {
+        this.isDefault = Boolean.TRUE;
+    }
+
+    public void unsetDefaultAddress() {
+        this.isDefault = Boolean.FALSE;
+    }
+
 }
