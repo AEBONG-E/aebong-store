@@ -107,6 +107,18 @@ public class ProductEntity extends AuditingEntity {
         }
     }
 
+    public void decreaseStock(int quantity) {
+        if (this.stock < quantity) {
+            throw new IllegalStateException(
+                    String.format("재고 부족 (현재=%d, 요청=%d)", this.stock, quantity));
+        }
+        this.stock -= quantity;
+    }
+
+    public void increaseStock(int quantity) {
+        this.stock += quantity;
+    }
+
     public void softDelete() {
         this.deletedAt = LocalDateTime.now();
         setDelete();

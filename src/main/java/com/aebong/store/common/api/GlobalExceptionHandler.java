@@ -4,6 +4,7 @@ import com.aebong.store.common.exception.ForbiddenException;
 import com.aebong.store.common.exception.ResourceNotFoundException;
 import com.aebong.store.common.exception.UnauthorizedException;
 import com.aebong.store.common.enums.CustomErrorType;
+import com.aebong.store.common.exceptions.OrderApplicationException;
 import com.aebong.store.common.exceptions.ProductApplicationException;
 import com.aebong.store.common.exceptions.UserApplicationException;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserApplicationException.class)
     public ResponseEntity<?> handleException(UserApplicationException e) {
         log.error(">>>>> [UserApplicationException] ERROR: {}", e.getMessage());
+        return ResponseEntity
+                .status(e.getErrorType().getStatus())
+                .body(ApiResponse.error(e.getErrorType().name(), e.getErrorType().getMessageKr()));
+    }
+
+    @ExceptionHandler(OrderApplicationException.class)
+    public ResponseEntity<?> handleException(OrderApplicationException e) {
+        log.error(">>>>> [OrderApplicationException] ERROR: {}", e.getMessage());
         return ResponseEntity
                 .status(e.getErrorType().getStatus())
                 .body(ApiResponse.error(e.getErrorType().name(), e.getErrorType().getMessageKr()));
