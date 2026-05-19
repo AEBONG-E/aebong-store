@@ -4,6 +4,7 @@ import com.aebong.store.common.security.jwt.JwtAccessDeniedHandler;
 import com.aebong.store.common.security.jwt.JwtAuthenticationEntryPoint;
 import com.aebong.store.common.security.jwt.JwtAuthenticationFilter;
 import com.aebong.store.common.security.jwt.JwtTokenProvider;
+import com.aebong.store.common.security.userdetails.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +31,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -65,7 +67,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/categories/**").hasRole("ADMIN")
                         // 나머지는 인증 필요
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, customUserDetailsService),
                         UsernamePasswordAuthenticationFilter.class)
                 // H2 console iframe 허용
                 .headers(headers -> headers.frameOptions(fo -> fo.sameOrigin()));
