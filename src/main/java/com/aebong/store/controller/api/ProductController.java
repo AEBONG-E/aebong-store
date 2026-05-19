@@ -3,6 +3,7 @@ package com.aebong.store.controller.api;
 import com.aebong.store.common.api.ApiResponse;
 import com.aebong.store.service.product.ProductService;
 import com.aebong.store.service.product.dto.ProductGetInfo;
+import com.aebong.store.service.product.dto.ProductModifyRequest;
 import com.aebong.store.service.product.dto.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,12 +41,15 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<ApiResponse<Void>> modifyProduct(@PathVariable Long productId) {
+    public ResponseEntity<ApiResponse<Void>> modifyProduct(@PathVariable Long productId,
+                                                           @RequestBody ProductModifyRequest modifyRequest) {
+        productService.modifyProduct(productId, modifyRequest);
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<ApiResponse<Void>> deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 
