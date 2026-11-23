@@ -57,4 +57,22 @@ include::{snippets}/products-get/http-response.adoc[]
 include::{snippets}/products-get/response-fields.adoc[]
 include::{snippets}/products-get/response-body.adoc[]
 
+=== 상품수정_실패_상품없음
+include::{snippets}/product-modify-fail/http-request.adoc[]
+include::{snippets}/product-modify-fail/path-parameters.adoc[]
+include::{snippets}/product-modify-fail/request-fields.adoc[]
+include::{snippets}/product-modify-fail/request-body.adoc[]
+include::{snippets}/product-modify-fail/http-response.adoc[]
+include::{snippets}/product-modify-fail/response-fields.adoc[]
+include::{snippets}/product-modify-fail/response-body.adoc[]
+
+=== 상품수정_성공
+include::{snippets}/product-modify/http-request.adoc[]
+include::{snippets}/product-modify/path-parameters.adoc[]
+include::{snippets}/product-modify/request-fields.adoc[]
+include::{snippets}/product-modify/request-body.adoc[]
+include::{snippets}/product-modify/http-response.adoc[]
+include::{snippets}/product-modify/response-fields.adoc[]
+include::{snippets}/product-modify/response-body.adoc[]
+
 
