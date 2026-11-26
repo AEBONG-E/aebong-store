@@ -80,6 +80,56 @@ class DefaultProductValidatorTest {
     }
 
     @Test
+    void 상품수정_유효성검증_실패_필수문자열이_공백인_케이스() {
+        ProductModifyRequest emptyName = createProductModifyRequest();
+        emptyName.setProductName("");
+        ProductModifyRequest blankCode = createProductModifyRequest();
+        blankCode.setProductCode("  ");
+
+        assertThatThrownBy(() -> validator.validateForModify(emptyName))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productName is blank", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(blankCode))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productCode is blank", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_실패_컬럼길이를_초과한_케이스() {
+        ProductModifyRequest longCode = createProductModifyRequest();
+        longCode.setProductCode("C".repeat(21));
+        ProductModifyRequest longName = createProductModifyRequest();
+        longName.setProductName("N".repeat(151));
+        ProductModifyRequest longBasicDescription = createProductModifyRequest();
+        longBasicDescription.setBasicDescription("B".repeat(301));
+        ProductModifyRequest longImageFileName = createProductModifyRequest();
+        longImageFileName.getImageList().get(0).setImageFileName("I".repeat(1001));
+
+        assertThatThrownBy(() -> validator.validateForModify(longCode))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productCode must be at most 20 characters", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(longName))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productName must be at most 150 characters", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(longBasicDescription))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "basicDescription must be at most 300 characters", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(longImageFileName))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "imageFileName must be at most 1000 characters", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_정상_컬럼길이_경계값_케이스() {
+        ProductModifyRequest modifyRequest = createProductModifyRequest();
+        modifyRequest.setProductCode("C".repeat(20));
+        modifyRequest.setProductName("N".repeat(150));
+        modifyRequest.setBasicDescription("B".repeat(300));
+
+        assertThatNoException().isThrownBy(() -> validator.validateForModify(modifyRequest));
+    }
+
+    @Test
     void 상품수정_유효성검증_정상_케이스() {
         assertThatNoException().isThrownBy(() -> validator.validateForModify(createProductModifyRequest()));
     }
