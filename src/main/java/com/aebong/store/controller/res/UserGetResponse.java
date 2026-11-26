@@ -22,7 +22,6 @@ public class UserGetResponse {
 //    private UserType userType;
     private String userAccount;
 //    private UserAccountType userAccountType;
-    private String userPassword;
 //    private UserStatus userStatus;
     private String firstName;
     private String lastName;
@@ -44,7 +43,6 @@ public class UserGetResponse {
                            UserType userType,
                            String userAccount,
                            UserAccountType userAccountType,
-                           String userPassword,
                            UserStatus userStatus,
                            Boolean passwordInitYn,
                            int failPasswordCount,
@@ -71,7 +69,6 @@ public class UserGetResponse {
 //        this.userType = userType;
         this.userAccount = userAccount;
 //        this.userAccountType = userAccountType;
-        this.userPassword = userPassword;
 //        this.userStatus = userStatus;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -95,7 +92,6 @@ public class UserGetResponse {
                 .userId(userGetInfo.getUserId())
                 .userDetailId(userGetInfo.getUserDetailId())
                 .userAccount(userGetInfo.getUserAccount())
-                .userPassword(userGetInfo.getUserPassword())
                 .firstName(userGetInfo.getFirstName())
                 .lastName(userGetInfo.getLastName())
                 .birthDate(userGetInfo.getBirthDate())
