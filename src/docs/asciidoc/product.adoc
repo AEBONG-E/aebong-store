@@ -66,6 +66,20 @@ include::{snippets}/product-modify-fail/http-response.adoc[]
 include::{snippets}/product-modify-fail/response-fields.adoc[]
 include::{snippets}/product-modify-fail/response-body.adoc[]
 
+=== 상품수정_실패_잘못된요청
+다음 요청은 `400 BAD_REQUEST` 로 거절한다.
+
+* `imageList` 가 null 이거나 비어 있음
+* `price.priceId` 가 없거나, 수정할 상품의 가격순번이 아님
+* `productCode`, `productName` 이 공백
+* 문자열 길이 초과: `productCode` 20, `productName` 150, `productEnglishName` 200, `productShortName` 100, `basicDescription` 300, `manufacturerCountry` 20, `imageList[].adminImageFileName` / `originalImageFileName` / `imageFileName` 1000자
+
+include::{snippets}/product-modify-fail-2/http-request.adoc[]
+include::{snippets}/product-modify-fail-2/path-parameters.adoc[]
+include::{snippets}/product-modify-fail-2/http-response.adoc[]
+include::{snippets}/product-modify-fail-2/response-fields.adoc[]
+include::{snippets}/product-modify-fail-2/response-body.adoc[]
+
 === 상품수정_성공
 include::{snippets}/product-modify/http-request.adoc[]
 include::{snippets}/product-modify/path-parameters.adoc[]

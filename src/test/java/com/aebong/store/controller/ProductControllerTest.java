@@ -572,6 +572,40 @@ class ProductControllerTest {
     }
 
     @Test
+    void 상품수정_실패_잘못된요청() throws Exception {
+
+        // given
+        Long productId = 0L;
+        ProductModifyRequest modifyRequest = createProductModifyRequest(productId);
+
+        doThrow(new ProductApplicationException(CustomErrorType.BAD_REQUEST, "priceId is null"))
+                .when(productService).modifyProduct(eq(productId), any(ProductModifyRequest.class));
+
+        // when & then
+        mockMvc.perform(patch("/api/v1/products/{productId}", productId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(modifyRequest)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.data").doesNotExist())
+                .andDo(document("product-modify-fail-2",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("productId").description("수정할 상품순번")
+                        ),
+                        responseFields(
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("응답코드"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("에러 메시지"),
+                                subsectionWithPath("data").type(JsonFieldType.OBJECT).description("error 발생시 null").optional()
+                        ),
+                        responseBody()
+                ));
+    }
+
+    @Test
     void 상품수정_성공() throws Exception {
 
         // given
