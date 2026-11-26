@@ -38,6 +38,10 @@ public class DefaultProductValidator implements ProductValidator {
         validateRequiredString(modifyRequest.getProductCode(), "productCode is null");
         validateRequiredString(modifyRequest.getProductName(), "productName is null");
 
+        if (Objects.isNull(modifyRequest.getPrice().getPriceId())) {
+            throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "priceId is null");
+        }
+
         validatePriceAmount(modifyRequest.getPrice().getSalesAmount());
         validatePriceAmount(modifyRequest.getPrice().getPurchaseAmount());
         validatePriceAmount(modifyRequest.getPrice().getDiscountAmount());

@@ -16,7 +16,6 @@ import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import com.aebong.store.service.product.validator.ProductValidator;
 import com.aebong.store.controller.product.req.ProductRegisterRequest;
 import com.aebong.store.controller.product.req.ProductModifyRequest;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -97,7 +96,8 @@ public class ProductServiceImpl implements ProductService {
         PriceEntity price = product.getPrices().stream()
                 .filter(p -> p.getId().equals(modifyInfo.getPrice().getPriceId()))
                 .findFirst()
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new ProductApplicationException(CustomErrorType.BAD_REQUEST,
+                        String.format("%s priceId does not belong to product %s", modifyInfo.getPrice().getPriceId(), productId)));
         List<ImageEntity> images = product.getImages();
 
         // todo: check valid image format

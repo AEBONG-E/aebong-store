@@ -70,6 +70,16 @@ class DefaultProductValidatorTest {
     }
 
     @Test
+    void 상품수정_유효성검증_실패_가격순번이_null인_케이스() {
+        ProductModifyRequest modifyRequest = createProductModifyRequest();
+        modifyRequest.getPrice().setPriceId(null);
+
+        assertThatThrownBy(() -> validator.validateForModify(modifyRequest))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "priceId is null", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
     void 상품수정_유효성검증_정상_케이스() {
         assertThatNoException().isThrownBy(() -> validator.validateForModify(createProductModifyRequest()));
     }

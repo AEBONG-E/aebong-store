@@ -21,7 +21,6 @@ import com.aebong.store.domain.repository.product.PriceRepository;
 import com.aebong.store.domain.repository.product.ProductDetailRepository;
 import com.aebong.store.domain.repository.product.ProductRepository;
 import com.aebong.store.service.product.dto.*;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -325,7 +324,8 @@ class ProductServiceTest {
 
         // when
         assertThatThrownBy(() -> service.modifyProduct(productId, request))
-                .isInstanceOf(EntityNotFoundException.class);
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertThat(((ProductApplicationException) e).getErrorType()).isEqualTo(CustomErrorType.BAD_REQUEST));
 
         // then
         then(productRepository).should(times(1)).findByProductId(productId);
