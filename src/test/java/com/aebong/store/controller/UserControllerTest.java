@@ -187,6 +187,8 @@ class UserControllerTest {
                                 .content(objectMapper.writeValueAsString(userLoginInfo)))
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.userAccount").value("aebong@gmail.com"))
+                .andExpect(jsonPath("$.data.userPassword").doesNotExist())
                 .andDo(document("user-login",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -201,7 +203,6 @@ class UserControllerTest {
                                 fieldWithPath("data.userId").type(JsonFieldType.NUMBER).description("사용자고유번호"),
                                 fieldWithPath("data.userDetailId").type(JsonFieldType.NUMBER).description("사용자상세고유번호"),
                                 fieldWithPath("data.userAccount").type(JsonFieldType.STRING).description("사용자계정"),
-                                fieldWithPath("data.userPassword").type(JsonFieldType.STRING).description("비밀번호"),
                                 fieldWithPath("data.lastName").type(JsonFieldType.STRING).description("성"),
                                 fieldWithPath("data.firstName").type(JsonFieldType.STRING).description("이름"),
                                 fieldWithPath("data.birthDate").type(JsonFieldType.STRING).description("생년월일 (yyyy-MM-dd)"),
@@ -218,6 +219,32 @@ class UserControllerTest {
                 ));
 
 
+    }
+
+    @Test
+    void 로그인_성공_응답에_비밀번호_미포함() throws Exception {
+
+        // given
+        UserLoginRequest userLoginInfo = createUserLoginInfo();
+        UserGetInfo userGetInfo = createUserGetInfo();
+
+        given(userService.loginUser(userLoginInfo)).willReturn(userGetInfo);
+
+        // when & then
+        String responseBody = mockMvc.perform(post("/api/v1/users/sign-in")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(userLoginInfo)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SUCCESS"))
+                .andExpect(jsonPath("$.data.userId").value(0))
+                .andExpect(jsonPath("$.data.userPassword").doesNotExist())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        org.assertj.core.api.Assertions.assertThat(responseBody)
+                .doesNotContain("userPassword")
+                .doesNotContain(userGetInfo.getUserPassword());
     }
 
     @Test
