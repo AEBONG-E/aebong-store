@@ -1,6 +1,6 @@
-package com.aebong.store.controller.view;
+package com.aebong.store.controller.user.view;
 
-import com.aebong.store.controller.req.UserRegisterRequest;
+import com.aebong.store.controller.user.req.UserRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

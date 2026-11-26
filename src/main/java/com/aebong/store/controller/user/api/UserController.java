@@ -1,10 +1,10 @@
-package com.aebong.store.controller.api;
+package com.aebong.store.controller.user.api;
 
 import com.aebong.store.common.api.ApiResponse;
-import com.aebong.store.controller.req.UserLoginRequest;
-import com.aebong.store.controller.req.UserModifyRequest;
-import com.aebong.store.controller.req.UserRegisterRequest;
-import com.aebong.store.controller.res.UserGetResponse;
+import com.aebong.store.controller.user.req.UserLoginRequest;
+import com.aebong.store.controller.user.req.UserModifyRequest;
+import com.aebong.store.controller.user.req.UserRegisterRequest;
+import com.aebong.store.controller.user.res.UserGetResponse;
 import com.aebong.store.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

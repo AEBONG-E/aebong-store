@@ -1,8 +1,8 @@
 package com.aebong.store.service.user;
 
-import com.aebong.store.controller.req.UserLoginRequest;
-import com.aebong.store.controller.req.UserModifyRequest;
-import com.aebong.store.controller.req.UserRegisterRequest;
+import com.aebong.store.controller.user.req.UserLoginRequest;
+import com.aebong.store.controller.user.req.UserModifyRequest;
+import com.aebong.store.controller.user.req.UserRegisterRequest;
 import com.aebong.store.service.user.dto.UserGetInfo;
 
 public interface UserService {

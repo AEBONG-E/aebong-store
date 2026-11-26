@@ -1,9 +1,10 @@
-package com.aebong.store.controller.api;
+package com.aebong.store.controller.product.api;
 
 import com.aebong.store.common.api.ApiResponse;
 import com.aebong.store.service.product.ProductService;
 import com.aebong.store.service.product.dto.ProductGetInfo;
-import com.aebong.store.service.product.dto.ProductRegisterRequest;
+import com.aebong.store.controller.product.req.ProductModifyRequest;
+import com.aebong.store.controller.product.req.ProductRegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +41,9 @@ public class ProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<ApiResponse<Void>> modifyProduct(@PathVariable Long productId) {
+    public ResponseEntity<ApiResponse<Void>> modifyProduct(@PathVariable Long productId,
+                                                           @RequestBody ProductModifyRequest modifyRequest) {
+        productService.modifyProduct(productId, modifyRequest);
         return new ResponseEntity<>(ApiResponse.success(), HttpStatus.OK);
     }
 

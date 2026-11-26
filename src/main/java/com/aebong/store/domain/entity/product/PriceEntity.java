@@ -2,6 +2,7 @@ package com.aebong.store.domain.entity.product;
 
 import com.aebong.store.common.enums.product.DiscountType;
 import com.aebong.store.domain.entity.AuditingEntity;
+import com.aebong.store.service.product.dto.ProductModifyInfo;
 import com.aebong.store.service.product.dto.ProductRegisterInfo;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -103,6 +104,17 @@ public class PriceEntity extends AuditingEntity {
                 .discountAmount(registerInfo.getDiscountAmount())
                 .discount(registerInfo.getDiscount())
                 .build();
+    }
+
+    public void modify(ProductModifyInfo modifyInfo) {
+        if (Objects.isNull(modifyInfo) || Objects.isNull(modifyInfo.getPrice())) return;
+        this.applyStartDate = modifyInfo.getPrice().getApplyStartDate();
+        this.applyEndDate = modifyInfo.getPrice().getApplyEndDate();
+        this.salesAmount = modifyInfo.getPrice().getSalesAmount();
+        this.purchaseAmount = modifyInfo.getPrice().getPurchaseAmount();
+        this.discountType = modifyInfo.getPrice().getDiscountType();
+        this.discountAmount = modifyInfo.getPrice().getDiscountAmount();
+        this.discount = modifyInfo.getPrice().getDiscount();
     }
 
 }

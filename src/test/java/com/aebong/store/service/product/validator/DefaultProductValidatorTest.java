@@ -1,0 +1,221 @@
+package com.aebong.store.service.product.validator;
+
+import com.aebong.store.common.enums.CustomErrorType;
+import com.aebong.store.common.enums.product.ContentType;
+import com.aebong.store.common.enums.product.DiscountType;
+import com.aebong.store.common.enums.product.ImageType;
+import com.aebong.store.common.enums.product.ProductType;
+import com.aebong.store.common.exceptions.ProductApplicationException;
+import com.aebong.store.controller.product.req.ProductImageRequest;
+import com.aebong.store.controller.product.req.ProductModifyRequest;
+import com.aebong.store.controller.product.req.ProductPriceRequest;
+import com.aebong.store.controller.product.req.ProductRegisterRequest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
+class DefaultProductValidatorTest {
+
+    private ProductValidator validator;
+
+    @BeforeEach
+    void setUp() {
+        validator = new DefaultProductValidator();
+    }
+
+    @Test
+    void 유효성검증_실패_유효하지않은_금액_등록_수정_통합_케이스() {
+        ProductRegisterRequest registerRequest = createInvalidProductRegisterRequest();
+        ProductModifyRequest modifyRequest = createInvalidProductModifyRequest();
+
+        assertThatThrownBy(() -> validator.validateForRegister(registerRequest))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "-1 this amount is invalid", CustomErrorType.INVALID_AMOUNT));
+
+        assertThatThrownBy(() -> validator.validateForModify(modifyRequest))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "-1 this amount is invalid", CustomErrorType.INVALID_AMOUNT));
+    }
+
+    @Test
+    void 상품등록_유효성검증_실패_요청정보가_null인_케이스() {
+        assertThatThrownBy(() -> validator.validateForRegister(null))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "registerInfo must not be null", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_실패_요청정보가_null인_케이스() {
+        assertThatThrownBy(() -> validator.validateForModify(null))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "modifyRequest must not be null", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_실패_이미지목록이_null인_케이스() {
+        ProductModifyRequest modifyRequest = createProductModifyRequest();
+        modifyRequest.setImageList(null);
+
+        assertThatThrownBy(() -> validator.validateForModify(modifyRequest))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "modifyRequest must not be null", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_실패_가격순번이_null인_케이스() {
+        ProductModifyRequest modifyRequest = createProductModifyRequest();
+        modifyRequest.getPrice().setPriceId(null);
+
+        assertThatThrownBy(() -> validator.validateForModify(modifyRequest))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "priceId is null", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_실패_필수문자열이_공백인_케이스() {
+        ProductModifyRequest emptyName = createProductModifyRequest();
+        emptyName.setProductName("");
+        ProductModifyRequest blankCode = createProductModifyRequest();
+        blankCode.setProductCode("  ");
+
+        assertThatThrownBy(() -> validator.validateForModify(emptyName))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productName is blank", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(blankCode))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productCode is blank", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_실패_컬럼길이를_초과한_케이스() {
+        ProductModifyRequest longCode = createProductModifyRequest();
+        longCode.setProductCode("C".repeat(21));
+        ProductModifyRequest longName = createProductModifyRequest();
+        longName.setProductName("N".repeat(151));
+        ProductModifyRequest longBasicDescription = createProductModifyRequest();
+        longBasicDescription.setBasicDescription("B".repeat(301));
+        ProductModifyRequest longImageFileName = createProductModifyRequest();
+        longImageFileName.getImageList().get(0).setImageFileName("I".repeat(1001));
+
+        assertThatThrownBy(() -> validator.validateForModify(longCode))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productCode must be at most 20 characters", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(longName))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "productName must be at most 150 characters", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(longBasicDescription))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "basicDescription must be at most 300 characters", CustomErrorType.BAD_REQUEST));
+        assertThatThrownBy(() -> validator.validateForModify(longImageFileName))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "imageFileName must be at most 1000 characters", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_정상_컬럼길이_경계값_케이스() {
+        ProductModifyRequest modifyRequest = createProductModifyRequest();
+        modifyRequest.setProductCode("C".repeat(20));
+        modifyRequest.setProductName("N".repeat(150));
+        modifyRequest.setBasicDescription("B".repeat(300));
+
+        assertThatNoException().isThrownBy(() -> validator.validateForModify(modifyRequest));
+    }
+
+    @Test
+    void 상품수정_유효성검증_정상_케이스() {
+        assertThatNoException().isThrownBy(() -> validator.validateForModify(createProductModifyRequest()));
+    }
+
+    private void assertError(ProductApplicationException exception, String message, CustomErrorType errorType) {
+        assertThat(exception.getMessage()).isEqualTo(message);
+        assertThat(exception.getErrorType()).isEqualTo(errorType);
+    }
+
+    private ProductRegisterRequest createInvalidProductRegisterRequest() {
+        return ProductRegisterRequest.builder()
+                .productCode("0000000000")
+                .productType(ProductType.STANDARD)
+                .productName("TEST_001A_블랙")
+                .productEnglishName("TEST_001A_BLACK")
+                .productShortName("TEST_001A")
+                .basicDescription("TEST_001A_블랙 상품입니다.")
+                .detailDescription("테스트 상품입니다.")
+                .manufacturerCountry("대한민국")
+                .releaseDatetime(LocalDateTime.now())
+                .price(createInvalidPrice())
+                .imageList(createImageList())
+                .build();
+    }
+
+    private ProductModifyRequest createInvalidProductModifyRequest() {
+        return ProductModifyRequest.builder()
+                .productId(1L)
+                .productDetailId(1L)
+                .productCode("0000000000")
+                .productType(ProductType.STANDARD)
+                .productName("TEST_001A_블랙")
+                .productEnglishName("TEST_001A_BLACK")
+                .productShortName("TEST_001A")
+                .basicDescription("TEST_001A_블랙 상품입니다.")
+                .detailDescription("테스트 상품입니다.")
+                .manufacturerCountry("대한민국")
+                .releaseDatetime(LocalDateTime.now())
+                .price(createInvalidPrice())
+                .imageList(createImageList())
+                .build();
+    }
+
+    private ProductModifyRequest createProductModifyRequest() {
+        ProductModifyRequest modifyRequest = createInvalidProductModifyRequest();
+        modifyRequest.setPrice(ProductPriceRequest.builder()
+                .priceId(1L)
+                .applyStartDate(LocalDate.now())
+                .applyEndDate(LocalDate.of(9999, 12, 31))
+                .salesAmount(BigDecimal.valueOf(1000))
+                .purchaseAmount(BigDecimal.valueOf(500))
+                .discountType(DiscountType.NONE)
+                .discountAmount(BigDecimal.ZERO)
+                .discount(0L)
+                .build());
+        return modifyRequest;
+    }
+
+    private ProductPriceRequest createInvalidPrice() {
+        return ProductPriceRequest.builder()
+                .priceId(1L)
+                .applyStartDate(LocalDate.now())
+                .applyEndDate(LocalDate.of(9999, 12, 31))
+                .salesAmount(BigDecimal.valueOf(-1))
+                .purchaseAmount(BigDecimal.valueOf(-1))
+                .discountType(DiscountType.NONE)
+                .discountAmount(BigDecimal.valueOf(-1))
+                .discount(0L)
+                .build();
+    }
+
+    private List<ProductImageRequest> createImageList() {
+        return List.of(
+                ProductImageRequest.builder()
+                        .imageId(1L)
+                        .adminImageFileName("TEST_0001.png")
+                        .originalImageFileName("TEST_0001.png")
+                        .imageFileName("TEST_0001.png")
+                        .imageFileUrl("/static/images/TEST_0001.png")
+                        .imageType(ImageType.FILE)
+                        .contentType(ContentType.IMAGE)
+                        .width(500)
+                        .height(500)
+                        .fileSize(1048576)
+                        .build()
+        );
+    }
+
+}

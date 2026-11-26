@@ -1,4 +1,4 @@
-package com.aebong.store.controller.view;
+package com.aebong.store.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
