@@ -30,7 +30,8 @@ public class DefaultProductValidator implements ProductValidator {
     @Override
     public void validateForModify(ProductModifyRequest modifyRequest) {
 
-        if (Objects.isNull(modifyRequest) || Objects.isNull(modifyRequest.getPrice()) || modifyRequest.getImageList().isEmpty()) {
+        if (Objects.isNull(modifyRequest) || Objects.isNull(modifyRequest.getPrice())
+                || Objects.isNull(modifyRequest.getImageList()) || modifyRequest.getImageList().isEmpty()) {
             throw new ProductApplicationException(CustomErrorType.BAD_REQUEST, "modifyRequest must not be null");
         }
 

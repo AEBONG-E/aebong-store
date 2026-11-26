@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -58,6 +59,21 @@ class DefaultProductValidatorTest {
                 .satisfies(e -> assertError((ProductApplicationException) e, "modifyRequest must not be null", CustomErrorType.BAD_REQUEST));
     }
 
+    @Test
+    void 상품수정_유효성검증_실패_이미지목록이_null인_케이스() {
+        ProductModifyRequest modifyRequest = createProductModifyRequest();
+        modifyRequest.setImageList(null);
+
+        assertThatThrownBy(() -> validator.validateForModify(modifyRequest))
+                .isInstanceOf(ProductApplicationException.class)
+                .satisfies(e -> assertError((ProductApplicationException) e, "modifyRequest must not be null", CustomErrorType.BAD_REQUEST));
+    }
+
+    @Test
+    void 상품수정_유효성검증_정상_케이스() {
+        assertThatNoException().isThrownBy(() -> validator.validateForModify(createProductModifyRequest()));
+    }
+
     private void assertError(ProductApplicationException exception, String message, CustomErrorType errorType) {
         assertThat(exception.getMessage()).isEqualTo(message);
         assertThat(exception.getErrorType()).isEqualTo(errorType);
@@ -95,6 +111,21 @@ class DefaultProductValidatorTest {
                 .price(createInvalidPrice())
                 .imageList(createImageList())
                 .build();
+    }
+
+    private ProductModifyRequest createProductModifyRequest() {
+        ProductModifyRequest modifyRequest = createInvalidProductModifyRequest();
+        modifyRequest.setPrice(ProductPriceRequest.builder()
+                .priceId(1L)
+                .applyStartDate(LocalDate.now())
+                .applyEndDate(LocalDate.of(9999, 12, 31))
+                .salesAmount(BigDecimal.valueOf(1000))
+                .purchaseAmount(BigDecimal.valueOf(500))
+                .discountType(DiscountType.NONE)
+                .discountAmount(BigDecimal.ZERO)
+                .discount(0L)
+                .build());
+        return modifyRequest;
     }
 
     private ProductPriceRequest createInvalidPrice() {
